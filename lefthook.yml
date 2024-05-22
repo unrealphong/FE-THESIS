@@ -1,0 +1,11 @@
+pre-commit:
+  piped: true
+  commands:
+    frontend-eslint:
+      root: 'src/'
+      glob: '*.{ts,tsx,js,jsx}'
+      run: npx eslint {staged_files}
+    frontend-prettier:
+      root: 'src/'
+      glob: '*.{ts,tsx,js,jsx}'
+      run: npx prettier {staged_files} --check
