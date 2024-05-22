@@ -17,7 +17,10 @@ pre-commit:
   commands:
     eslint:
       glob: "*.{ts,tsx}"
-      run: yarn eslint {staged_files}
+      run: npx eslint {staged_files} --fix
+    pretter:
+      glob: "*.{ts,tsx}"
+      run: npx prettier {staged_files} --write
 #     rubocop:
 #       tags: backend style
 #       glob: "*.rb"
