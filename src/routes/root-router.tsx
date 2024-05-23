@@ -1,5 +1,5 @@
-import HomePage from "../pages/HomePage";
-import { pathName } from "./path-name";
+import HomePage from "../pages/HomePage"
+import { pathName } from "./path-name"
 
 export const UnAuthRouter = [
   {
@@ -12,6 +12,6 @@ export const UnAuthRouter = [
   },
   {
     path: pathName.HOME,
-    element: <HomePage/>
+    element: <HomePage />,
   },
-];
+]
