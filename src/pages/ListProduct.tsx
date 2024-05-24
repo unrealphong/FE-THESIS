@@ -1,10 +1,8 @@
-import React from 'react'
-
-type Props = {}
-
-const ListProduct = (props: Props) => {
+const ListProduct = () => {
   return (
-    <div><h1>Danh sách sản phẩm</h1></div>
+    <div>
+      <h1>Danh sách sản phẩm</h1>
+    </div>
   )
 }
 
