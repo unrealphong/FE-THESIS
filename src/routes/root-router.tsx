@@ -1,5 +1,6 @@
 import HomePage from "../pages/HomePage"
 import { pathName } from "./path-name"
+import ListProduct from "../pages/ListProduct"
 
 export const UnAuthRouter = [
   {
@@ -13,5 +14,9 @@ export const UnAuthRouter = [
   {
     path: pathName.HOME,
     element: <HomePage />,
+  },
+  {
+    path: pathName.LIST_PRODUCT,
+    element: <ListProduct />,
   },
 ]
