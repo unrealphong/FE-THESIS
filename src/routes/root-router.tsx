@@ -1,7 +1,7 @@
 import HomePage from "../pages/HomePage"
 import { pathName } from "./path-name"
 import ListProduct from "../pages/ListProduct"
-import Cart from '../pages/Cart';
+import Cart from "../pages/Cart"
 
 export const UnAuthRouter = [
   {
