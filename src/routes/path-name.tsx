@@ -7,4 +7,5 @@ export const pathName = {
 
   HOME: "/",
   LIST_PRODUCT: "/product",
+  CART: "/cart",
 } as const
