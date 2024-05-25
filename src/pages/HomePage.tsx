@@ -1,14 +1,27 @@
-import { toast } from "react-toastify"
-
-import "react-toastify/dist/ReactToastify.css"
+import { useEffect } from "react"
 
 function HomePage() {
-  const notify = () => toast("Wow so easy !")
-
+  useEffect(() => {
+    document.title =
+      "TokyoLife.vn | Hàng tiêu dùng Nhật Bản &  thời trang thông minh"
+  }, [])
   return (
-    <div>
-      <button onClick={notify}>Notify !</button>
+    <div className="container fixed-grid has-2-cols">
+      <div className="grid">
+        {/* <div className="cell">
+          <button className="button" onClick={notify}>
+            Notify !
+          </button>
+        </div>
+        <div className="cell">
+          <button className="button" onClick={notify}>
+            Notify !
+          </button>
+        </div> */}
+        <h1>hompage</h1>
+      </div>
     </div>
   )
 }
+
 export default HomePage
