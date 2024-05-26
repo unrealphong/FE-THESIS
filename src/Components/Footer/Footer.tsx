@@ -7,7 +7,7 @@ import vnpay from "@/assets/images/logo/vnpay.svg"
 
 function Footer() {
   return (
-    <footer className="tw-footer">
+    <footer className="tw-footer text-black">
       <div className="footer-content container flex space-x-4 justify-center">
         <div className="a flex flex-wrap w-9/12">
           <div className="w-1/4">
@@ -39,14 +39,14 @@ function Footer() {
           </div>
           <div className="w-1/4">
             <h3 className="font-bold mb-4">LIÊN HỆ</h3>
-            <div>
-              <h4 className="font-semibold">Hỗ trợ tư vấn mua online:</h4>
+            <div className="text-gray-700 font-medium">
+              <h4 className="font-semibold text-black">Hỗ trợ tư vấn mua online:</h4>
               <p>Hotline: 0247 308 2882</p>
               <p>Email: contact@tokyolife.vn</p>
               <p>Giờ làm việc: 8:30 - 22:00 hằng ngày.</p>
             </div>
-            <div>
-              <h4 className="font-semibold">
+            <div className="text-gray-700 font-medium">
+              <h4 className="font-semibold text-black">
                 Hỗ trợ khiếu nại và bảo hành sản phẩm:
               </h4>
               <p>Hotline: 024 7300 6999</p>
@@ -114,8 +114,8 @@ function Footer() {
                       y2="23.9288"
                       gradientUnits="userSpaceOnUse"
                     >
-                      <stop stop-color="#18ACFE"></stop>
-                      <stop offset="1" stop-color="#0163E0"></stop>
+                      <stop stopColor="#18ACFE"></stop>
+                      <stop offset="1" stopColor="#0163E0"></stop>
                     </linearGradient>
                   </defs>
                 </svg>
@@ -128,7 +128,7 @@ function Footer() {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <g clip-path="url(#clip0_2942_313007)">
+                  <g clipPath="url(#clip0_2942_313007)">
                     <path
                       d="M4.47234 0.121397C5.29404 -0.00818096 6.1297 -0.00895688 6.95993 0.00966509L6.88854 0.0756179C5.80226 0.787132 4.90142 1.76401 4.25043 2.88521C2.94534 5.12993 2.46971 7.78434 2.57756 10.3573C2.68463 12.4522 3.18743 14.5589 4.25354 16.3799C4.432 16.7058 4.72917 16.9937 4.73383 17.3894C4.76719 18.2382 4.34742 19.0382 3.77945 19.645C3.81669 19.6838 3.85316 19.7226 3.89041 19.7614C4.42191 20.3418 4.9891 20.8872 5.52914 21.4599C6.29652 22.3273 7.17098 23.0955 7.92284 23.9785C6.67206 23.9971 5.40655 24.0553 4.17051 23.8217C2.6148 23.5199 1.23367 22.4414 0.574144 20.9997C0.174547 20.1664 0.0550561 19.2345 0.0240194 18.3213C0.0232435 14.1049 0.0232435 9.8894 0.0240194 5.67385C0.0410896 4.26479 0.414305 2.79055 1.40593 1.74539C2.19115 0.860069 3.30304 0.284339 4.47234 0.121397Z"
                       fill="#0068FF"
@@ -183,8 +183,8 @@ function Footer() {
                 >
                   <rect width="24" height="24" rx="12" fill="#FC0D1B"></rect>
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M6.34376 6.55131C5.22972 6.60651 4.33483 7.47881 4.26253 8.59187C4.19327 9.65827 4.125 10.9704 4.125 12C4.125 13.0296 4.19327 14.3417 4.26253 15.4081C4.33483 16.5212 5.22972 17.3935 6.34376 17.4487C7.95697 17.5286 10.2627 17.625 12 17.625C13.7373 17.625 16.043 17.5286 17.6562 17.4487C18.7703 17.3935 19.6652 16.5212 19.7375 15.4081C19.8067 14.3417 19.875 13.0296 19.875 12C19.875 10.9704 19.8067 9.65827 19.7375 8.59187C19.6652 7.47881 18.7703 6.60651 17.6562 6.55131C16.043 6.47139 13.7373 6.375 12 6.375C10.2627 6.375 7.95697 6.47139 6.34376 6.55131ZM14.8125 12L10.3125 14.25V9.75L14.8125 12Z"
                     fill="white"
                   ></path>
@@ -225,7 +225,7 @@ function Footer() {
         <div className="my-5">
           <span>
             <div className="my-2">
-              <strong>Công ty cổ phần STAAAR</strong>
+              <strong className="text-black">Công ty cổ phần STAAAR</strong>
             </div>
             <u>Địa chỉ:</u> Tầng 6, số 96 Thái Hà Phường Trung Liệt, Quận Đống Đa,
             Thành phố Hà Nội, Việt Nam.

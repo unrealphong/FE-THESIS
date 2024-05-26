@@ -45,8 +45,6 @@ function Header() {
               </div>
             </div>
           </div>
-          <div className="swiper-button-prev"></div>
-          <div className="swiper-button-next"></div>
         </div>
         <div
           className={`sticky-header w-full h-[126px] bg-[#f8f1e4] ${isScrolled ? "fixed top-0 z-10" : ""}`}
@@ -165,7 +163,7 @@ function Header() {
               </a>
             </div>
           </div>
-          <div className="menu-box flex bg-white items-center h-[63px]">
+          <div className="menu-box flex bg-white items-center h-[63px] shadow-md">
             <ul className="font-medium container flex flex-col md:p-0 rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 ">
               <li>
                 <a
