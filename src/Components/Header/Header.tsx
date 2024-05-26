@@ -1,9 +1,29 @@
+import { useEffect, useState } from "react"
 import logo from "../../assets/images/logo/logo.webp"
 
 function Header() {
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset
+      if (scrollTop > 0) {
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
   return (
     <>
-      <div className="header">
+      <header className="header">
         <div className="swiper swiper-initialized">
           <div className="swiper-wrapper">
             <div className="swiper-slide">
@@ -28,7 +48,9 @@ function Header() {
           <div className="swiper-button-prev"></div>
           <div className="swiper-button-next"></div>
         </div>
-        <div className="sticky-header h-[126px]  bg-[#f8f1e4]">
+        <div
+          className={`sticky-header w-full h-[126px] bg-[#f8f1e4] ${isScrolled ? "fixed top-0 z-10" : ""}`}
+        >
           <div className="header-content container flex items-center justify-between h-[63px] max-w-7xl mx-auto">
             <div className="logo">
               <a href="/">
@@ -144,11 +166,11 @@ function Header() {
             </div>
           </div>
           <div className="menu-box flex bg-white items-center h-[63px]">
-            <ul className="font-medium container flex flex-col md:p-0 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+            <ul className="font-medium container flex flex-col md:p-0 rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 ">
               <li>
                 <a
                   href="/"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
                   aria-current="page"
                 >
                   Trang chủ
@@ -157,7 +179,7 @@ function Header() {
               <li>
                 <a
                   href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
                 >
                   Áo
                 </a>
@@ -165,7 +187,7 @@ function Header() {
               <li>
                 <a
                   href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
                 >
                   Quần
                 </a>
@@ -173,7 +195,7 @@ function Header() {
               <li>
                 <a
                   href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0 "
                 >
                   Giày Dép
                 </a>
@@ -181,7 +203,7 @@ function Header() {
               <li>
                 <a
                   href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
                 >
                   Phụ kiện
                 </a>
@@ -189,7 +211,7 @@ function Header() {
               <li>
                 <a
                   href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
                 >
                   Giảm giá -40%
                 </a>
@@ -197,7 +219,7 @@ function Header() {
               <li>
                 <a
                   href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
                 >
                   Tin tức
                 </a>
@@ -205,7 +227,7 @@ function Header() {
             </ul>
           </div>
         </div>
-      </div>
+      </header>
     </>
   )
 }
