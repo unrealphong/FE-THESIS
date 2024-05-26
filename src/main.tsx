@@ -7,7 +7,7 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import { ErrorBoundary } from "react-error-boundary"
 import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom"
-import "./index.css"
+import "./index.scss"
 
 const routes: RouteObject[] = [...RootUnAuthRouter]
 const router = createBrowserRouter(routes, {})
