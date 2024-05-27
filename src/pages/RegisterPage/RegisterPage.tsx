@@ -1,5 +1,6 @@
+import iconFb from "@/assets/images/icons/icon-fb.svg"
+import iconGg from "@/assets/images/icons/icon-gg.svg"
 import { useState } from "react"
-
 const RegisterPage = () => {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -11,7 +12,7 @@ const RegisterPage = () => {
     setShowPassword(!showPassword)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // Handle form submission
   }
@@ -102,19 +103,11 @@ const RegisterPage = () => {
         <p className="text-center font-bold my-3">Hoặc</p>
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-center gap-2 py-2 rounded bg-blue-600 text-white cursor-pointer">
-            <img
-              src="./src/assets/img/icon/icon-fb.svg"
-              alt="Facebook"
-              className="w-5 h-5"
-            />
+            <img src={iconFb} alt="Facebook" className="w-5 h-5" />
             <span className="font-medium">Đăng Nhập Với Facebook</span>
           </div>
           <div className="flex items-center justify-center gap-2 py-2 rounded bg-red-600 text-white cursor-pointer">
-            <img
-              src="./src/assets/img/icon/icon-gg.svg"
-              alt="Google"
-              className="w-5 h-5"
-            />
+            <img src={iconGg} alt="Google" className="w-5 h-5" />
             <span className="font-medium">Đăng Nhập Với Google</span>
           </div>
         </div>
