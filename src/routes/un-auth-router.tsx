@@ -1,14 +1,16 @@
 import HomePage from "@/pages/HomePage"
+import LoginPage from "@/pages/LoginPage/LoginPage"
+import RegisterPage from "@/pages/RegisterPage/RegisterPage"
 import { pathName } from "@/routes/path-name"
 
 export const UnAuthRouter = [
   {
     path: pathName.LOGIN,
-    element: <h1>login page</h1>,
+    element: <LoginPage />,
   },
   {
     path: pathName.REGISTER,
-    element: <h1>resister page</h1>,
+    element: <RegisterPage />,
   },
   {
     path: pathName.HOME,
