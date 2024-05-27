@@ -6,4 +6,5 @@ export const pathName = {
   VERIFY_REGISTER: "/verify-register",
 
   HOME: "/",
+  CART: "/cart",
 } as const
