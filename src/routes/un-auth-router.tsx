@@ -1,4 +1,4 @@
-import HomePage from "@/pages/HomePage"
+import HomePage from "@/pages/HomePage/HomePage"
 import LoginPage from "@/pages/LoginPage/LoginPage"
 import RegisterPage from "@/pages/RegisterPage/RegisterPage"
 import { pathName } from "@/routes/path-name"

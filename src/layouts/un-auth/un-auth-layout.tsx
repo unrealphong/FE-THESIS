@@ -8,13 +8,13 @@ import "swiper/css/scrollbar"
 
 function UnAuthLayout() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <div className="container pt-2 pb-10">
+      <main className="flex-grow">
         <Outlet />
-      </div>
+      </main>
       <Footer />
-    </>
+    </div>
   )
 }
 
