@@ -35,7 +35,7 @@ const LoginPage = () => {
           <input
             type="email"
             id="email"
-            className="input-bordered input w-full max-w-md"
+            className="input input-bordered w-full max-w-md"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -51,7 +51,7 @@ const LoginPage = () => {
           <input
             type={showPassword ? "text" : "password"}
             id="password"
-            className="input-bordered input w-full max-w-md"
+            className="input input-bordered w-full max-w-md"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}

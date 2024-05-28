@@ -5,7 +5,6 @@ import thumbnail3 from "@/assets/images/block-item-3.webp"
 import thumbnail4 from "@/assets/images/block-item-4.webp"
 import storebg from "@/assets/images/store-bg.jpg"
 import { useEffect, useState } from "react"
-import { Button } from "react-aria-components"
 import { Autoplay, Navigation, Pagination } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 function HomePage() {
@@ -163,9 +162,9 @@ function HomePage() {
           </div>
         </div>
         <div className="block-offer-button text-center">
-          <Button className="button h-10 rounded border bg-red-500 px-2 text-white">
+          <button className="btn h-10 rounded border bg-red-500 px-2 text-white">
             <a href="#">Xem tất cả sản phẩm</a>
-          </Button>
+          </button>
         </div>
       </div>
       <div className="block-new-product container mx-auto my-2 flex max-w-7xl flex-col">
@@ -295,9 +294,9 @@ function HomePage() {
           </div>
         </div>
         <div className="block-offer-button my-5 text-center">
-          <Button className="h-10 rounded border bg-red-500 px-2 text-white">
+          <button className="btn h-10 rounded border bg-red-500 px-2 text-white">
             <a href="#">Xem tất cả sản phẩm</a>
-          </Button>
+          </button>
         </div>
       </div>
       <div className="relative mx-auto my-5 max-w-7xl">
@@ -318,9 +317,9 @@ function HomePage() {
               <br /> thông minh và chất lượng hơn tới hàng triệu người tiêu dùng
               Việt.
             </p>
-            <Button className="rounded bg-red-600 px-5 py-2 text-white">
+            <button className="btn rounded bg-red-600 px-5 py-2 text-white">
               Xem Vị Trí Cửa Hàng
-            </Button>
+            </button>
           </div>
         </div>
       </div>
