@@ -1,12 +1,12 @@
+import logo from "@/assets/images/logo/logo.webp"
 import { useEffect, useState } from "react"
-import logo from "../../assets/images/logo/logo.webp"
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.pageYOffset
+      const scrollTop = window.scrollY
       if (scrollTop > 0) {
         setIsScrolled(true)
       } else {
@@ -27,12 +27,12 @@ function Header() {
         <div className="swiper swiper-initialized">
           <div className="swiper-wrapper">
             <div className="swiper-slide">
-              <div className="sale-header h-[50px] flex items-center justify-center relative bg-contain bg-center bg-[url('https://pm2ec.s3.ap-southeast-1.amazonaws.com/cms/17122900563117907.jpg')] bg-[rgb(201,32,39)]">
-                <div className="sale-content uppercase text-white mr-2 font-semibold">
+              <div className="sale-header relative flex h-[50px] items-center justify-center bg-[rgb(201,32,39)] bg-[url('https://pm2ec.s3.ap-southeast-1.amazonaws.com/cms/17122900563117907.jpg')] bg-contain bg-center">
+                <div className="sale-content mr-2 font-semibold uppercase text-white">
                   Flash sale đến 50%
                 </div>
                 <div className="sale-action flex justify-end">
-                  <div className="link">
+                  <div className="">
                     <a
                       href="https://tokyolife.vn/landing-page/hot-100"
                       className="text-bold text-sm text-white"
@@ -47,24 +47,24 @@ function Header() {
           </div>
         </div>
         <div
-          className={`sticky-header w-full h-[126px] bg-[#f8f1e4] ${isScrolled ? "fixed top-0 z-10" : ""}`}
+          className={`sticky-header h-[126px] w-full bg-[#f8f1e4] ${isScrolled ? "fixed top-0 z-10" : ""}`}
         >
-          <div className="header-content container flex items-center justify-between h-[63px] max-w-7xl mx-auto">
+          <div className="header-content container mx-auto flex h-[63px] max-w-7xl items-center justify-between">
             <div className="logo">
               <a href="/">
                 <img src={logo} alt="logo" className="h-10 w-auto" />
               </a>
             </div>
-            <div className="search mx-4 flex justify-center w-full max-w-3xl">
+            <div className="search mx-4 flex w-full max-w-3xl justify-center">
               <div className="flex w-full">
                 <input
                   type="text"
                   placeholder="Tìm kiếm..."
                   autoComplete="off"
                   aria-invalid="false"
-                  className="p-2 border border-r-0 rounded-l w-full outline-none"
+                  className="w-full rounded-l border border-r-0 p-2 outline-none"
                 />
-                <button className="p-2 border border-l-0 rounded-r bg-red-500 text-white hover:bg-red-600">
+                <button className="rounded-r border border-l-0 bg-red-500 p-2 text-white hover:bg-red-600">
                   <svg
                     width="16"
                     height="16"
@@ -163,66 +163,68 @@ function Header() {
               </a>
             </div>
           </div>
-          <div className="menu-box flex bg-white items-center h-[63px] shadow-md">
-            <ul className="font-medium container flex flex-col md:p-0 rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 ">
-              <li>
-                <a
-                  href="/"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
-                  aria-current="page"
-                >
-                  Trang chủ
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
-                >
-                  Áo
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
-                >
-                  Quần
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0 "
-                >
-                  Giày Dép
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
-                >
-                  Phụ kiện
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
-                >
-                  Giảm giá -40%
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-600 md:p-0"
-                >
-                  Tin tức
-                </a>
-              </li>
-            </ul>
+          <div className="menu-box flex h-[63px] items-center bg-white shadow-md">
+            <nav className="nav container mx-auto flex max-w-7xl justify-start">
+              <ul className="flex flex-col rounded-lg font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0 rtl:space-x-reverse ">
+                <li>
+                  <a
+                    href="/"
+                    className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
+                    aria-current="page"
+                  >
+                    Trang chủ
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
+                  >
+                    Áo
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
+                  >
+                    Quần
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600 "
+                  >
+                    Giày Dép
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
+                  >
+                    Phụ kiện
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
+                  >
+                    Giảm giá -40%
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
+                  >
+                    Tin tức
+                  </a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </header>

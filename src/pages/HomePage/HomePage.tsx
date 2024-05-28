@@ -5,6 +5,7 @@ import thumbnail3 from "@/assets/images/block-item-3.webp"
 import thumbnail4 from "@/assets/images/block-item-4.webp"
 import storebg from "@/assets/images/store-bg.jpg"
 import { useEffect, useState } from "react"
+import { Button } from "react-aria-components"
 import { Autoplay, Navigation, Pagination } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 function HomePage() {
@@ -21,8 +22,8 @@ function HomePage() {
       "TokyoLife.vn | Hàng tiêu dùng Nhật Bản &  thời trang thông minh"
   }, [])
   return (
-    <div className="">
-      <div className="banner mt-5">
+    <>
+      <div className="mx-auto mt-5 max-w-7xl justify-center">
         <Swiper
           spaceBetween={30}
           centeredSlides={true}
@@ -47,48 +48,64 @@ function HomePage() {
           </SwiperSlide>
         </Swiper>
       </div>
-      <div className="block-item justify-center mt-14">
-        <div className="block-product-name-inner-home flex justify-center text-red-600 uppercase font-semibold text-3xl">
+      <div className="block-item mx-auto mt-14 max-w-7xl items-center justify-center">
+        <div className="block-product-name-inner-home flex justify-center text-3xl font-semibold uppercase text-red-600">
           Mua gì hôm nay?
         </div>
-        <div className="block-product-image-home flex w-12/12 space-x-16 m-5">
+        <div className="block-product-image-home w-12/12 m-5 flex space-x-16">
           <div className="w-1/6">
             <a href="#">
               <div className="thumbnail my-2">
-                <img src={thumbnail1} alt="" className="rounded-full" />
+                <img
+                  src={thumbnail1}
+                  alt=""
+                  className="h-40 w-40 rounded-full object-cover"
+                />
               </div>
               <div className="thumbnail-name my-2">
-                <p className="text-2xl font-medium text-center">Áo thun nam</p>
+                <p className="text-center text-2xl font-medium">Áo thun nam</p>
               </div>
             </a>
           </div>
           <div className="w-1/6">
             <a href="#">
               <div className="thumbnail my-2">
-                <img src={thumbnail2} alt="" className="rounded-full" />
+                <img
+                  src={thumbnail2}
+                  alt=""
+                  className="h-40 w-40 rounded-full object-cover"
+                />
               </div>
               <div className="thumbnail-name my-2">
-                <p className="text-2xl font-medium text-center">Áo polo nam</p>
+                <p className="text-center text-2xl font-medium">Áo polo nam</p>
               </div>
             </a>
           </div>
           <div className="w-1/6">
             <a href="#">
               <div className="thumbnail my-2">
-                <img src={thumbnail3} alt="" className="rounded-full" />
+                <img
+                  src={thumbnail3}
+                  alt=""
+                  className="h-40 w-40 rounded-full object-cover"
+                />
               </div>
               <div className="thumbnail-name my-2">
-                <p className="text-2xl font-medium text-center">Áo chống nắng</p>
+                <p className="text-center text-2xl font-medium">Áo chống nắng</p>
               </div>
             </a>
           </div>
           <div className="w-1/6">
             <a href="#">
               <div className="thumbnail my-2">
-                <img src={thumbnail1} alt="" className="rounded-full" />
+                <img
+                  src={thumbnail1}
+                  alt=""
+                  className="h-40 w-40 rounded-full object-cover"
+                />
               </div>
-              <div className="thumbnail-name my-2">
-                <p className="text-2xl font-medium text-center">Áo thun nam</p>
+              <div className="thumbnail my-2">
+                <p className="text-center text-2xl font-medium">Áo thun nam</p>
               </div>
             </a>
           </div>
@@ -97,37 +114,37 @@ function HomePage() {
               <div className="thumbnail my-2">
                 <img
                   src={thumbnail4}
-                  className="w-40 h-40 rounded-full object-cover"
+                  className="h-40 w-40 rounded-full object-cover"
                 />
               </div>
 
               <div className="thumbnail-name my-2">
-                <p className="text-2xl font-medium text-center">Quần shorts nam</p>
+                <p className="text-center text-2xl font-medium">Quần shorts nam</p>
               </div>
             </a>
           </div>
           <div className="w-1/6">
             <a href="#">
               <div className="thumbnail my-2">
-                <img src={thumbnail2} alt="" className="rounded-full" />
+                <img src={thumbnail2} alt="" className="h-40 w-40 rounded-full" />
               </div>
               <div className="thumbnail-name my-2">
-                <p className="text-2xl font-medium text-center">Áo polo nam</p>
+                <p className="text-center text-2xl font-medium">Áo polo nam</p>
               </div>
             </a>
           </div>
         </div>
       </div>
-      <div className="block-offer-online my-10 flex flex-col justify-center">
-        <div className="flex justify-center text-red-600 uppercase font-semibold text-3xl">
+      <div className="block-offer-online container mx-auto my-10 flex max-w-7xl flex-col justify-center">
+        <div className="flex justify-center text-3xl font-semibold uppercase text-red-600">
           Ưu đãi độc quyền online
         </div>
         <div className="block-offer-content">
-          <div className="flex justify-center border-b-4 mb-4 mt-8">
+          <div className="mb-4 mt-8 flex justify-center border-b-4">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                className={`cursor-pointer mx-4 py-2 text-md font-medium ${activeTab === tab.id ? "border-b-4 border-red-500 text-red-500" : ""}`}
+                className={`text-md mx-4 cursor-pointer py-2 font-medium ${activeTab === tab.id ? "border-b-4 border-red-500 text-red-500" : ""}`}
                 onClick={() => setActiveTab(tab.id)}
               >
                 {tab.label}
@@ -146,18 +163,18 @@ function HomePage() {
           </div>
         </div>
         <div className="block-offer-button text-center">
-          <button className="button bg-red-500 text-white">
+          <Button className="button h-10 rounded border bg-red-500 px-2 text-white">
             <a href="#">Xem tất cả sản phẩm</a>
-          </button>
+          </Button>
         </div>
       </div>
-      <div className="block-new-product flex flex-col my-2">
-        <div className="block-new-product-title text-center text-red-600 uppercase font-semibold text-3xl my-4">
+      <div className="block-new-product container mx-auto my-2 flex max-w-7xl flex-col">
+        <div className="block-new-product-title my-4 text-center text-3xl font-semibold uppercase text-red-600">
           Sản phẩm mới ra mắt
         </div>
-        <div className="block-new-product-item grid grid-cols-1 md:grid-cols-5 gap-4">
-          <div className="tw-card block max-w-[18rem] rounded-lg bg-white text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white">
-            <div className="relative overflow-hidden bg-cover bg-no-repeat h-100">
+        <div className="block-new-product-item grid grid-cols-1 gap-4 md:grid-cols-5">
+          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
+            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
               <img
                 src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
                 alt=""
@@ -171,8 +188,8 @@ function HomePage() {
               </p>
             </div>
           </div>
-          <div className="tw-card block max-w-[18rem] rounded-lg bg-white text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white">
-            <div className="relative overflow-hidden bg-cover bg-no-repeat h-100">
+          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
+            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
               <img
                 src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
                 alt=""
@@ -186,8 +203,8 @@ function HomePage() {
               </p>
             </div>
           </div>
-          <div className="tw-card block max-w-[18rem] rounded-lg bg-white text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white">
-            <div className="relative overflow-hidden bg-cover bg-no-repeat h-100">
+          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
+            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
               <img
                 src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
                 alt=""
@@ -201,8 +218,8 @@ function HomePage() {
               </p>
             </div>
           </div>
-          <div className="tw-card block max-w-[18rem] rounded-lg bg-white text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white">
-            <div className="relative overflow-hidden bg-cover bg-no-repeat h-100">
+          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
+            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
               <img
                 src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
                 alt=""
@@ -216,8 +233,8 @@ function HomePage() {
               </p>
             </div>
           </div>
-          <div className="tw-card block max-w-[18rem] rounded-lg bg-white text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white">
-            <div className="relative overflow-hidden bg-cover bg-no-repeat h-100">
+          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
+            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
               <img
                 src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
                 alt=""
@@ -231,8 +248,8 @@ function HomePage() {
               </p>
             </div>
           </div>
-          <div className="tw-card block max-w-[18rem] rounded-lg bg-white text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white">
-            <div className="relative overflow-hidden bg-cover bg-no-repeat h-100">
+          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
+            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
               <img
                 src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
                 alt=""
@@ -246,8 +263,8 @@ function HomePage() {
               </p>
             </div>
           </div>
-          <div className="tw-card block max-w-[18rem] rounded-lg bg-white text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white">
-            <div className="relative overflow-hidden bg-cover bg-no-repeat h-100">
+          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
+            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
               <img
                 src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
                 alt=""
@@ -261,8 +278,8 @@ function HomePage() {
               </p>
             </div>
           </div>
-          <div className="tw-card block max-w-[18rem] rounded-lg bg-white text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white">
-            <div className="relative overflow-hidden bg-cover bg-no-repeat h-100">
+          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
+            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
               <img
                 src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
                 alt=""
@@ -277,20 +294,20 @@ function HomePage() {
             </div>
           </div>
         </div>
-        <div className="block-offer-button text-center">
-          <button className="button bg-red-500 text-white">
+        <div className="block-offer-button my-5 text-center">
+          <Button className="h-10 rounded border bg-red-500 px-2 text-white">
             <a href="#">Xem tất cả sản phẩm</a>
-          </button>
+          </Button>
         </div>
       </div>
-      <div className="my-5 relative">
+      <div className="relative mx-auto my-5 max-w-7xl">
         <div className="relative flex flex-col sm:flex-row">
           <img
             src={storebg}
             className="w-full sm:flex"
             style={{ height: "600px" }}
           />
-          <div className="group-text flex flex-col gap-3 items-start justify-start absolute top-1/2 left-0 w-1/2 transform -translate-y-1/2">
+          <div className="group-text absolute left-0 top-1/2 flex w-1/2 -translate-y-1/2 transform flex-col items-start justify-start gap-3 px-10">
             <h4>HỆ THỐNG CỬA HÀNG</h4>
             <h3 className="font-bold">
               <span className="text-red-600">TOKYOLIFE</span> CÓ HỆ THỐNG CỬA HÀNG{" "}
@@ -301,21 +318,21 @@ function HomePage() {
               <br /> thông minh và chất lượng hơn tới hàng triệu người tiêu dùng
               Việt.
             </p>
-            <button className="bg-red-600 text-white px-5 py-2 rounded">
+            <Button className="rounded bg-red-600 px-5 py-2 text-white">
               Xem Vị Trí Cửa Hàng
-            </button>
+            </Button>
           </div>
         </div>
       </div>
-      <div className="bg-red-600 text-white p-8 flex flex-col items-center mt-10">
-        <h1 className="text-3xl font-bold mb-4">TOKYOLIFE</h1>
-        <p className="italic text-center mb-4">
+      <div className="mx-auto my-10 flex w-full max-w-7xl flex-col items-center bg-red-600 p-8 text-white">
+        <h1 className="mb-4 text-3xl font-bold">TOKYOLIFE</h1>
+        <p className="mb-4 text-center italic">
           <span className="text-lg font-semibold">
             TokyoLife trân trọng cảm ơn Quý Khách đã ủng hộ và góp phần tạo thêm cơ
             hội việc làm cho 142 người khuyết tật.
           </span>
         </p>
-        <p className="text-center leading-relaxed max-w-4xl">
+        <p className="max-w-4xl text-center leading-relaxed">
           TokyoLife là cửa hàng bán lẻ đồ gia dụng, hóa mỹ phẩm, phụ kiện chính hãng
           các thương hiệu Nhật Bản: Inomata, Ebisu, ORP Tokyo, Momotani, Naturie,
           Rohto (Hada Labo, Melano CC...), Kose (Dòng Softymo), Shiseido (Dòng Senka,
@@ -329,7 +346,7 @@ function HomePage() {
           sản xuất tại Việt Nam, Trung Quốc, Thái Lan...
         </p>
       </div>
-    </div>
+    </>
   )
 }
 
