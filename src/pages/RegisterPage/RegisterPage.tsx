@@ -29,7 +29,7 @@ const RegisterPage = () => {
             type="text"
             name="name"
             id="name"
-            className="input-bordered input w-full"
+            className="input input-bordered w-full"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -42,7 +42,7 @@ const RegisterPage = () => {
             type="email"
             name="email"
             id="email"
-            className="input-bordered input w-full"
+            className="input input-bordered w-full"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -55,7 +55,7 @@ const RegisterPage = () => {
             type={showPassword ? "text" : "password"}
             name="password"
             id="password"
-            className="input-bordered input w-full"
+            className="input input-bordered w-full"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -72,7 +72,7 @@ const RegisterPage = () => {
             type={showPassword ? "text" : "password"}
             name="confirmPassword"
             id="confirmPassword"
-            className="input-bordered input w-full"
+            className="input input-bordered w-full"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
