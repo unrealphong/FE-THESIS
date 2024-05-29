@@ -1,10 +1,6 @@
-import Footer from "@/Components/Footer/Footer"
-import Header from "@/Components/Header/Header"
+import Footer from "@/layouts/un-auth/Components/Footer/Footer"
+import Header from "@/layouts/un-auth/Components/Header/Header"
 import { Outlet } from "react-router-dom"
-import "swiper/css"
-import "swiper/css/navigation"
-import "swiper/css/pagination"
-import "swiper/css/scrollbar"
 
 function UnAuthLayout() {
   return (

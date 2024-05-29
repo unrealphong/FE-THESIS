@@ -1,12 +1,16 @@
 import App from "@/App"
 import { AppProvider } from "@/AppProvider"
 import { Fallback } from "@/Fallback"
+import "@/index.scss"
 import { RootUnAuthRouter } from "@/routes"
 import React from "react"
 import ReactDOM from "react-dom/client"
 import { ErrorBoundary } from "react-error-boundary"
 import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom"
-import "./index.scss"
+import "swiper/css"
+import "swiper/css/navigation"
+import "swiper/css/pagination"
+import "swiper/css/scrollbar"
 
 const routes: RouteObject[] = [...RootUnAuthRouter]
 const router = createBrowserRouter(routes, {})
