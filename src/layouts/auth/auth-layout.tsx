@@ -6,20 +6,18 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons"
-import { Breadcrumb, Button, Layout, Menu, theme } from "antd"
+import { Breadcrumb, Button, Layout, Menu } from "antd"
 import React, { useState } from "react"
 import { Link, Outlet, useLocation } from "react-router-dom"
 const { Header, Sider, Content } = Layout
 
 const AuthLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false)
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken()
   const location = useLocation()
+
   const generateBreadcrumbs = () => {
     const pathnames = location.pathname.split("/").filter((item) => item)
-    return [
+    const breadcrumbs = [
       <Breadcrumb.Item key="home">
         <Link to="/">Admin</Link>
       </Breadcrumb.Item>,
@@ -35,7 +33,9 @@ const AuthLayout: React.FC = () => {
         )
       }),
     ]
+    return breadcrumbs
   }
+
   return (
     <Layout>
       <Sider theme="light" trigger={null} collapsible collapsed={collapsed}>
@@ -96,7 +96,7 @@ const AuthLayout: React.FC = () => {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Header style={{ padding: 0 }}>
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -108,18 +108,13 @@ const AuthLayout: React.FC = () => {
             }}
           />
         </Header>
-        <Content
-          style={{
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-          className="mx-4 my-6 p-6"
-        >
+        <Content style={{ padding: "0 50px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
             {generateBreadcrumbs()}
           </Breadcrumb>
-          <Outlet />
+          <div className="site-layout-content">
+            <Outlet />
+          </div>
         </Content>
       </Layout>
     </Layout>
