@@ -2,7 +2,7 @@ import App from "@/App"
 import { AppProvider } from "@/AppProvider"
 import { Fallback } from "@/Fallback"
 import "@/index.scss"
-import { RootUnAuthRouter } from "@/routes"
+import { RootAuthRouter, RootUnAuthRouter } from "@/routes"
 import React from "react"
 import ReactDOM from "react-dom/client"
 import { ErrorBoundary } from "react-error-boundary"
@@ -12,7 +12,7 @@ import "swiper/css/navigation"
 import "swiper/css/pagination"
 import "swiper/css/scrollbar"
 
-const routes: RouteObject[] = [...RootUnAuthRouter]
+const routes: RouteObject[] = [...RootUnAuthRouter, ...RootAuthRouter]
 const router = createBrowserRouter(routes, {})
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
