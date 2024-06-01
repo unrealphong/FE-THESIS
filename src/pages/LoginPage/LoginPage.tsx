@@ -1,50 +1,75 @@
 import iconFb from "@/assets/images/icons/icon-fb.svg"
 import iconGg from "@/assets/images/icons/icon-gg.svg"
-import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
+import { object, string } from "zod"
+
+const loginSchema = object({
+  email: string()
+    .min(1, "Email address is required")
+    .email("Email Address is invalid"),
+  password: string()
+    .min(1, "Password is required")
+    .min(8, "Password must be more than 8 characters")
+    .max(32, "Password must be less than 32 characters"),
+})
+
 const LoginPage = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+  })
   const [showPassword, setShowPassword] = useState(false)
-  const [formSubmitted, setFormSubmitted] = useState(false)
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
+  const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setFormSubmitted(true)
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken")
+    if (accessToken) {
+      navigate("/")
+    }
+  }, [navigate])
 
-    if ((e.target as HTMLFormElement).checkValidity()) {
-      // Handle form submission
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post("http://localhost:3056/api/auth/login", data)
+      console.log(response.data)
+      const { accessToken } = response.data
+      localStorage.setItem("accessToken", accessToken) // Lưu accessToken vào localStorage
+      navigate("/") // Chuyển hướng đến trang Home
+    } catch (error) {
+      console.error(error)
     }
   }
 
   return (
     <div className="mx-auto my-10 max-w-md">
       <h3 className="mb-3 text-center font-medium">Đăng Nhập</h3>
-      <form
-        onSubmit={handleSubmit}
-        className={`needs-validation ${formSubmitted ? "was-validated" : ""}`}
-        noValidate
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="my-2">
-          <label htmlFor="email" className=" label">
+          <label htmlFor="email" className="label">
             Email
           </label>
           <input
             type="email"
             id="email"
             className="input input-bordered w-full max-w-md"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email")}
           />
-          <div className="mt-1 text-red-500">
-            {formSubmitted && !email && "Vui lòng nhập email hợp lệ."}
-          </div>
+          {errors.email && (
+            <span className="text-red-500">{errors.email.message}</span>
+          )}
         </div>
-        <div className="my-2">
+        <div className="relative my-2">
           <label htmlFor="password" className="mb-1 block">
             Mật Khẩu
           </label>
@@ -52,17 +77,21 @@ const LoginPage = () => {
             type={showPassword ? "text" : "password"}
             id="password"
             className="input input-bordered w-full max-w-md"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password")}
           />
           <i
             className="fa-solid fa-eye absolute right-0 top-0 mr-3 mt-2 cursor-pointer"
             onClick={togglePasswordVisibility}
           ></i>
+          {errors.password && (
+            <span className="text-red-500">{errors.password.message}</span>
+          )}
         </div>
         <div className="mb-3">
-          <button className="btn w-full rounded bg-red-600 py-2 text-white">
+          <button
+            type="submit"
+            className="btn w-full rounded bg-red-600 py-2 text-white"
+          >
             Đăng Nhập
           </button>
         </div>

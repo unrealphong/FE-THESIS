@@ -1,38 +1,48 @@
 import iconFb from "@/assets/images/icons/icon-fb.svg"
 import iconGg from "@/assets/images/icons/icon-gg.svg"
-import { useState } from "react"
+import axios from "axios"
+import React from "react"
+import { useForm } from "react-hook-form"
+
 const RegisterPage = () => {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
+  const [showPassword, setShowPassword] = React.useState(false)
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    // Handle form submission
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3056/api/auth/register",
+        data,
+      )
+      console.log(response.data)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
-    <div className="mx-auto my-10 max-w-md ">
+    <div className="mx-auto my-10 max-w-md">
       <h3 className="mb-3 text-center font-medium">Đăng Ký</h3>
-      <form id="form-register" onSubmit={handleSubmit}>
+      <form id="form-register" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-3">
           <label htmlFor="name" className="mb-1 block">
             Họ Và Tên
           </label>
           <input
             type="text"
-            name="name"
             id="name"
             className="input input-bordered w-full"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            {...register("name", { required: "Họ và tên là bắt buộc" })}
           />
+          {errors.name && <span>{errors.name.message}</span>}
         </div>
         <div className="mb-3">
           <label htmlFor="email" className="mb-1 block">
@@ -40,12 +50,11 @@ const RegisterPage = () => {
           </label>
           <input
             type="email"
-            name="email"
             id="email"
             className="input input-bordered w-full"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email", { required: "Email là bắt buộc" })}
           />
+          {errors.email && <span>{errors.email.message}</span>}
         </div>
         <div className="relative mb-3">
           <label htmlFor="password" className="mb-1 block">
@@ -53,16 +62,15 @@ const RegisterPage = () => {
           </label>
           <input
             type={showPassword ? "text" : "password"}
-            name="password"
             id="password"
             className="input input-bordered w-full"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password", { required: "Mật khẩu là bắt buộc" })}
           />
           <i
             className="fa-solid fa-eye absolute right-0 top-0 mr-3 mt-2 cursor-pointer"
             onClick={togglePasswordVisibility}
           ></i>
+          {errors.password && <span>{errors.password.message}</span>}
         </div>
         <div className="relative mb-3">
           <label htmlFor="confirmPassword" className="mb-1 block">
@@ -70,16 +78,17 @@ const RegisterPage = () => {
           </label>
           <input
             type={showPassword ? "text" : "password"}
-            name="confirmPassword"
             id="confirmPassword"
             className="input input-bordered w-full"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            {...register("confirmPassword", {
+              required: "Nhập lại mật khẩu là bắt buộc",
+            })}
           />
           <i
             className="fa-solid fa-eye absolute right-0 top-0 mr-3 mt-2 cursor-pointer"
             onClick={togglePasswordVisibility}
           ></i>
+          {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
         </div>
         <div className="mb-3">
           <button
