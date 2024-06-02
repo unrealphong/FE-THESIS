@@ -73,7 +73,10 @@ const AuthLayout: React.FC = () => {
                   key: "6",
                   label: <Link to="/quan-ly-san-pham">Tất cả sản phẩm</Link>,
                 },
-                { key: "7", label: "Thêm sản phẩm" },
+                {
+                  key: "7",
+                  label: <Link to="/quan-ly-san-pham/them">Thêm sản phẩm</Link>,
+                },
                 { key: "8", label: "Sửa sản phẩm" },
               ],
             },
