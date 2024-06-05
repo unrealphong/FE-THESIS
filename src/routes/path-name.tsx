@@ -6,6 +6,7 @@ export const pathName = {
   VERIFY_REGISTER: "/verify-register",
   HOME: "/",
   PRODUCTS: "/products",
+  CART: "/cart",
 
   // ADMIN PATH
   DASHBOARD: "/thong-ke",
