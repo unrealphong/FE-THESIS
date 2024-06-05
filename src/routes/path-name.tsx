@@ -12,4 +12,5 @@ export const pathName = {
   CATEGORIES: "/quan-ly-danh-muc",
   PRODUCTS: "/quan-ly-san-pham",
   ADDPRODUCT: "/quan-ly-san-pham/them",
+  UPDATEPRODUCT: "/quan-ly-san-pham/sua",
 } as const
