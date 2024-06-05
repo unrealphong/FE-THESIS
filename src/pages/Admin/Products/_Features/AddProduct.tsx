@@ -1,4 +1,6 @@
+import { Category } from "@/@types/category"
 import httpRequest from "@/api/axios-instance"
+import { getAllCategory } from "@/api/services/CategoryService"
 import { PlusOutlined } from "@ant-design/icons"
 import { Button, Form, Input, Select, Upload } from "antd"
 import { useEffect, useState } from "react"
@@ -14,7 +16,7 @@ const AddProduct = () => {
   const [isFlashSale, setIsFlashSale] = useState("")
   const [description, setDescription] = useState("")
   const [images, setImages] = useState([])
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [variants, setVariants] = useState([{ color: "", size: "", quantity: 0 }])
   const navigate = useNavigate()
   useEffect(() => {
@@ -22,14 +24,8 @@ const AddProduct = () => {
   }, [])
 
   const fetchCategories = async () => {
-    try {
-      const response = await httpRequest.get("/category")
-      if (response.data.success) {
-        setCategories(response.data.listCategory)
-      }
-    } catch (error) {
-      console.error("Failed to fetch categories:", error)
-    }
+    const allCategory = await getAllCategory()
+    setCategories(allCategory)
   }
 
   const handleAddVariant = () => {
@@ -84,8 +80,8 @@ const AddProduct = () => {
             <Select value={category} onChange={(value) => setCategory(value)}>
               <Option value="">Chọn Loại Sản Phẩm</Option>
               {categories.map((cat) => (
-                <Option key={cat._id} value={cat._id}>
-                  {cat.title}
+                <Option key={cat.id} value={cat.id}>
+                  {cat.name}
                 </Option>
               ))}
             </Select>

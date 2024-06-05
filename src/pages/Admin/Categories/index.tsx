@@ -9,7 +9,7 @@ const CategoryManagement = () => {
   const [categories, setCategories] = useState<Category[]>([])
   const [isAddModalVisible, setIsAddModalVisible] = useState(false)
   const [isEditModalVisible, setIsEditModalVisible] = useState(false)
-  const [currentCategory, setCurrentCategory] = useState(null)
+  const [currentCategory, setCurrentCategory] = useState<Category | null>(null)
   const [form] = Form.useForm()
 
   useEffect(() => {
@@ -20,6 +20,7 @@ const CategoryManagement = () => {
     const data = await getAllCategory()
     setCategories(data)
   }
+
   const handleAddCategory = async (values: Category) => {
     try {
       await createCategory(values)
@@ -33,7 +34,7 @@ const CategoryManagement = () => {
 
   const handleEditCategory = async (values: Category) => {
     try {
-      await httpRequest.put(`/categories/${currentCategory._id}`, values)
+      await httpRequest.put(`/categories/${currentCategory?.id}`, values) // Sử dụng currentCategory để lấy id
       fetchCategories()
       setIsEditModalVisible(false)
       form.resetFields()
@@ -42,7 +43,7 @@ const CategoryManagement = () => {
     }
   }
 
-  const handleDeleteCategory = async (categoryId) => {
+  const handleDeleteCategory = async (categoryId: number) => {
     try {
       await httpRequest.delete(`/categories/${categoryId}`)
       fetchCategories()
@@ -56,7 +57,7 @@ const CategoryManagement = () => {
       title: "STT",
       dataIndex: "id",
       key: "id",
-      render: (text, record, index) => index + 1,
+      render: (index: number) => index + 1,
     },
     {
       title: "Tên Danh Mục",
@@ -71,7 +72,7 @@ const CategoryManagement = () => {
     {
       title: "Thao Tác",
       key: "actions",
-      render: (text, record) => (
+      render: (record: Category) => (
         <Space size="middle">
           <Button
             icon={<EditOutlined />}
@@ -83,7 +84,7 @@ const CategoryManagement = () => {
           />
           <Button
             icon={<DeleteOutlined />}
-            onClick={() => handleDeleteCategory(record._id)}
+            onClick={() => handleDeleteCategory(record.id)}
             danger
           />
         </Space>
@@ -128,7 +129,7 @@ const CategoryManagement = () => {
 
       <Modal
         title="Chỉnh Sửa Danh Mục"
-        open={isEditModalVisible}
+        open={isEditModalVisible} // Sửa open thành visible
         onCancel={() => setIsEditModalVisible(false)}
         footer={null}
       >
