@@ -1,10 +1,12 @@
+import { Category } from "@/@types/category"
+import httpRequest from "@/api/axios-instance"
+import { createCategory, getAllCategory } from "@/api/services/CategoryService"
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons"
 import { Button, Form, Input, Modal, Space, Table } from "antd"
-import axios from "axios"
 import { useEffect, useState } from "react"
 
 const CategoryManagement = () => {
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [isAddModalVisible, setIsAddModalVisible] = useState(false)
   const [isEditModalVisible, setIsEditModalVisible] = useState(false)
   const [currentCategory, setCurrentCategory] = useState(null)
@@ -15,24 +17,12 @@ const CategoryManagement = () => {
   }, [])
 
   const fetchCategories = async () => {
-    try {
-      const response = await axios.get(
-        "https://app-server.lafutavn.store/api/category/",
-      )
-      const rawData = response.data
-      if (rawData.success && Array.isArray(rawData.listCategory)) {
-        setCategories(rawData.listCategory)
-      } else {
-        console.error("API response is not valid:", rawData)
-      }
-    } catch (error) {
-      console.error("Failed to fetch categories:", error)
-    }
+    const data = await getAllCategory()
+    setCategories(data)
   }
-
-  const handleAddCategory = async (values) => {
+  const handleAddCategory = async (values: Category) => {
     try {
-      await axios.post("https://app-server.lafutavn.store/api/category/", values)
+      await createCategory(values)
       fetchCategories()
       setIsAddModalVisible(false)
       form.resetFields()
@@ -41,12 +31,9 @@ const CategoryManagement = () => {
     }
   }
 
-  const handleEditCategory = async (values) => {
+  const handleEditCategory = async (values: Category) => {
     try {
-      await axios.put(
-        `https://app-server.lafutavn.store/api/category/${currentCategory.id}`,
-        values,
-      )
+      await httpRequest.put(`/categories/${currentCategory._id}`, values)
       fetchCategories()
       setIsEditModalVisible(false)
       form.resetFields()
@@ -57,9 +44,7 @@ const CategoryManagement = () => {
 
   const handleDeleteCategory = async (categoryId) => {
     try {
-      await axios.delete(
-        `https://app-server.lafutavn.store/api/category/${categoryId}`,
-      )
+      await httpRequest.delete(`/categories/${categoryId}`)
       fetchCategories()
     } catch (error) {
       console.error("Failed to delete category:", error)
@@ -75,13 +60,13 @@ const CategoryManagement = () => {
     },
     {
       title: "Tên Danh Mục",
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Sản Phẩm",
-      dataIndex: "productCount",
-      key: "productCount",
+      dataIndex: "quantity",
+      key: "quantity",
     },
     {
       title: "Thao Tác",
@@ -98,7 +83,7 @@ const CategoryManagement = () => {
           />
           <Button
             icon={<DeleteOutlined />}
-            onClick={() => handleDeleteCategory(record.id)}
+            onClick={() => handleDeleteCategory(record._id)}
             danger
           />
         </Space>
@@ -117,7 +102,7 @@ const CategoryManagement = () => {
         Thêm Danh Mục Mới
       </Button>
 
-      <Table columns={columns} dataSource={categories} rowKey={"_id"} />
+      <Table columns={columns} dataSource={categories} rowKey={"id"} />
 
       <Modal
         title="Thêm Danh Mục Mới"

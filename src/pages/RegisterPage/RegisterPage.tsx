@@ -1,10 +1,12 @@
+import httpRequest from "@/api/axios-instance"
 import iconFb from "@/assets/images/icons/icon-fb.svg"
 import iconGg from "@/assets/images/icons/icon-gg.svg"
-import axios from "axios"
 import React from "react"
 import { useForm } from "react-hook-form"
-
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 const RegisterPage = () => {
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -18,13 +20,13 @@ const RegisterPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3056/api/auth/register",
-        data,
-      )
+      const response = await httpRequest.post("/register", data)
       console.log(response.data)
+      toast.success("Đăng ký thành công!") // Show success toast
+      navigate("/dang-nhap")
     } catch (error) {
       console.error(error)
+      toast.error("Đăng ký thất bại!") // Show error toast
     }
   }
 
