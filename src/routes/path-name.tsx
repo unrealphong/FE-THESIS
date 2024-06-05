@@ -4,8 +4,8 @@ export const pathName = {
   FORGOT_PASSWORD: "/quen-mat-khau",
   RESET_PASSWORD: "/doi-mat-khai",
   VERIFY_REGISTER: "/verify-register",
-
   HOME: "/",
+  PRODUCTS: "/products",
 
   // ADMIN PATH
   DASHBOARD: "/thong-ke",
