@@ -7,6 +7,7 @@ export const pathName = {
   HOME: "/",
   PRODUCTS: "/products",
   CART: "/cart",
+  CHECKOUT: "/checkout",
 
   // ADMIN PATH
   DASHBOARD: "/thong-ke",
