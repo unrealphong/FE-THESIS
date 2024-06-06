@@ -14,15 +14,15 @@ export const AuthRouter = [
     element: <CategoryManagement />,
   },
   {
-    path: pathName.PRODUCTS,
+    path: pathName.PRODUCT_MANAGEMENT,
     element: <ProductManagement />,
   },
   {
-    path: pathName.UPDATEPRODUCT,
+    path: pathName.UPDATE_PRODUCT,
     element: <UpdateProduct />,
   },
   {
-    path: pathName.ADDPRODUCT,
+    path: pathName.ADD_PRODUCT,
     element: <AddProduct />,
   },
 ]

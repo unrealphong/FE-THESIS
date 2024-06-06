@@ -10,7 +10,7 @@ export const pathName = {
   // ADMIN PATH
   DASHBOARD: "/thong-ke",
   CATEGORIES: "/quan-ly-danh-muc",
-  PRODUCTS: "/quan-ly-san-pham",
-  ADDPRODUCT: "/quan-ly-san-pham/them",
-  UPDATEPRODUCT: "/quan-ly-san-pham/sua",
+  PRODUCT_MANAGEMENT: "/quan-ly-san-pham",
+  ADD_PRODUCT: "/quan-ly-san-pham/them",
+  UPDATE_PRODUCT: "/quan-ly-san-pham/sua",
 } as const
