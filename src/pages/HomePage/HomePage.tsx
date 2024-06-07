@@ -44,7 +44,7 @@ function HomePage() {
     fetchCategory()
   }, [])
   const [products, setProducts] = useState<Product[]>([])
-const product= products.slice(0,10)
+  const product = products.slice(0, 10)
   useEffect(() => {
     const fetchProducts = async () => {
       const allProducts: Product[] = await getAllProduct()
@@ -144,14 +144,13 @@ const product= products.slice(0,10)
           Sản phẩm mới ra mắt
         </div>
         <div className="block-new-product-item grid grid-cols-1 gap-4 md:grid-cols-5">
-          {product?.map((data:Product)=>{
-            return(
+          {product?.map((data: Product) => {
+            return (
               <>
-                <ProductNewInHomePage data={data} key={data?._id}/>
+                <ProductNewInHomePage data={data} key={data?._id} />
               </>
             )
           })}
-
         </div>
         <div className="block-offer-button my-5 text-center">
           <button className="btn h-10 rounded border bg-red-500 px-2 text-white">

@@ -196,14 +196,16 @@ const ListProduct = () => {
                 {displayedProducts?.map((data: Product) => {
                   return (
                     <>
-                      <ProductInListProduct data={data} key={data?._id}/>
+                      <ProductInListProduct data={data} key={data?._id} />
                     </>
                   )
                 })}
-               
               </div>
               <div className="mb-20 mt-10 flex justify-center">
-                <button className="rounded border border-red-500 bg-red-500 px-4 py-2 text-white" onClick={loadMore}>
+                <button
+                  className="rounded border border-red-500 bg-red-500 px-4 py-2 text-white"
+                  onClick={loadMore}
+                >
                   Xem thêm
                 </button>
               </div>
