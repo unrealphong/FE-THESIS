@@ -3,6 +3,36 @@ import { Checkbox } from "antd"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 
+import { Category } from "@/@types/category"
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons"
+import { Checkbox } from "antd"
+import axios, { AxiosResponse } from "axios"
+import { useEffect, useState } from "react"
+import CategoryInListProduct from "./CategoryInListProduct"
+import { Product } from "@/@types/product"
+import ProductInListProduct from "./ProductInListProduct"
+const getAllCategory = async () => {
+  try {
+    const response: AxiosResponse<{ listCategory: Category[] }> = await axios.get(
+      "https://app-server.lafutavn.store/api/category/",
+    )
+    return response.data.listCategory
+  } catch (error) {
+    console.error("An error occurred while fetching products:", error)
+    return []
+  }
+}
+const getAllProduct = async (): Promise<Product[]> => {
+  try {
+    const response: AxiosResponse<{ products: Product[] }> = await axios.get(
+      "https://app-server.lafutavn.store/api/product/",
+    )
+    return response.data.products
+  } catch (error) {
+    console.error("An error occurred while fetching products:", error)
+    return []
+  }
+}
 const ListProduct = () => {
   const [isDivVisible, setIsDivVisible] = useState(false)
   const [isCategory, setIsCategory] = useState(false)
@@ -16,6 +46,31 @@ const ListProduct = () => {
   const handleIcon2Click = () => {
     setIsSubject(!isSubject)
   }
+  const [category, setCategory] = useState<Category[]>([])
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      const allCategory: Category[] = await getAllCategory()
+      setCategory(allCategory)
+    }
+
+    fetchCategory()
+  }, [])
+  const [products, setProducts] = useState<Product[]>([])
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const allProducts: Product[] = await getAllProduct()
+      setProducts(allProducts)
+    }
+
+    fetchProducts()
+  }, [])
+  const [visibleCount, setVisibleCount] = useState(10)
+  const loadMore = () => {
+    setVisibleCount((prevCount: number) => prevCount + 10)
+  }
+  const displayedProducts = products?.slice(0, visibleCount)
   return (
     <>
       <div className="pl-36 pr-28">
@@ -30,6 +85,11 @@ const ListProduct = () => {
               </a>
               <hr className="border-gray-400 border-opacity-50" />
               <a href="#!product" className="flex w-full text-sm font-bold">
+              <a href="#!product" className="block w-full text-sm text-sm font-bold">
+                <span>Sắp xếp theo khoảng giá</span>
+              </a>
+              <hr className="border-gray-400 border-opacity-50" />
+              <a href="#!product" className="flex w-full text-lg text-sm font-bold">
                 <div className="flex-grow">Màu sắc</div>
                 <div
                   className="w-1/10 text-center text-xs font-bold"
@@ -53,6 +113,7 @@ const ListProduct = () => {
               )}
               <hr className="border-gray-400 border-opacity-50" />
               <a href="#!product" className="flex text-sm font-bold">
+              <a href="#!product" className="flex text-lg text-sm font-bold">
                 <div className="flex-grow">Danh mục</div>
                 <div
                   className="w-1/10 text-center text-xs font-bold"
@@ -79,12 +140,20 @@ const ListProduct = () => {
                     {" "}
                     <Checkbox>Áo polo</Checkbox>
                   </div>
+                  {category?.map((data: Category) => {
+                    return (
+                      <>
+                        <CategoryInListProduct data={data} key={data?._id} />
+                      </>
+                    )
+                  })}
                 </div>
               ) : (
                 ""
               )}
               <hr className="border-gray-400 border-opacity-50" />
               <a href="#!product" className="flex w-full text-sm font-bold ">
+              <a href="#!product" className="flex w-full text-lg text-sm font-bold ">
                 <div className="flex-grow">Đối tượng</div>
                 <div
                   className="w-1/10 text-center text-xs font-bold"
@@ -503,6 +572,19 @@ const ListProduct = () => {
               </div>
               <div className="mb-20 mt-10 flex justify-center">
                 <button className="rounded border border-red-500 bg-red-500 px-4 py-2 text-white">
+                {displayedProducts?.map((data: Product) => {
+                  return (
+                    <>
+                      <ProductInListProduct data={data} key={data?._id} />
+                    </>
+                  )
+                })}
+              </div>
+              <div className="mb-20 mt-10 flex justify-center">
+                <button
+                  className="rounded border border-red-500 bg-red-500 px-4 py-2 text-white"
+                  onClick={loadMore}
+                >
                   Xem thêm
                 </button>
               </div>

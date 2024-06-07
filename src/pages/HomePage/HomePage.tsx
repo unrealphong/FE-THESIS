@@ -1,13 +1,58 @@
 import banner from "@/assets/images/banner/banner.webp"
-import thumbnail1 from "@/assets/images/block-item-1.webp"
-import thumbnail2 from "@/assets/images/block-item-2.webp"
-import thumbnail3 from "@/assets/images/block-item-3.webp"
-import thumbnail4 from "@/assets/images/block-item-4.webp"
 import storebg from "@/assets/images/store-bg.jpg"
+import axios, { AxiosResponse } from "axios"
 import { useEffect, useState } from "react"
 import { Autoplay, Navigation, Pagination } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
+import CategoryInHomePage from "./CategoryInHomePage"
+import { Category } from "@/@types/category"
+import { Product } from "@/@types/product"
+import ProductNewInHomePage from "./ProductNewInHomePage"
+import { Link } from "react-router-dom"
+
+const getAllCategory = async () => {
+  try {
+    const response: AxiosResponse<{ listCategory: Category[] }> = await axios.get(
+      "https://app-server.lafutavn.store/api/category/",
+    )
+    return response.data.listCategory
+  } catch (error) {
+    console.error("An error occurred while fetching products:", error)
+    return []
+  }
+}
+const getAllProduct = async (): Promise<Product[]> => {
+  try {
+    const response: AxiosResponse<{ products: Product[] }> = await axios.get(
+      "https://app-server.lafutavn.store/api/product/",
+    )
+    return response.data.products
+  } catch (error) {
+    console.error("An error occurred while fetching products:", error)
+    return []
+  }
+}
 function HomePage() {
+  const [category, setCategory] = useState<Category[]>([])
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      const allCategory: Category[] = await getAllCategory()
+      setCategory(allCategory)
+    }
+
+    fetchCategory()
+  }, [])
+  const [products, setProducts] = useState<Product[]>([])
+  const product = products.slice(0, 10)
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const allProducts: Product[] = await getAllProduct()
+      setProducts(allProducts)
+    }
+
+    fetchProducts()
+  }, [])
   const [activeTab, setActiveTab] = useState(1)
 
   const tabs = [
@@ -52,86 +97,13 @@ function HomePage() {
           Mua gì hôm nay?
         </div>
         <div className="block-product-image-home w-12/12 m-5 flex space-x-16">
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img
-                  src={thumbnail1}
-                  alt=""
-                  className="h-40 w-40 rounded-full object-cover"
-                />
-              </div>
-              <div className="thumbnail-name my-2">
-                <p className="text-center text-2xl font-medium">Áo thun nam</p>
-              </div>
-            </a>
-          </div>
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img
-                  src={thumbnail2}
-                  alt=""
-                  className="h-40 w-40 rounded-full object-cover"
-                />
-              </div>
-              <div className="thumbnail-name my-2">
-                <p className="text-center text-2xl font-medium">Áo polo nam</p>
-              </div>
-            </a>
-          </div>
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img
-                  src={thumbnail3}
-                  alt=""
-                  className="h-40 w-40 rounded-full object-cover"
-                />
-              </div>
-              <div className="thumbnail-name my-2">
-                <p className="text-center text-2xl font-medium">Áo chống nắng</p>
-              </div>
-            </a>
-          </div>
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img
-                  src={thumbnail1}
-                  alt=""
-                  className="h-40 w-40 rounded-full object-cover"
-                />
-              </div>
-              <div className="thumbnail my-2">
-                <p className="text-center text-2xl font-medium">Áo thun nam</p>
-              </div>
-            </a>
-          </div>
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img
-                  src={thumbnail4}
-                  className="h-40 w-40 rounded-full object-cover"
-                />
-              </div>
-
-              <div className="thumbnail-name my-2">
-                <p className="text-center text-2xl font-medium">Quần shorts nam</p>
-              </div>
-            </a>
-          </div>
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img src={thumbnail2} alt="" className="h-40 w-40 rounded-full" />
-              </div>
-              <div className="thumbnail-name my-2">
-                <p className="text-center text-2xl font-medium">Áo polo nam</p>
-              </div>
-            </a>
-          </div>
+          {category?.map((data: Category) => {
+            return (
+              <>
+                <CategoryInHomePage data={data} key={data?._id} />
+              </>
+            )
+          })}
         </div>
       </div>
       <div className="block-offer-online container mx-auto my-10 flex max-w-7xl flex-col justify-center">
@@ -161,141 +133,28 @@ function HomePage() {
             ))}
           </div>
         </div>
-        <div className="block-offer-button text-center">
+        {/* <div className="block-offer-button text-center">
           <button className="btn h-10 rounded border bg-red-500 px-2 text-white">
             <a href="#">Xem tất cả sản phẩm</a>
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="block-new-product container mx-auto my-2 flex max-w-7xl flex-col">
         <div className="block-new-product-title my-4 text-center text-3xl font-semibold uppercase text-red-600">
           Sản phẩm mới ra mắt
         </div>
         <div className="block-new-product-item grid grid-cols-1 gap-4 md:grid-cols-5">
-          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
-            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
-              <img
-                src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
-                alt=""
-              />
-            </div>
-            <div className="pt-3">
-              <h5 className="mb-2 text-xl font-medium leading-tight">Card title</h5>
-              <p className="text-base">
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </p>
-            </div>
-          </div>
-          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
-            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
-              <img
-                src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
-                alt=""
-              />
-            </div>
-            <div className="pt-3">
-              <h5 className="mb-2 text-xl font-medium leading-tight">Card title</h5>
-              <p className="text-base">
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </p>
-            </div>
-          </div>
-          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
-            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
-              <img
-                src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
-                alt=""
-              />
-            </div>
-            <div className="pt-3">
-              <h5 className="mb-2 text-xl font-medium leading-tight">Card title</h5>
-              <p className="text-base">
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </p>
-            </div>
-          </div>
-          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
-            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
-              <img
-                src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
-                alt=""
-              />
-            </div>
-            <div className="pt-3">
-              <h5 className="mb-2 text-xl font-medium leading-tight">Card title</h5>
-              <p className="text-base">
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </p>
-            </div>
-          </div>
-          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
-            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
-              <img
-                src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
-                alt=""
-              />
-            </div>
-            <div className="pt-3">
-              <h5 className="mb-2 text-xl font-medium leading-tight">Card title</h5>
-              <p className="text-base">
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </p>
-            </div>
-          </div>
-          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
-            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
-              <img
-                src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
-                alt=""
-              />
-            </div>
-            <div className="pt-3">
-              <h5 className="mb-2 text-xl font-medium leading-tight">Card title</h5>
-              <p className="text-base">
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </p>
-            </div>
-          </div>
-          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
-            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
-              <img
-                src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
-                alt=""
-              />
-            </div>
-            <div className="pt-3">
-              <h5 className="mb-2 text-xl font-medium leading-tight">Card title</h5>
-              <p className="text-base">
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </p>
-            </div>
-          </div>
-          <div className="tw-card text-surface shadow-secondary-1 dark:bg-surface-dark block max-w-[18rem] rounded-lg bg-white dark:text-white">
-            <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
-              <img
-                src="https://gapprod.a.bigcontent.io/v1/static/SP246077_NA_img_MOB"
-                alt=""
-              />
-            </div>
-            <div className="pt-3">
-              <h5 className="mb-2 text-xl font-medium leading-tight">Card title</h5>
-              <p className="text-base">
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </p>
-            </div>
-          </div>
+          {product?.map((data: Product) => {
+            return (
+              <>
+                <ProductNewInHomePage data={data} key={data?._id} />
+              </>
+            )
+          })}
         </div>
         <div className="block-offer-button my-5 text-center">
           <button className="btn h-10 rounded border bg-red-500 px-2 text-white">
-            <a href="#">Xem tất cả sản phẩm</a>
+            <Link to="/products">Xem tất cả sản phẩm</Link>
           </button>
         </div>
       </div>

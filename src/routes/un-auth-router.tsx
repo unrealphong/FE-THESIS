@@ -1,3 +1,5 @@
+import Cart from "@/pages/Cart/Cart"
+import CheckOut from "@/pages/CheckOut/CheckOut"
 import HomePage from "@/pages/HomePage/HomePage"
 import ListProduct from "@/pages/ListProduct/ListProduct"
 import LoginPage from "@/pages/LoginPage/LoginPage"
@@ -20,5 +22,13 @@ export const UnAuthRouter = [
   {
     path: pathName.PRODUCTS,
     element: <ListProduct />,
+  },
+  {
+    path: pathName.CART,
+    element: <Cart />,
+  },
+  {
+    path: pathName.CHECKOUT,
+    element: <CheckOut />,
   },
 ]
