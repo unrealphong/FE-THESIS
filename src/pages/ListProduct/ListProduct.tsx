@@ -1,8 +1,21 @@
+import { Category } from "@/@types/category"
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons"
 import { Checkbox } from "antd"
-import { useState } from "react"
+import axios, { AxiosResponse } from "axios"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-
+import CategoryInListProduct from "./CategoryInListProduct"
+const getAllCategory = async () => {
+  try {
+    const response: AxiosResponse<{ listCategory: Category[] }> = await axios.get(
+      "https://app-server.lafutavn.store/api/category/",
+    )
+    return response.data.listCategory
+  } catch (error) {
+    console.error("An error occurred while fetching products:", error)
+    return []
+  }
+}
 const ListProduct = () => {
   const [isDivVisible, setIsDivVisible] = useState(false)
   const [isCategory, setIsCategory] = useState(false)
@@ -16,6 +29,16 @@ const ListProduct = () => {
   const handleIcon2Click = () => {
     setIsSubject(!isSubject)
   }
+  const [category, setCategory] = useState<Category[]>([])
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const allCategory: Category[] = await getAllCategory()
+      setCategory(allCategory)
+    }
+
+    fetchProducts()
+  }, [])
   return (
     <>
       <div className="pl-36 pr-28">
@@ -63,22 +86,13 @@ const ListProduct = () => {
               </a>
               {isCategory ? (
                 <div>
-                  <div>
-                    {" "}
-                    <Checkbox>Áo khoác</Checkbox>
-                  </div>
-                  <div>
-                    {" "}
-                    <Checkbox>Áo thun</Checkbox>
-                  </div>
-                  <div>
-                    {" "}
-                    <Checkbox>Áo nắng</Checkbox>
-                  </div>
-                  <div>
-                    {" "}
-                    <Checkbox>Áo polo</Checkbox>
-                  </div>
+                  {category?.map((data:Category) =>{
+                    return(
+                      <>
+                        <CategoryInListProduct data={data} key={data?._id}/>
+                      </>
+                    )
+                  })}
                 </div>
               ) : (
                 ""
