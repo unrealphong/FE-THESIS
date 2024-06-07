@@ -3,7 +3,7 @@ import { AppProvider } from "@/AppProvider"
 import { Fallback } from "@/Fallback"
 import "@/index.scss"
 import { RootAuthRouter, RootUnAuthRouter } from "@/routes"
-import React from "react"
+import { StrictMode } from "react"
 import ReactDOM from "react-dom/client"
 import { ErrorBoundary } from "react-error-boundary"
 import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom"
@@ -15,7 +15,7 @@ import "swiper/css/scrollbar"
 const routes: RouteObject[] = [...RootUnAuthRouter, ...RootAuthRouter]
 const router = createBrowserRouter(routes, {})
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  <StrictMode>
     <AppProvider>
       <ErrorBoundary
         FallbackComponent={Fallback}
@@ -28,5 +28,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </App>
       </ErrorBoundary>
     </AppProvider>
-  </React.StrictMode>,
+  </StrictMode>,
 )

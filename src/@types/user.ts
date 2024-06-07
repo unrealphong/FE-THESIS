@@ -1,30 +1,27 @@
-export interface IUser {
-  id: number
+interface User {
+  id: string
   username: string
-  first_name?: string
-  last_name?: string
-  cover_photo?: string
-  group_id: number
   email: string
-  birthday: null
-  avatar?: string
-  phone: null
-  address: null
-  biography: null
-  gender: null
-  activity_user: string
-  status: number
-  major_id: null
-  majors_name?: string
-  permissions: null
-  verification_code: string
-  created_at: null
-  updated_at: Date
+  password: string
+  role: UserRole
+  phones: PhoneNumber[] // Một mảng các số điện thoại của người dùng
+  createdAt: Date
+  updatedAt: Date
 }
 
-export interface IProfileUser {
-  user: IUser
-  total_blog: number
-  total_post: number
-  total_friend: number
+interface PhoneNumber {
+  number: string
+  shippingAddresses: Address[] // Danh sách các địa chỉ giao hàng ứng với số điện thoại này
 }
+
+interface Address {
+  street: string
+  city: string
+  state: string
+  country: string
+  postalCode: string
+}
+
+type UserRole = "customer" | "admin"
+
+export type { Address, PhoneNumber, User, UserRole }

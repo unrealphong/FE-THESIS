@@ -11,6 +11,8 @@ export const pathName = {
 
   // ADMIN PATH
   DASHBOARD: "/thong-ke",
-  Categories: "/quan-ly-danh-muc",
-  Products: "/quan-ly-san-pham",
+  CATEGORIES: "/quan-ly-danh-muc",
+  PRODUCT_MANAGEMENT: "/quan-ly-san-pham",
+  ADD_PRODUCT: "/quan-ly-san-pham/them",
+  UPDATE_PRODUCT: "/quan-ly-san-pham/sua",
 } as const

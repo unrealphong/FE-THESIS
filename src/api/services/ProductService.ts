@@ -1,20 +1,84 @@
-import axios from "axios"
+import { Product } from "@/@types/product"
+import httpRequest from "@/api/axios-instance"
+import { AxiosResponse } from "axios"
+import { toast } from "react-toastify"
 
-const getAllProduct = async () => {
+const getAllProducts = async (): Promise<Product[]> => {
   try {
-    const response = await axios.get("http://example.com/api/products")
-    const products = response.data
-
-    // Xử lý dữ liệu sản phẩm ở đây
-    console.log(products)
-
-    return products
+    const response: AxiosResponse<{ data: { products: Product[] } }> =
+      await httpRequest.get("/products")
+    return response.data?.data?.products ?? []
   } catch (error) {
-    console.error("An error occurred while fetching products:", error)
-    return null
+    console.error("An error occurred while fetching products")
+    toast.error("Failed to fetch products. Please try again later.")
+    return []
   }
 }
 
-export const ProductService = {
-  getAllProduct,
+const getProductById = async (id: string): Promise<Product | undefined> => {
+  try {
+    const response: AxiosResponse<{ data: Product }> = await httpRequest.get(
+      `/products/${id}`,
+    )
+    return response.data?.data
+  } catch (error) {
+    console.error(`An error occurred while fetching product with ID ${id}`)
+    toast.error(`Failed to fetch product with ID ${id}. Please try again later.`)
+    return undefined
+  }
+}
+
+const createProduct = async (product: Product): Promise<Product | undefined> => {
+  try {
+    const response: AxiosResponse<{ data: Product }> = await httpRequest.post(
+      "/products",
+      product,
+    )
+    const createdProduct = response.data?.data
+    toast.success("Product created successfully.")
+    return createdProduct
+  } catch (error) {
+    console.error("An error occurred while creating product")
+    toast.error("Failed to create product. Please try again later.")
+    return undefined
+  }
+}
+
+const updateProduct = async (
+  id: string,
+  product: Product,
+): Promise<Product | undefined> => {
+  try {
+    const response: AxiosResponse<{ data: Product }> = await httpRequest.put(
+      `/products/${id}`,
+      product,
+    )
+    const updatedProduct = response.data?.data
+    toast.success("Product updated successfully.")
+    return updatedProduct
+  } catch (error) {
+    console.error(`An error occurred while updating product with ID ${id}`)
+    toast.error(`Failed to update product with ID ${id}. Please try again later.`)
+    return undefined
+  }
+}
+
+const deleteProduct = async (id: string): Promise<boolean> => {
+  try {
+    await httpRequest.delete(`/products/${id}`)
+    toast.success("Product deleted successfully.")
+    return true
+  } catch (error) {
+    console.error(`An error occurred while deleting product with ID ${id}`)
+    toast.error(`Failed to delete product with ID ${id}. Please try again later.`)
+    return false
+  }
+}
+
+export {
+  createProduct,
+  deleteProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct,
 }

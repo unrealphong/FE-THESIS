@@ -1,3 +1,8 @@
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons"
+import { Checkbox } from "antd"
+import { useState } from "react"
+import { Link } from "react-router-dom"
+
 import { Category } from "@/@types/category"
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons"
 import { Checkbox } from "antd"
@@ -75,6 +80,11 @@ const ListProduct = () => {
         <div className="flex">
           <div className="" style={{ width: "30%" }}>
             <div className="space-y-3">
+              <a href="#!product" className="block w-full text-sm font-bold">
+                <span>Sắp xếp theo khoảng giá</span>
+              </a>
+              <hr className="border-gray-400 border-opacity-50" />
+              <a href="#!product" className="flex w-full text-sm font-bold">
               <a href="#!product" className="block w-full text-sm text-sm font-bold">
                 <span>Sắp xếp theo khoảng giá</span>
               </a>
@@ -102,6 +112,7 @@ const ListProduct = () => {
                 ""
               )}
               <hr className="border-gray-400 border-opacity-50" />
+              <a href="#!product" className="flex text-sm font-bold">
               <a href="#!product" className="flex text-lg text-sm font-bold">
                 <div className="flex-grow">Danh mục</div>
                 <div
@@ -113,6 +124,22 @@ const ListProduct = () => {
               </a>
               {isCategory ? (
                 <div>
+                  <div>
+                    {" "}
+                    <Checkbox>Áo khoác</Checkbox>
+                  </div>
+                  <div>
+                    {" "}
+                    <Checkbox>Áo thun</Checkbox>
+                  </div>
+                  <div>
+                    {" "}
+                    <Checkbox>Áo nắng</Checkbox>
+                  </div>
+                  <div>
+                    {" "}
+                    <Checkbox>Áo polo</Checkbox>
+                  </div>
                   {category?.map((data: Category) => {
                     return (
                       <>
@@ -125,6 +152,7 @@ const ListProduct = () => {
                 ""
               )}
               <hr className="border-gray-400 border-opacity-50" />
+              <a href="#!product" className="flex w-full text-sm font-bold ">
               <a href="#!product" className="flex w-full text-lg text-sm font-bold ">
                 <div className="flex-grow">Đối tượng</div>
                 <div
@@ -193,6 +221,357 @@ const ListProduct = () => {
                 className="grid grid-cols-5 gap-4"
                 ng-repeat="product in displayedProducts"
               >
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+                <div className="position-relative custom-card-hover card">
+                  <Link to={`/product/1`}>
+                    <img
+                      src={
+                        "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17162865823595937_512.jpg&w=1920&q=75"
+                      }
+                      style={{ height: "250px" }}
+                    />
+                  </Link>
+                  <div className=" ">
+                    <a
+                      className="nav-link fs-7"
+                      style={{ fontSize: "14px", fontWeight: "500" }}
+                    >
+                      Áo chống nắng nữ SunStop Master loại cao
+                    </a>
+                    <div
+                      className=""
+                      style={{ fontSize: "16px", fontWeight: "bold" }}
+                    >
+                      200.000đ
+                    </div>
+                    <p className="font-bold text-[#FF0000]">-20%</p>
+                  </div>
+
+                  <span className="opacity-50" style={{ fontSize: "12px" }}>
+                    Cao cấp nhất, chống nắng, chống nóng #1, chống tia UV
+                  </span>
+                </div>
+              </div>
+              <div className="mb-20 mt-10 flex justify-center">
+                <button className="rounded border border-red-500 bg-red-500 px-4 py-2 text-white">
                 {displayedProducts?.map((data: Product) => {
                   return (
                     <>

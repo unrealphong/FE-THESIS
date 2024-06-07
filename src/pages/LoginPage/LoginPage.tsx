@@ -1,10 +1,11 @@
+import httpRequest from "@/api/axios-instance"
 import iconFb from "@/assets/images/icons/icon-fb.svg"
 import iconGg from "@/assets/images/icons/icon-gg.svg"
 import { zodResolver } from "@hookform/resolvers/zod"
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 import { object, string } from "zod"
 
 const loginSchema = object({
@@ -41,13 +42,15 @@ const LoginPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://localhost:3056/api/auth/login", data)
+      const response = await httpRequest.post("/login", data)
       console.log(response.data)
       const { accessToken } = response.data
       localStorage.setItem("accessToken", accessToken) // Lưu accessToken vào localStorage
+      toast.success("Đăng nhập thành công!") // Show success toast
       navigate("/") // Chuyển hướng đến trang Home
     } catch (error) {
       console.error(error)
+      toast.error("Đăng nhập thất bại!") // Show error toast
     }
   }
 

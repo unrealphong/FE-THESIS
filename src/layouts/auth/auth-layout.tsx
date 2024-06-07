@@ -1,99 +1,55 @@
 import logo from "@/assets/images/logo/logo.webp"
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons"
-import { Breadcrumb, Button, Layout, Menu } from "antd"
-import React, { useState } from "react"
-import { Link, Outlet, useLocation } from "react-router-dom"
+import MenuSidebar from "@/layouts/auth/Components/Menu/Menu"
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
+import { Breadcrumb, Button, Layout } from "antd"
+import React, { useEffect, useState } from "react"
+import { NavLink, Outlet, useLocation } from "react-router-dom"
+
 const { Header, Sider, Content } = Layout
 
 const AuthLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false)
   const location = useLocation()
+  const [breadcrumbs, setBreadcrumbs] = useState<React.ReactNode[]>([])
 
-  const generateBreadcrumbs = () => {
-    const pathnames = location.pathname.split("/").filter((item) => item)
-    const breadcrumbs = [
-      <Breadcrumb.Item key="home">
-        <Link to="/">Admin</Link>
-      </Breadcrumb.Item>,
-      ...pathnames.map((name, index) => {
-        const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`
-        const displayName = name
-          .replace(/-/g, " ")
-          .replace(/\b\w/g, (char) => char.toUpperCase())
-        return (
-          <Breadcrumb.Item key={routeTo}>
-            <Link to={routeTo}>{displayName}</Link>
-          </Breadcrumb.Item>
-        )
-      }),
-    ]
-    return breadcrumbs
-  }
+  useEffect(() => {
+    const generateBreadcrumbs = () => {
+      const pathnames = location.pathname.split("/").filter((item) => item)
+      const newBreadcrumbs = [
+        <Breadcrumb.Item key="home">
+          <NavLink to="/thong-ke">Admin</NavLink>
+        </Breadcrumb.Item>,
+        ...pathnames.map((name, index) => {
+          const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`
+          const displayName = name
+            .replace(/-/g, " ")
+            .replace(/\b\w/g, (char) => char.toUpperCase())
+          return (
+            <Breadcrumb.Item key={routeTo}>
+              <NavLink to={routeTo}>{displayName}</NavLink>
+            </Breadcrumb.Item>
+          )
+        }),
+      ]
+      setBreadcrumbs(newBreadcrumbs)
+    }
+
+    generateBreadcrumbs()
+  }, [location.pathname])
 
   return (
     <Layout>
-      <Sider theme="light" trigger={null} collapsible collapsed={collapsed}>
+      <Sider
+        width={210}
+        theme="light"
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+      >
         <div className="demo-logo-vertical m-5">
           <img src={logo} alt="logo" />
         </div>
-        <Menu
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <UserOutlined />,
-              label: <Link to="/thong-ke">Thống kê</Link>,
-            },
-            {
-              key: "sub1",
-              icon: <VideoCameraOutlined />,
-              label: "Quản lý danh mục",
-              children: [
-                {
-                  key: "3",
-                  label: <Link to="/quan-ly-danh-muc">Tất cả danh mục</Link>,
-                },
-                { key: "4", label: "Thêm danh muc" },
-                { key: "5", label: "Sửa danh muc" },
-              ],
-            },
-            {
-              key: "sub2",
-              icon: <UploadOutlined />,
-              label: "Quản lý sản phẩm",
-              children: [
-                {
-                  key: "6",
-                  label: <Link to="/quan-ly-san-pham">Tất cả sản phẩm</Link>,
-                },
-                { key: "7", label: "Thêm sản phẩm" },
-                { key: "8", label: "Sửa sản phẩm" },
-              ],
-            },
-            {
-              key: "9",
-              icon: <UserOutlined />,
-              label: "Users",
-            },
-            {
-              key: "10",
-              icon: <UserOutlined />,
-              label: "Orders",
-            },
-            {
-              key: "11",
-              icon: <UserOutlined />,
-              label: "Settings",
-            },
-          ]}
-        />
+        <MenuSidebar />
       </Sider>
       <Layout>
         <Header style={{ padding: 0 }}>
@@ -108,11 +64,16 @@ const AuthLayout: React.FC = () => {
             }}
           />
         </Header>
-        <Content style={{ padding: "0 50px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            {generateBreadcrumbs()}
-          </Breadcrumb>
-          <div className="site-layout-content">
+        <Content
+          style={{
+            padding: "20px 50px",
+            overflowY: "auto",
+            backgroundColor: "whitesmoke",
+          }}
+          className="min-h-screen"
+        >
+          <Breadcrumb style={{ margin: "16px 0" }}>{breadcrumbs}</Breadcrumb>
+          <div className="site-layout-content ">
             <Outlet />
           </div>
         </Content>
