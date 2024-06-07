@@ -1,13 +1,35 @@
 import banner from "@/assets/images/banner/banner.webp"
-import thumbnail1 from "@/assets/images/block-item-1.webp"
-import thumbnail2 from "@/assets/images/block-item-2.webp"
-import thumbnail3 from "@/assets/images/block-item-3.webp"
-import thumbnail4 from "@/assets/images/block-item-4.webp"
 import storebg from "@/assets/images/store-bg.jpg"
+import axios, { AxiosResponse } from "axios"
 import { useEffect, useState } from "react"
 import { Autoplay, Navigation, Pagination } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
+import CategoryInHomePage from "./CategoryInHomePage"
+import { Category } from "@/@types/category"
+
+const getAllCategory = async () => {
+  try {
+    const response: AxiosResponse<{ listCategory: Category[] }> = await axios.get(
+      "https://app-server.lafutavn.store/api/category/",
+    )
+    return response.data.listCategory
+  } catch (error) {
+    console.error("An error occurred while fetching products:", error)
+    return []
+  }
+}
 function HomePage() {
+
+  const [category, setCategory] = useState<Category[]>([])
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const allCategory: Category[] = await getAllCategory()
+      setCategory(allCategory)
+    }
+
+    fetchProducts()
+  }, [])
   const [activeTab, setActiveTab] = useState(1)
 
   const tabs = [
@@ -52,86 +74,11 @@ function HomePage() {
           Mua gì hôm nay?
         </div>
         <div className="block-product-image-home w-12/12 m-5 flex space-x-16">
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img
-                  src={thumbnail1}
-                  alt=""
-                  className="h-40 w-40 rounded-full object-cover"
-                />
-              </div>
-              <div className="thumbnail-name my-2">
-                <p className="text-center text-2xl font-medium">Áo thun nam</p>
-              </div>
-            </a>
-          </div>
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img
-                  src={thumbnail2}
-                  alt=""
-                  className="h-40 w-40 rounded-full object-cover"
-                />
-              </div>
-              <div className="thumbnail-name my-2">
-                <p className="text-center text-2xl font-medium">Áo polo nam</p>
-              </div>
-            </a>
-          </div>
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img
-                  src={thumbnail3}
-                  alt=""
-                  className="h-40 w-40 rounded-full object-cover"
-                />
-              </div>
-              <div className="thumbnail-name my-2">
-                <p className="text-center text-2xl font-medium">Áo chống nắng</p>
-              </div>
-            </a>
-          </div>
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img
-                  src={thumbnail1}
-                  alt=""
-                  className="h-40 w-40 rounded-full object-cover"
-                />
-              </div>
-              <div className="thumbnail my-2">
-                <p className="text-center text-2xl font-medium">Áo thun nam</p>
-              </div>
-            </a>
-          </div>
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img
-                  src={thumbnail4}
-                  className="h-40 w-40 rounded-full object-cover"
-                />
-              </div>
-
-              <div className="thumbnail-name my-2">
-                <p className="text-center text-2xl font-medium">Quần shorts nam</p>
-              </div>
-            </a>
-          </div>
-          <div className="w-1/6">
-            <a href="#">
-              <div className="thumbnail my-2">
-                <img src={thumbnail2} alt="" className="h-40 w-40 rounded-full" />
-              </div>
-              <div className="thumbnail-name my-2">
-                <p className="text-center text-2xl font-medium">Áo polo nam</p>
-              </div>
-            </a>
-          </div>
+          {category?.map((data: Category) => {
+            return (<>
+              <CategoryInHomePage data={data} key={data?._id} />
+            </>)
+          })}
         </div>
       </div>
       <div className="block-offer-online container mx-auto my-10 flex max-w-7xl flex-col justify-center">
