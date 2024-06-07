@@ -1,5 +1,10 @@
+// export interface Category {
+//   id: number
+//   name: string
+//   quantity: number
+// }
 export interface Category {
-  id: number
-  name: string
-  quantity: number
+  _id: string
+  title: string
+  productCount: number
 }

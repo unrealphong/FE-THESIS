@@ -33,7 +33,7 @@ const items = [
         key: "4",
         label: <Link to="/quan-ly-san-pham/them">Thêm sản phẩm</Link>,
       },
-      { key: "5", label: "Sửa sản phẩm" },
+      { key: "5", label: <Link to="/quan-ly-san-pham/sua">Sửa sản phẩm</Link> },
     ],
   },
   {

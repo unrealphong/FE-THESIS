@@ -1,6 +1,7 @@
 import { Product } from "@/@types/product"
 import { deleteProduct, getAllProducts } from "@/api/services/ProductService"
 import { Button, Space, Table } from "antd"
+import { ColumnGroupType, ColumnType } from "antd/es/table"
 import { useEffect, useState } from "react"
 
 const ProductManagement = () => {
@@ -9,7 +10,6 @@ const ProductManagement = () => {
   const fetchProducts = async () => {
     const allProducts: Product[] = await getAllProducts()
     setProducts(allProducts)
-    console.log(allProducts)
   }
 
   useEffect(() => {
@@ -27,17 +27,18 @@ const ProductManagement = () => {
     }
   }
 
-  const columns = [
+  const columns: (ColumnGroupType<Product> | ColumnType<Product>)[] = [
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "Tên sản phẩm",
+      dataIndex: "title",
       key: "name",
       render: (text: string) => <p>{text}</p>,
     },
     {
-      title: "Action",
+      title: "Hành động",
       key: "action",
-      render: (text: string, record: Product) => (
+      align: "center",
+      render: (_text: string, record: Product) => (
         <Space size="middle">
           <Button type="primary" danger onClick={() => handleRemoveProduct(record)}>
             Remove
@@ -53,7 +54,7 @@ const ProductManagement = () => {
       <Table
         columns={columns}
         dataSource={products}
-        rowKey="id"
+        rowKey="_id"
         pagination={{ pageSize: 10 }}
       />
     </>

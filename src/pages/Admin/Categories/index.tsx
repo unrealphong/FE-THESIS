@@ -4,6 +4,7 @@ import { createCategory, getAllCategory } from "@/api/services/CategoryService"
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons"
 import { Button, Form, Input, Modal, Space, Table } from "antd"
 import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState<Category[]>([])
@@ -34,7 +35,7 @@ const CategoryManagement = () => {
 
   const handleEditCategory = async (values: Category) => {
     try {
-      await httpRequest.put(`/categories/${currentCategory?.id}`, values) // Sử dụng currentCategory để lấy id
+      await httpRequest.put(`/categories/${currentCategory?._id}`, values)
       fetchCategories()
       setIsEditModalVisible(false)
       form.resetFields()
@@ -43,7 +44,7 @@ const CategoryManagement = () => {
     }
   }
 
-  const handleDeleteCategory = async (categoryId: number) => {
+  const handleDeleteCategory = async (categoryId: string) => {
     try {
       await httpRequest.delete(`/categories/${categoryId}`)
       fetchCategories()
@@ -52,22 +53,38 @@ const CategoryManagement = () => {
     }
   }
 
+  const showDeleteConfirm = (category: Category) => {
+    if (category.productCount > 0) {
+      toast.warning("Danh mục này có sản phẩm và không thể xóa.")
+      return
+    }
+
+    Modal.confirm({
+      title: "Xác nhận xóa",
+      content: "Bạn có chắc chắn muốn xóa danh mục này không?",
+      okText: "Xóa",
+      okType: "danger",
+      cancelText: "Hủy",
+      onOk: () => handleDeleteCategory(category._id),
+    })
+  }
+
   const columns = [
     {
       title: "STT",
-      dataIndex: "id",
-      key: "id",
-      render: (index: number) => index + 1,
+      dataIndex: "_id",
+      key: "_id",
+      render: (_text: string, _record: Category, index: number) => index + 1,
     },
     {
       title: "Tên Danh Mục",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "title",
+      key: "title",
     },
     {
       title: "Sản Phẩm",
-      dataIndex: "quantity",
-      key: "quantity",
+      dataIndex: "productCount",
+      key: "productCount",
     },
     {
       title: "Thao Tác",
@@ -84,7 +101,7 @@ const CategoryManagement = () => {
           />
           <Button
             icon={<DeleteOutlined />}
-            onClick={() => handleDeleteCategory(record.id)}
+            onClick={() => showDeleteConfirm(record)}
             danger
           />
         </Space>
@@ -103,7 +120,7 @@ const CategoryManagement = () => {
         Thêm Danh Mục Mới
       </Button>
 
-      <Table columns={columns} dataSource={categories} rowKey={"id"} />
+      <Table columns={columns} dataSource={categories} rowKey={"_id"} />
 
       <Modal
         title="Thêm Danh Mục Mới"
@@ -129,7 +146,7 @@ const CategoryManagement = () => {
 
       <Modal
         title="Chỉnh Sửa Danh Mục"
-        open={isEditModalVisible} // Sửa open thành visible
+        open={isEditModalVisible}
         onCancel={() => setIsEditModalVisible(false)}
         footer={null}
       >

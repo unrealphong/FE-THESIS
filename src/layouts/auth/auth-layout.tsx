@@ -64,9 +64,16 @@ const AuthLayout: React.FC = () => {
             }}
           />
         </Header>
-        <Content style={{ padding: "0 50px" }}>
+        <Content
+          style={{
+            padding: "20px 50px",
+            overflowY: "auto",
+            backgroundColor: "whitesmoke",
+          }}
+          className="min-h-screen"
+        >
           <Breadcrumb style={{ margin: "16px 0" }}>{breadcrumbs}</Breadcrumb>
-          <div className="site-layout-content">
+          <div className="site-layout-content ">
             <Outlet />
           </div>
         </Content>
