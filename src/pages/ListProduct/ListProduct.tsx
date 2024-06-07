@@ -75,11 +75,11 @@ const ListProduct = () => {
         <div className="flex">
           <div className="" style={{ width: "30%" }}>
             <div className="space-y-3">
-              <a href="#!product" className="block w-full text-sm text-sm font-bold">
+              <a href="#!product" className="block w-full text-sm font-bold">
                 <span>Sắp xếp theo khoảng giá</span>
               </a>
               <hr className="border-gray-400 border-opacity-50" />
-              <a href="#!product" className="flex w-full text-lg text-sm font-bold">
+              <a href="#!product" className="flex w-full text-sm font-bold">
                 <div className="flex-grow">Màu sắc</div>
                 <div
                   className="w-1/10 text-center text-xs font-bold"
@@ -102,7 +102,7 @@ const ListProduct = () => {
                 ""
               )}
               <hr className="border-gray-400 border-opacity-50" />
-              <a href="#!product" className="flex text-lg text-sm font-bold">
+              <a href="#!product" className="flex text-sm font-bold">
                 <div className="flex-grow">Danh mục</div>
                 <div
                   className="w-1/10 text-center text-xs font-bold"
@@ -125,7 +125,7 @@ const ListProduct = () => {
                 ""
               )}
               <hr className="border-gray-400 border-opacity-50" />
-              <a href="#!product" className="flex w-full text-lg text-sm font-bold ">
+              <a href="#!product" className="flex w-full text-sm font-bold ">
                 <div className="flex-grow">Đối tượng</div>
                 <div
                   className="w-1/10 text-center text-xs font-bold"
