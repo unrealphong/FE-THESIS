@@ -2,7 +2,7 @@ export const pathName = {
   LOGIN: "/dang-nhap",
   REGISTER: "/dang-ki",
   FORGOT_PASSWORD: "/quen-mat-khau",
-  RESET_PASSWORD: "/doi-mat-khai",
+  RESET_PASSWORD: "/doi-mat-khau",
   VERIFY_REGISTER: "/verify-register",
   HOME: "/",
   PRODUCTS: "/products",
