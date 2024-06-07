@@ -86,10 +86,10 @@ const ListProduct = () => {
               </a>
               {isCategory ? (
                 <div>
-                  {category?.map((data:Category) =>{
-                    return(
+                  {category?.map((data: Category) => {
+                    return (
                       <>
-                        <CategoryInListProduct data={data} key={data?._id}/>
+                        <CategoryInListProduct data={data} key={data?._id} />
                       </>
                     )
                   })}

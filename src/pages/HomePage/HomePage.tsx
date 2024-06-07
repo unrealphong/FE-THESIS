@@ -19,7 +19,6 @@ const getAllCategory = async () => {
   }
 }
 function HomePage() {
-
   const [category, setCategory] = useState<Category[]>([])
 
   useEffect(() => {
@@ -75,9 +74,11 @@ function HomePage() {
         </div>
         <div className="block-product-image-home w-12/12 m-5 flex space-x-16">
           {category?.map((data: Category) => {
-            return (<>
-              <CategoryInHomePage data={data} key={data?._id} />
-            </>)
+            return (
+              <>
+                <CategoryInHomePage data={data} key={data?._id} />
+              </>
+            )
           })}
         </div>
       </div>
