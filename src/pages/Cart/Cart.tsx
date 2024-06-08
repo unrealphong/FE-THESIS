@@ -6,20 +6,20 @@ import { ArrowRightOutlined, ClearOutlined } from "@ant-design/icons"
 const Cart = () => {
   return (
     <>
-      <main className="mb-28 pl-36 pr-36 flex flex-wrap justify-around ">
+      <main className="mb-28 flex flex-wrap justify-around pl-36 pr-36 ">
         <div className="mb-10 mt-20 flex items-center justify-center">
           <div className="flex items-center">
             <img src={cart} className="img-fluid" />
             <span className="text-danger ml-2 text-xl font-bold">Giỏ Hàng</span>
           </div>
-          <hr className="my-4 w-20 border-t border-dashed border-gray-400 ml-2 mr-2" />
+          <hr className="my-4 ml-2 mr-2 w-20 border-t border-dashed border-gray-400" />
 
           <div className="flex items-center">
             <img src={cart1} className="img-fluid" />
             <span className="ml-2 text-xl  font-light">Đặt Hàng</span>
           </div>
 
-          <hr className="my-4 w-20 border-t border-dashed border-gray-400 ml-2 mr-2" />
+          <hr className="my-4 ml-2 mr-2 w-20 border-t border-dashed border-gray-400" />
 
           <div className="flex items-center">
             <img src={cart2} className="img-fluid" />
@@ -71,7 +71,7 @@ const Cart = () => {
                           </button>
                           <input
                             type="number"
-                            className="h-8 w-15 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none "
+                            className="w-15 h-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none "
                             min="1"
                             max="9"
                             defaultValue="1"
@@ -117,7 +117,7 @@ const Cart = () => {
                           </button>
                           <input
                             type="number"
-                            className="h-8 w-15 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none "
+                            className="w-15 h-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none "
                             min="1"
                             max="9"
                             defaultValue="1"
@@ -136,7 +136,7 @@ const Cart = () => {
                 </table>
               </div>
             </div>
-            <div className="ml-5 bg-gray-100 p-4 w-1/3">
+            <div className="ml-5 w-1/3 bg-gray-100 p-4">
               <div className="">
                 <h5 className="pb-6 font-bold" style={{ fontSize: 25 }}>
                   ĐƠN HÀNG
