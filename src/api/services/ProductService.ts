@@ -3,7 +3,7 @@ import httpRequest from "@/api/axios-instance"
 import { AxiosResponse } from "axios"
 import { toast } from "react-toastify"
 
-const getAllProducts = async (): Promise<Product[]> => {
+const getAllProduct = async (): Promise<Product[]> => {
   try {
     const response: AxiosResponse<{ data: { products: Product[] } }> =
       await httpRequest.get("/products")
@@ -63,22 +63,15 @@ const updateProduct = async (
   }
 }
 
-const deleteProduct = async (id: string): Promise<boolean> => {
+const deleteProduct = async (id: number): Promise<boolean> => {
   try {
     await httpRequest.delete(`/products/${id}`)
     toast.success("Product deleted successfully.")
     return true
   } catch (error) {
-    console.error(`An error occurred while deleting product with ID ${id}`)
     toast.error(`Failed to delete product with ID ${id}. Please try again later.`)
     return false
   }
 }
 
-export {
-  createProduct,
-  deleteProduct,
-  getAllProducts,
-  getProductById,
-  updateProduct,
-}
+export { createProduct, deleteProduct, getAllProduct, getProductById, updateProduct }

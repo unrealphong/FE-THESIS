@@ -1,6 +1,10 @@
 import { Category } from "@/@types/category"
-import httpRequest from "@/api/axios-instance"
-import { createCategory, getAllCategory } from "@/api/services/CategoryService"
+import {
+  createCategory,
+  deleteCategory,
+  getAllCategory,
+  updateCategory,
+} from "@/api/services/CategoryService"
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons"
 import { Button, Form, Input, Modal, Space, Table } from "antd"
 import { useEffect, useState } from "react"
@@ -35,7 +39,7 @@ const CategoryManagement = () => {
 
   const handleEditCategory = async (values: Category) => {
     try {
-      await httpRequest.put(`/categories/${currentCategory?._id}`, values)
+      await updateCategory(currentCategory?.id, values)
       fetchCategories()
       setIsEditModalVisible(false)
       form.resetFields()
@@ -44,9 +48,9 @@ const CategoryManagement = () => {
     }
   }
 
-  const handleDeleteCategory = async (categoryId: string) => {
+  const handleDeleteCategory = async (categoryId: number) => {
     try {
-      await httpRequest.delete(`/categories/${categoryId}`)
+      await deleteCategory(categoryId)
       fetchCategories()
     } catch (error) {
       console.error("Failed to delete category:", error)
@@ -54,7 +58,7 @@ const CategoryManagement = () => {
   }
 
   const showDeleteConfirm = (category: Category) => {
-    if (category.productCount > 0) {
+    if (category.quantity > 0) {
       toast.warning("Danh mục này có sản phẩm và không thể xóa.")
       return
     }
@@ -65,26 +69,26 @@ const CategoryManagement = () => {
       okText: "Xóa",
       okType: "danger",
       cancelText: "Hủy",
-      onOk: () => handleDeleteCategory(category._id),
+      onOk: () => handleDeleteCategory(category.id),
     })
   }
 
   const columns = [
     {
       title: "STT",
-      dataIndex: "_id",
-      key: "_id",
+      dataIndex: "id",
+      key: "id",
       render: (_text: string, _record: Category, index: number) => index + 1,
     },
     {
       title: "Tên Danh Mục",
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Sản Phẩm",
-      dataIndex: "productCount",
-      key: "productCount",
+      dataIndex: "quantity",
+      key: "quantity",
     },
     {
       title: "Thao Tác",
@@ -120,7 +124,7 @@ const CategoryManagement = () => {
         Thêm Danh Mục Mới
       </Button>
 
-      <Table columns={columns} dataSource={categories} rowKey={"_id"} />
+      <Table columns={columns} dataSource={categories} rowKey={"id"} />
 
       <Modal
         title="Thêm Danh Mục Mới"
@@ -131,7 +135,7 @@ const CategoryManagement = () => {
         <Form form={form} onFinish={handleAddCategory}>
           <Form.Item
             label="Tên Danh Mục"
-            name="title"
+            name="name"
             rules={[{ required: true, message: "Please input the category name!" }]}
           >
             <Input />
@@ -153,7 +157,7 @@ const CategoryManagement = () => {
         <Form form={form} onFinish={handleEditCategory}>
           <Form.Item
             label="Tên Danh Mục"
-            name="title"
+            name="name"
             rules={[{ required: true, message: "Please input the category name!" }]}
           >
             <Input />

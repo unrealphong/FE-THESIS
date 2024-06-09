@@ -1,37 +1,16 @@
-import banner from "@/assets/images/banner/banner.webp"
-import storebg from "@/assets/images/store-bg.jpg"
-import axios, { AxiosResponse } from "axios"
-import { useEffect, useState } from "react"
-import { Autoplay, Navigation, Pagination } from "swiper/modules"
-import { Swiper, SwiperSlide } from "swiper/react"
-import CategoryInHomePage from "./CategoryInHomePage"
 import { Category } from "@/@types/category"
 import { Product } from "@/@types/product"
-import ProductNewInHomePage from "./ProductNewInHomePage"
+import { getAllCategory } from "@/api/services/CategoryService"
+import { getAllProduct } from "@/api/services/ProductService"
+import banner from "@/assets/images/banner/banner.webp"
+import storebg from "@/assets/images/store-bg.jpg"
+import CategoryInHomePage from "@/pages/HomePage/CategoryInHomePage"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { Autoplay, Navigation, Pagination } from "swiper/modules"
+import { Swiper, SwiperSlide } from "swiper/react"
+import ProductNewInHomePage from "./ProductNewInHomePage"
 
-const getAllCategory = async () => {
-  try {
-    const response: AxiosResponse<{ listCategory: Category[] }> = await axios.get(
-      "https://app-server.lafutavn.store/api/category/",
-    )
-    return response.data.listCategory
-  } catch (error) {
-    console.error("An error occurred while fetching products:", error)
-    return []
-  }
-}
-const getAllProduct = async (): Promise<Product[]> => {
-  try {
-    const response: AxiosResponse<{ products: Product[] }> = await axios.get(
-      "https://app-server.lafutavn.store/api/product/",
-    )
-    return response.data.products
-  } catch (error) {
-    console.error("An error occurred while fetching products:", error)
-    return []
-  }
-}
 function HomePage() {
   const [category, setCategory] = useState<Category[]>([])
 
@@ -43,8 +22,10 @@ function HomePage() {
 
     fetchCategory()
   }, [])
+
   const [products, setProducts] = useState<Product[]>([])
   const product = products.slice(0, 10)
+
   useEffect(() => {
     const fetchProducts = async () => {
       const allProducts: Product[] = await getAllProduct()
@@ -53,6 +34,7 @@ function HomePage() {
 
     fetchProducts()
   }, [])
+
   const [activeTab, setActiveTab] = useState(1)
 
   const tabs = [
@@ -61,10 +43,11 @@ function HomePage() {
     { id: 3, label: "MUA 1 TẶNG 1", content: "Tab 3 Content" },
     { id: 4, label: "BÁN CHẠY NHẤT", content: "Tab 4 Content" },
   ]
+
   useEffect(() => {
-    document.title =
-      "TokyoLife.vn | Hàng tiêu dùng Nhật Bản &  thời trang thông minh"
+    document.title = "TokyoLife.vn | Hàng tiêu dùng Nhật Bản & thời trang thông minh"
   }, [])
+
   return (
     <>
       <div className="mx-auto mt-5 max-w-7xl justify-center">
@@ -82,13 +65,13 @@ function HomePage() {
           modules={[Pagination, Navigation, Autoplay]}
         >
           <SwiperSlide className="">
-            <img src={banner} alt="" />
+            <img src={banner} alt="Banner" />
           </SwiperSlide>
           <SwiperSlide>
-            <img src={banner} alt="" />
+            <img src={banner} alt="Banner" />
           </SwiperSlide>
           <SwiperSlide>
-            <img src={banner} alt="" />
+            <img src={banner} alt="Banner" />
           </SwiperSlide>
         </Swiper>
       </div>
@@ -97,13 +80,9 @@ function HomePage() {
           Mua gì hôm nay?
         </div>
         <div className="block-product-image-home w-12/12 m-5 flex space-x-16">
-          {category?.map((data: Category) => {
-            return (
-              <>
-                <CategoryInHomePage data={data} key={data?._id} />
-              </>
-            )
-          })}
+          {category?.map((data: Category) => (
+            <CategoryInHomePage data={data} key={data.id} />
+          ))}
         </div>
       </div>
       <div className="block-offer-online container mx-auto my-10 flex max-w-7xl flex-col justify-center">
@@ -133,24 +112,15 @@ function HomePage() {
             ))}
           </div>
         </div>
-        {/* <div className="block-offer-button text-center">
-          <button className="btn h-10 rounded border bg-red-500 px-2 text-white">
-            <a href="#">Xem tất cả sản phẩm</a>
-          </button>
-        </div> */}
       </div>
       <div className="block-new-product container mx-auto my-2 flex max-w-7xl flex-col">
         <div className="block-new-product-title my-4 text-center text-3xl font-semibold uppercase text-red-600">
           Sản phẩm mới ra mắt
         </div>
         <div className="block-new-product-item grid grid-cols-1 gap-4 md:grid-cols-5">
-          {product?.map((data: Product) => {
-            return (
-              <>
-                <ProductNewInHomePage data={data} key={data?._id} />
-              </>
-            )
-          })}
+          {product?.map((data: Product) => (
+            <ProductNewInHomePage data={data} key={data.id} />
+          ))}
         </div>
         <div className="block-offer-button my-5 text-center">
           <button className="btn h-10 rounded border bg-red-500 px-2 text-white">
@@ -164,6 +134,7 @@ function HomePage() {
             src={storebg}
             className="w-full sm:flex"
             style={{ height: "600px" }}
+            alt="Store background"
           />
           <div className="group-text absolute left-0 top-1/2 flex w-1/2 -translate-y-1/2 transform flex-col items-start justify-start gap-3 px-10">
             <h4>HỆ THỐNG CỬA HÀNG</h4>

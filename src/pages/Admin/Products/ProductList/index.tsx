@@ -1,5 +1,5 @@
 import { Product } from "@/@types/product"
-import { deleteProduct, getAllProducts } from "@/api/services/ProductService"
+import { deleteProduct, getAllProduct } from "@/api/services/ProductService"
 import { Button, Space, Table } from "antd"
 import { ColumnGroupType, ColumnType } from "antd/es/table"
 import { useEffect, useState } from "react"
@@ -8,7 +8,7 @@ const ProductManagement = () => {
   const [products, setProducts] = useState<Product[]>([])
 
   const fetchProducts = async () => {
-    const allProducts: Product[] = await getAllProducts()
+    const allProducts: Product[] = await getAllProduct()
     setProducts(allProducts)
   }
 
@@ -18,10 +18,8 @@ const ProductManagement = () => {
 
   const handleRemoveProduct = async (record: Product) => {
     try {
-      console.log(record.id)
-      const id = record.id
-      await deleteProduct(id)
-      setProducts(products.filter((product) => product.id !== id))
+      await deleteProduct(record.id)
+      fetchProducts()
     } catch (error) {
       console.error("An error occurred while deleting product:", error)
     }
@@ -29,9 +27,27 @@ const ProductManagement = () => {
 
   const columns: (ColumnGroupType<Product> | ColumnType<Product>)[] = [
     {
+      title: "STT",
+      dataIndex: "id",
+      key: "id",
+      render: (_text: string, _record: Product, index: number) => index + 1,
+    },
+    {
       title: "Tên sản phẩm",
-      dataIndex: "title",
+      dataIndex: "name",
       key: "name",
+      render: (text: string) => <p>{text}</p>,
+    },
+    {
+      title: "Thương hiệu",
+      dataIndex: "brand",
+      key: "brand",
+      render: (text: string) => <p>{text}</p>,
+    },
+    {
+      title: "Mô tả",
+      dataIndex: "description",
+      key: "description",
       render: (text: string) => <p>{text}</p>,
     },
     {
@@ -54,7 +70,7 @@ const ProductManagement = () => {
       <Table
         columns={columns}
         dataSource={products}
-        rowKey="_id"
+        rowKey="id"
         pagination={{ pageSize: 10 }}
       />
     </>

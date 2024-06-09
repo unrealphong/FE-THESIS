@@ -1,33 +1,13 @@
 import { Category } from "@/@types/category"
 import { Product } from "@/@types/product"
+import { getAllCategory } from "@/api/services/CategoryService"
+import { getAllProduct } from "@/api/services/ProductService"
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons"
 import { Checkbox } from "antd"
-import axios, { AxiosResponse } from "axios"
 import { useEffect, useState } from "react"
 import CategoryInListProduct from "./CategoryInListProduct"
 import ProductInListProduct from "./ProductInListProduct"
-const getAllCategory = async () => {
-  try {
-    const response: AxiosResponse<{ listCategory: Category[] }> = await axios.get(
-      "https://app-server.lafutavn.store/api/category/",
-    )
-    return response.data.listCategory
-  } catch (error) {
-    console.error("An error occurred while fetching products:", error)
-    return []
-  }
-}
-const getAllProduct = async (): Promise<Product[]> => {
-  try {
-    const response: AxiosResponse<{ products: Product[] }> = await axios.get(
-      "https://app-server.lafutavn.store/api/product/",
-    )
-    return response.data.products
-  } catch (error) {
-    console.error("An error occurred while fetching products:", error)
-    return []
-  }
-}
+
 const ListProduct = () => {
   const [isDivVisible, setIsDivVisible] = useState(false)
   const [isCategory, setIsCategory] = useState(false)
@@ -116,7 +96,7 @@ const ListProduct = () => {
                   {category?.map((data: Category) => {
                     return (
                       <>
-                        <CategoryInListProduct data={data} key={data?._id} />
+                        <CategoryInListProduct data={data} key={data?.id} />
                       </>
                     )
                   })}
@@ -196,7 +176,7 @@ const ListProduct = () => {
                 {displayedProducts?.map((data: Product) => {
                   return (
                     <>
-                      <ProductInListProduct data={data} key={data?._id} />
+                      <ProductInListProduct data={data} key={data?.id} />
                     </>
                   )
                 })}
