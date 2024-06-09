@@ -39,13 +39,13 @@ const getCategoryBySlug = async (slug: string): Promise<Category> => {
   }
 }
 
-const deleteCategory = async (id: string): Promise<Category | undefined> => {
+const deleteCategory = async (id: number): Promise<Category | undefined> => {
   try {
     const response: AxiosResponse<{ data: { category: Category } }> =
       await httpRequest.delete(`/categories/${id}`)
     return response.data.data.category
   } catch (error) {
-    console.error()
+    console.error(error)
   }
 }
 const createCategory = async (category: Category): Promise<Category | undefined> => {
@@ -54,19 +54,20 @@ const createCategory = async (category: Category): Promise<Category | undefined>
       await httpRequest.post(`/categories`, category)
     return response.data.data.category
   } catch (error) {
-    console.error()
+    console.error(error)
   }
 }
-const updateCategory = async (id: string, category: Category): Promise<Category> => {
+const updateCategory = async (id: number, category: Category): Promise<Category> => {
   try {
-    const response: AxiosResponse<{ date: { category: Category } }> =
-      await httpRequest.patch(`/api/categories/${id}`, category)
-    return response.data.date.category
+    const response: AxiosResponse<{ data: { category: Category } }> =
+      await httpRequest.put(`/categories/${id}`, category)
+    return response.data.data.category
   } catch (error) {
     console.error("There was an error updating the category!", error)
     throw error
   }
 }
+
 export {
   createCategory,
   deleteCategory,

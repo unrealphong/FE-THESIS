@@ -16,7 +16,7 @@ const CategoryInHomePage: React.FC<CategoryInListProductProps> = ({ data }) => {
             />
           </div>
           <div className="thumbnail-name my-2">
-            <p className="text-center text-2xl font-medium">{data?.title}</p>
+            <p className="text-center text-2xl font-medium">{data?.name}</p>
           </div>
         </a>
       </div>

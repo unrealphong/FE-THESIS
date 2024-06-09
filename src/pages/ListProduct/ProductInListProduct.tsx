@@ -1,6 +1,6 @@
 import { Product } from "@/@types/product"
 import { Link } from "react-router-dom"
-import formatNumber from "../../utilities/local-storage/FormatTotal"
+import formatNumber from "../../utilities/FormatTotal"
 type Props = {
   data: Product
 }

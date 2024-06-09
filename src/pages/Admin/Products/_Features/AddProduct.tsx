@@ -21,9 +21,11 @@ import {
   type UploadProps,
 } from "antd"
 import { useEffect, useState } from "react"
+import ReactQuill from "react-quill"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 const { Option } = Select
+
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0]
 
 const getBase64 = (file: FileType): Promise<string> =>
@@ -162,8 +164,8 @@ const AddProduct = () => {
               >
                 <Option value="">Chọn</Option>
                 {categories.map((cat) => (
-                  <Option key={cat._id} value={cat._id}>
-                    {cat.title}
+                  <Option key={cat.id} value={cat.id}>
+                    {cat.name}
                   </Option>
                 ))}
               </Select>
@@ -177,11 +179,13 @@ const AddProduct = () => {
                 size="large"
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-                className="w-full"
                 placeholder="Thương hiệu"
+                style={{ height: 50 }}
               />
             </Form.Item>
-            <Form.Item label="Mô Tả"></Form.Item>
+            <Form.Item label="Mô Tả">
+              <ReactQuill theme="snow" />
+            </Form.Item>
           </div>
           <div className="max-w-[400px]">
             <Form.Item label="Hình ảnh">

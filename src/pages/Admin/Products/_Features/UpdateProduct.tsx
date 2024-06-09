@@ -161,8 +161,8 @@ const UpdateProduct = () => {
               >
                 <Option value="">Chọn</Option>
                 {categories.map((cat) => (
-                  <Option key={cat._id} value={cat._id}>
-                    {cat.title}
+                  <Option key={cat.id} value={cat.id}>
+                    {cat.name}
                   </Option>
                 ))}
               </Select>
@@ -177,6 +177,7 @@ const UpdateProduct = () => {
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
                 className="w-full"
+                style={{ height: 50 }}
                 placeholder="Thương hiệu"
               />
             </Form.Item>
@@ -185,7 +186,6 @@ const UpdateProduct = () => {
           <div className="max-w-[400px]">
             <Form.Item label="Hình ảnh">
               <Upload
-                action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                 listType="picture-card"
                 fileList={fileList}
                 onPreview={handlePreview}
