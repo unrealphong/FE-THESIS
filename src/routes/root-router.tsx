@@ -1,17 +1,20 @@
-import HomePage from "../pages/HomePage"
-import { pathName } from "./path-name"
+import AuthLayout from "@/layouts/auth/auth-layout"
+import UnAuthLayout from "@/layouts/un-auth/un-auth-layout"
+import { AuthRouter } from "@/routes/auth-router"
+import { UnAuthRouter } from "@/routes/un-auth-router"
 
-export const UnAuthRouter = [
+export const RootUnAuthRouter = [
   {
-    path: pathName.LOGIN,
-    element: <h1>login page</h1>,
+    path: "/",
+    element: <UnAuthLayout />,
+    children: [...UnAuthRouter],
   },
+]
+
+export const RootAuthRouter = [
   {
-    path: pathName.REGISTER,
-    element: <h1>resister page</h1>,
-  },
-  {
-    path: pathName.HOME,
-    element: <HomePage />,
+    path: "/",
+    element: <AuthLayout />,
+    children: [...AuthRouter],
   },
 ]

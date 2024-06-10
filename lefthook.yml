@@ -18,7 +18,7 @@ pre-commit:
     eslint:
       glob: "*.{ts,tsx}"
       run: npx eslint {staged_files} --fix
-    pretter:
+    prettier:
       glob: "*.{ts,tsx}"
       run: npx prettier {staged_files} --write
 #     rubocop:
