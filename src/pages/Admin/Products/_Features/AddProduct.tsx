@@ -1,5 +1,5 @@
 import { Category } from "@/@types/category"
-import { Attribute, Product, Variant } from "@/@types/product"
+import type { Attribute, Product, Variant } from "@/@types/product"
 import { getAllAttribute } from "@/api/services/AttributeService"
 import { getAllCategory } from "@/api/services/CategoryService"
 import { createProduct } from "@/api/services/ProductService"
@@ -66,7 +66,7 @@ const AddProduct = () => {
     }
     console.log(formattedData)
     try {
-      const response: Product = (await createProduct) < Product(formattedData)
+      const response: Product = await createProduct(formattedData)
       console.log("Product created successfully:", response)
       navigate("/quan-ly-san-pham")
     } catch (error) {
