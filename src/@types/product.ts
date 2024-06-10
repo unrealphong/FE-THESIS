@@ -1,38 +1,39 @@
 interface Product {
   id: number
   name: string
+  brand: string
   description?: string
   categoryId: string
   images: ProductImage[]
   variants: Variant[]
 }
 
-interface Variant {
-  size: string
-  color: string
-  originalPrice: number
-  discountedPrice?: number
-  quantity: number
+interface Attribute {
+  id: number
+  name: string
+  type: string
 }
+
+interface AttributeValue {
+  id: number
+  value: string
+  attribute_id: number
+  attribute: Attribute
+}
+
+interface Variant {
+  id?: number
+  product_id?: number
+  price: number
+  quantity: number
+  attributes?: Attribute[]
+  attribute_values?: AttributeValue[]
+}
+
 interface ProductImage {
   url: string
   alt?: string
   title?: string
 }
 
-export type { Product, ProductImage, Variant }
-
-// export interface Product {
-//   _id: string
-//   title: string
-//   images: [string]
-//   slug: string
-//   description: string
-//   price: number
-//   sale: number
-//   category: { title: string }
-//   numberView: number
-//   rating: { star: number; comment: string }[]
-//   isFlashSale: boolean
-//   totalRating: number
-// }
+export type { Attribute, AttributeValue, Product, Variant }

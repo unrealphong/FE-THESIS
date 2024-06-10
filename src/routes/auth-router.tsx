@@ -4,7 +4,6 @@ import Dashboard from "@/pages/Admin/Dashboard"
 import OrderManagement from "@/pages/Admin/Orders"
 import AddProduct from "@/pages/Admin/Products/_Features/AddProduct"
 import UpdateProduct from "@/pages/Admin/Products/_Features/UpdateProduct"
-import VariantManagement from "@/pages/Admin/Products/_Features/VariantProduct"
 import ProductManagement from "@/pages/Admin/Products/ProductList"
 import UserManagement from "@/pages/Admin/Users"
 import { pathName } from "@/routes/path-name"
@@ -21,10 +20,10 @@ export const AuthRouter = [
     path: pathName.PRODUCT_MANAGEMENT,
     element: <ProductManagement />,
   },
-  {
-    path: pathName.VARIANT_MANAGEMENT,
-    element: <VariantManagement />,
-  },
+  // {
+  //   path: pathName.VARIANT_MANAGEMENT,
+  //   element: <VariantManagement />,
+  // },
   {
     path: pathName.UPDATE_PRODUCT,
     element: <UpdateProduct />,
