@@ -39,15 +39,14 @@ const ProductManagement = () => {
       render: (text: string) => <p>{text}</p>,
     },
     {
+      title: "Danh mục",
+      dataIndex: ["category", "name"],
+      key: "category_name",
+    },
+    {
       title: "Thương hiệu",
       dataIndex: "brand",
       key: "brand",
-      render: (text: string) => <p>{text}</p>,
-    },
-    {
-      title: "Mô tả",
-      dataIndex: "description",
-      key: "description",
       render: (text: string) => <p>{text}</p>,
     },
     {
