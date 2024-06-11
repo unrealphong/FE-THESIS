@@ -2,24 +2,24 @@
 import { User } from "./user"
 
 export interface LoginSuccessInfo {
-  accessToken: string
-  refreshToken: string
-  expiresIn: number
+    accessToken: string
+    refreshToken: string
+    expiresIn: number
 }
 
 export interface AuthResponse {
-  success: boolean
-  message?: string
-  user?: User
-  accessToken?: string
-  refreshToken?: string
-  expiresIn?: number
+    success: boolean
+    message?: string
+    user?: User
+    accessToken?: string
+    refreshToken?: string
+    expiresIn?: number
 }
 
 export interface AuthState {
-  accessToken: string | null
-  loading: boolean
-  user: User | null
-  error: string | null
-  success: boolean
+    accessToken: string | null
+    loading: boolean
+    user: User | null
+    error: string | null
+    success: boolean
 }

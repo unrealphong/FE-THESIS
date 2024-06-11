@@ -7,28 +7,28 @@ import "react-toastify/dist/ReactToastify.css"
 import { PersistGate } from "redux-persist/integration/react"
 
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: 0,
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            retry: 0,
+        },
     },
-  },
 })
 
 type AppProviderProps = {
-  children: React.ReactNode
+    children: React.ReactNode
 }
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ReduxProvider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <ReactQueryDevtools initialIsOpen={false} />
-          {children}
-          <ToastContainer />
-        </PersistGate>
-      </ReduxProvider>
-    </QueryClientProvider>
-  )
+    return (
+        <QueryClientProvider client={queryClient}>
+            <ReduxProvider store={store}>
+                <PersistGate loading={null} persistor={persistor}>
+                    <ReactQueryDevtools initialIsOpen={false} />
+                    {children}
+                    <ToastContainer />
+                </PersistGate>
+            </ReduxProvider>
+        </QueryClientProvider>
+    )
 }

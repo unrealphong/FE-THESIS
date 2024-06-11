@@ -4,17 +4,17 @@ import { AuthRouter } from "@/routes/auth-router"
 import { UnAuthRouter } from "@/routes/un-auth-router"
 
 export const RootUnAuthRouter = [
-  {
-    path: "/",
-    element: <UnAuthLayout />,
-    children: [...UnAuthRouter],
-  },
+    {
+        path: "/",
+        element: <UnAuthLayout />,
+        children: [...UnAuthRouter],
+    },
 ]
 
 export const RootAuthRouter = [
-  {
-    path: "/",
-    element: <AuthLayout />,
-    children: [...AuthRouter],
-  },
+    {
+        path: "/",
+        element: <AuthLayout />,
+        children: [...AuthRouter],
+    },
 ]
