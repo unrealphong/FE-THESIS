@@ -15,18 +15,18 @@ import "swiper/css/scrollbar"
 const routes: RouteObject[] = [...RootUnAuthRouter, ...RootAuthRouter]
 const router = createBrowserRouter(routes, {})
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <AppProvider>
-      <ErrorBoundary
-        FallbackComponent={Fallback}
-        onReset={(details) => {
-          console.log("ErrorBoundary", details)
-        }}
-      >
-        <App>
-          <RouterProvider router={router} />
-        </App>
-      </ErrorBoundary>
-    </AppProvider>
-  </StrictMode>,
+    <StrictMode>
+        <AppProvider>
+            <ErrorBoundary
+                FallbackComponent={Fallback}
+                onReset={(details) => {
+                    console.log("ErrorBoundary", details)
+                }}
+            >
+                <App>
+                    <RouterProvider router={router} />
+                </App>
+            </ErrorBoundary>
+        </AppProvider>
+    </StrictMode>,
 )
