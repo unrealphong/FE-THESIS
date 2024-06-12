@@ -8,6 +8,7 @@ export const pathName = {
     PRODUCTS: "/products",
     CART: "/cart",
     CHECKOUT: "/checkout",
+    PRODUCT_DETAIL: "/products/:id",
 
     // ADMIN PATH
     DASHBOARD: "/thong-ke",

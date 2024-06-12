@@ -6,7 +6,7 @@ interface CategoryInListProductProps {
 const CategoryInHomePage: React.FC<CategoryInListProductProps> = ({ data }) => {
     return (
         <>
-            <div className="w-1/6">
+            <div className="mb-5 w-1/6">
                 <a href="#">
                     <div className="thumbnail my-2">
                         <img
