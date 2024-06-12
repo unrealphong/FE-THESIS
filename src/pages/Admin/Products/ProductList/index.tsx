@@ -1,7 +1,11 @@
-import { Product } from "@/@types/product"
-import { deleteProduct, getAllProduct } from "@/api/services/ProductService"
+import { AttributeValue, Product } from "@/@types/product"
+import {
+    deleteProduct,
+    getAllProduct,
+    getProductById,
+} from "@/api/services/ProductService"
 import { ArrowRightOutlined } from "@ant-design/icons"
-import { Button, Space, Table } from "antd"
+import { Button, Descriptions, Modal, Space, Table } from "antd"
 import { ColumnGroupType, ColumnType } from "antd/es/table"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -9,6 +13,9 @@ import { useNavigate } from "react-router-dom"
 const ProductManagement = () => {
     const navigate = useNavigate()
     const [products, setProducts] = useState<Product[]>([])
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+    const [isModalVisible, setIsModalVisible] = useState(false)
+
     const fetchProducts = async () => {
         const allProducts: Product[] = await getAllProduct()
         setProducts(allProducts)
@@ -26,8 +33,15 @@ const ProductManagement = () => {
             console.error("An error occurred while deleting product:", error)
         }
     }
+
     const handleUpdate = (id: number) => {
         navigate(`/quan-ly-san-pham/sua/${id}`)
+    }
+
+    const handleViewProduct = async (id: number) => {
+        const product = await getProductById(id)
+        setSelectedProduct(product)
+        setIsModalVisible(true)
     }
 
     const columns: (ColumnGroupType<Product> | ColumnType<Product>)[] = [
@@ -74,11 +88,43 @@ const ProductManagement = () => {
                     >
                         Update
                     </Button>
+                    <Button
+                        type="default"
+                        onClick={() => handleViewProduct(record.id)}
+                    >
+                        View
+                    </Button>
                 </Space>
             ),
         },
     ]
-
+    const variantColumns = [
+        {
+            title: "Mã số",
+            dataIndex: "id",
+            key: "id",
+        },
+        {
+            title: "Giá",
+            dataIndex: "price",
+            key: "price",
+        },
+        {
+            title: "Số lượng",
+            dataIndex: "quantity",
+            key: "quantity",
+        },
+        {
+            title: "Thuộc tính",
+            key: "attribute_values",
+            render: (record: Product) =>
+                record.attribute_values.map((attribute: AttributeValue) => (
+                    <p key={attribute.id}>
+                        {attribute.attribute.name}: {attribute.value}
+                    </p>
+                )),
+        },
+    ]
     return (
         <>
             <Table
@@ -87,6 +133,44 @@ const ProductManagement = () => {
                 rowKey="id"
                 pagination={{ pageSize: 10 }}
             />
+            {selectedProduct && (
+                <Modal
+                    title="Chi tiết sản phẩm"
+                    open={isModalVisible}
+                    onCancel={() => setIsModalVisible(false)}
+                    footer={[
+                        <Button key="close" onClick={() => setIsModalVisible(false)}>
+                            Đóng
+                        </Button>,
+                    ]}
+                    width={800}
+                >
+                    <Descriptions bordered size="middle" column={1}>
+                        <Descriptions.Item label="ID">
+                            {selectedProduct.id}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Tên sản phẩm">
+                            {selectedProduct.name}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Danh mục">
+                            {selectedProduct.category.name}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Thương hiệu">
+                            {selectedProduct.brand}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Mô tả">
+                            {selectedProduct.description}
+                        </Descriptions.Item>
+                    </Descriptions>
+                    <Table
+                        columns={variantColumns}
+                        dataSource={selectedProduct.variants}
+                        rowKey="id"
+                        pagination={false}
+                        style={{ marginTop: 20 }}
+                    />
+                </Modal>
+            )}
         </>
     )
 }
