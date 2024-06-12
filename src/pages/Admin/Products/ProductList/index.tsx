@@ -6,6 +6,7 @@ import {
 } from "@/api/services/ProductService"
 import { ArrowRightOutlined } from "@ant-design/icons"
 import { Button, Descriptions, Modal, Space, Table } from "antd"
+
 import { ColumnGroupType, ColumnType } from "antd/es/table"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -33,6 +34,7 @@ const ProductManagement = () => {
             console.error("An error occurred while deleting product:", error)
         }
     }
+
 
     const handleUpdate = (id: number) => {
         navigate(`/quan-ly-san-pham/sua/${id}`)
@@ -125,6 +127,7 @@ const ProductManagement = () => {
                 )),
         },
     ]
+
     return (
         <>
             <Table
@@ -171,6 +174,7 @@ const ProductManagement = () => {
                     />
                 </Modal>
             )}
+
         </>
     )
 }

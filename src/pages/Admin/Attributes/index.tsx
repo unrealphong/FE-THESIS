@@ -203,6 +203,7 @@ const AttributeManagement = () => {
             </Modal>
         </div>
     )
+
 }
 
 export default AttributeManagement

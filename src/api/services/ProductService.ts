@@ -8,6 +8,7 @@ const getAllProduct = async (): Promise<Product[]> => {
         const response: AxiosResponse<{ data: { products: Product[] } }> =
             await httpRequest.get("/products")
         return response.data?.data?.products ?? []
+    
     } catch (error) {
         console.error("An error occurred while fetching products")
         toast.error("Failed to fetch products. Please try again later.")

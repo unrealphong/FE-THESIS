@@ -197,6 +197,7 @@ const AddProduct = () => {
                                                     </Option>
                                                     <Option value="blue">
                                                         Blue
+
                                                     </Option>
                                                 </>
                                             ) : attribute.type.toLowerCase() ===

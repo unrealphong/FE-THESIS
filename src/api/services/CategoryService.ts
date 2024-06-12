@@ -7,7 +7,6 @@ const getAllCategory = async (): Promise<Category[]> => {
     try {
         const response: AxiosResponse<{ data: { categories: Category[] } }> =
             await httpRequest.get("/categories")
-        console.log(response.data.data.categories)
         return response.data?.data?.categories
     } catch (error) {
         console.error("An error occurred while fetching categories")
