@@ -4,7 +4,7 @@ interface Product {
     brand: string
     description?: string
     category_id: number
-    images: ProductImage[]
+    images?: ProductImage[]
     variants: Variant[]
 }
 
