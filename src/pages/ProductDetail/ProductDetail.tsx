@@ -7,8 +7,8 @@ import {
     HeartOutlined,
     ShoppingCartOutlined,
 } from "@ant-design/icons"
-type Props={
-    product:Product
+type Props = {
+    product: Product
 }
 import { useParams } from "react-router-dom"
 import { getProductById } from "@/api/services/ProductService"
