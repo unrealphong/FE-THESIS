@@ -54,7 +54,7 @@ const UpdateProduct = () => {
                         attribute_values: attributesObj,
                     }
                 })
-                formattedVariants.forEach((variant: Variant, index: number) => {
+                formattedVariants.forEach((variant, index: number) => {
                     setValue(`variants[${index}].price`, variant.price)
                     setValue(`variants[${index}].quantity`, variant.quantity)
 

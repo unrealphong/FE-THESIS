@@ -15,4 +15,70 @@ const getAllAttribute = async (): Promise<Attribute[]> => {
         return []
     }
 }
-export { getAllAttribute }
+
+const getAttributeById = async (id: number): Promise<Attribute | undefined> => {
+    try {
+        const response: AxiosResponse<{ data: { attributes: Attribute } }> =
+            await httpRequest.get(`attributes/${id}`)
+
+        return response.data?.data?.attributes
+    } catch (error) {
+        console.error("An error occurred while fetching Attribute")
+        toast.error("Failed to fetch attribute. Please try again later.")
+        return undefined
+    }
+}
+
+const createAttribute = async (
+    attribute: Attribute,
+): Promise<Attribute | undefined> => {
+    try {
+        const response: AxiosResponse<{ data: { attributes: Attribute } }> =
+            await httpRequest.post("attributes", attribute)
+
+        toast.success("Attribute created successfully.")
+        return response.data?.data?.attributes
+    } catch (error) {
+        console.error("An error occurred while creating the attribute")
+        toast.error("Failed to create attribute. Please try again later.")
+        return undefined
+    }
+}
+
+const updateAttribute = async (
+    id: number,
+    attribute: Attribute,
+): Promise<Attribute | undefined> => {
+    try {
+        const response: AxiosResponse<{ data: { attributes: Attribute } }> =
+            await httpRequest.put(`attributes/${id}`, attribute)
+
+        toast.success("Attribute updated successfully.")
+        return response.data?.data?.attributes
+    } catch (error) {
+        console.error("An error occurred while updating the attribute")
+        toast.error("Failed to update attribute. Please try again later.")
+        return undefined
+    }
+}
+
+const deleteAttribute = async (id: number): Promise<boolean> => {
+    try {
+        await httpRequest.delete(`attributes/${id}`)
+
+        toast.success("Attribute deleted successfully.")
+        return true
+    } catch (error) {
+        console.error("An error occurred while deleting the attribute")
+        toast.error("Failed to delete attribute. Please try again later.")
+        return false
+    }
+}
+
+export {
+    createAttribute,
+    deleteAttribute,
+    getAllAttribute,
+    getAttributeById,
+    updateAttribute,
+}

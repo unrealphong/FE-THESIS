@@ -5,9 +5,10 @@ import { toast } from "react-toastify"
 
 const getAllProduct = async (): Promise<Product[]> => {
     try {
-        const response: AxiosResponse<{ data: { product: Product[] } }> =
+        const response: AxiosResponse<{ data: { products: Product[] } }> =
             await httpRequest.get("/products")
-        return response.data?.data?.product ?? []
+        return response.data?.data?.products ?? []
+    
     } catch (error) {
         console.error("An error occurred while fetching products")
         toast.error("Failed to fetch products. Please try again later.")

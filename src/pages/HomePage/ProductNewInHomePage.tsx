@@ -6,6 +6,7 @@ type Props = {
 const ProductNewInHomePage = ({ data }: Props) => {
     return (
         <>
+
             <div className="group relative">
                 <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat">
                     <img
@@ -23,6 +24,7 @@ const ProductNewInHomePage = ({ data }: Props) => {
                     <h5 className="mb-2 text-xl font-medium leading-tight">
                         {data?.name}
                     </h5>
+
                     <div
                         className=""
                         style={{ fontSize: "16px", fontWeight: "bold" }}

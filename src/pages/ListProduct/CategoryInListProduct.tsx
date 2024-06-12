@@ -7,6 +7,7 @@ const CategoryInListProduct: React.FC<CategoryInListProductProps> = ({ data }) =
     return (
         <>
             <div>
+
                 <Checkbox value={data?.id}>{data?.name}</Checkbox>
             </div>
         </>

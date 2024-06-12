@@ -191,12 +191,13 @@ const AddProduct = () => {
                                             {attribute.type.toLowerCase() ===
                                             "color" ? (
                                                 <>
-                                                    <Option value="red">Đỏ</Option>
+                                                    <Option value="red">Red</Option>
                                                     <Option value="green">
-                                                        Xanh lá
+                                                        Green
                                                     </Option>
                                                     <Option value="blue">
-                                                        Xanh dương
+                                                        Blue
+
                                                     </Option>
                                                 </>
                                             ) : attribute.type.toLowerCase() ===

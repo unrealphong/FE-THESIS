@@ -1,5 +1,6 @@
 import { Product } from "@/@types/product"
 import { Link } from "react-router-dom"
+import formatNumber from "../../utilities/FormatTotal"
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons"
 type Props = {
     data: Product

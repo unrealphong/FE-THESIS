@@ -80,7 +80,7 @@ function HomePage() {
                 <div className="block-product-name-inner-home flex justify-center text-3xl font-semibold uppercase text-red-600">
                     Mua gì hôm nay?
                 </div>
-                <div className="block-product-image-home m-5 flex w-full space-x-16">
+                <div className="block-product-image-home w-12/12 m-5 flex space-x-16">
                     {category?.map((data: Category) => (
                         <CategoryInHomePage data={data} key={data.id} />
                     ))}
