@@ -40,14 +40,20 @@ const LoginPage = () => {
         }
     }, [navigate])
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data1) => {
         try {
-            const response = await httpRequest.post("/login", data)
-            console.log(response.data)
-            const { accessToken } = response.data
-            localStorage.setItem("accessToken", accessToken) // Lưu accessToken vào localStorage
-            toast.success("Đăng nhập thành công!") // Show success toast
-            navigate("/") // Chuyển hướng đến trang Home
+            const response = await httpRequest.post("/login", data1)
+            const { token } = response.data.data
+            const { data } = response.data.data
+            localStorage.setItem("accessToken", JSON.stringify(token))
+            localStorage.setItem("role", JSON.stringify(data.role_id))
+            if (data.role_id == 1) {
+                navigate("/")
+                toast.success("Đăng nhập thành công!")
+            } else if (data.role_id == 0) {
+                navigate("/thong-ke")
+                toast.success("Hello admin!")
+            }
         } catch (error) {
             console.error(error)
             toast.error("Đăng nhập thất bại!") // Show error toast

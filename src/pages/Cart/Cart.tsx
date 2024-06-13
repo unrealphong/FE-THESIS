@@ -1,9 +1,37 @@
 import cart from "../../assets/images/icons/icon-bag.svg"
 import cart1 from "../../assets/images/icons/icon-bag-2.svg"
 import cart2 from "../../assets/images/icons/icon-bag-3.svg"
-import { ArrowRightOutlined, ClearOutlined } from "@ant-design/icons"
+import { ArrowRightOutlined } from "@ant-design/icons"
+import { useEffect, useState } from "react"
+import ProductInCart from "./ProductInCart"
+import formatNumber from "@/utilities/FormatTotal"
+import { Link } from "react-router-dom"
 
 const Cart = () => {
+    const [carts, setCarts] = useState([])
+    const [totalPrice, setTotalPrice] = useState(0)
+    const [check] = useState()
+    const [totalClick] = useState(0)
+    useEffect(() => {
+        const storedCarts = JSON.parse(localStorage.getItem("cart")!) || []
+        setCarts(storedCarts)
+    }, [carts])
+    useEffect(() => {
+        const totalPrice = calculateTotalClick()
+        setTotalPrice(totalPrice)
+    }, [carts])
+
+    const calculateTotalClick = () => {
+        let total = 0
+        carts.forEach((product) => {
+            const price = parseFloat(product.price)
+            const quantity = parseInt(product.quantity, 10)
+            if (!isNaN(price) && !isNaN(quantity)) {
+                total += price * quantity
+            }
+        })
+        return total
+    }
     return (
         <>
             <main className="mb-28 flex flex-wrap justify-around pl-36 pr-36 ">
@@ -34,124 +62,49 @@ const Cart = () => {
                     <div className="row flex p-0">
                         <div className="col-xl-8 col-sm-12 table-responsive w-2/3">
                             <div className="bg-gray-100 p-4">
-                                <table className="font-bold">
-                                    <thead>
-                                        <th className="font-bold">STT</th>
-                                        <th className="font-bold">Ảnh</th>
-                                        <th className="font-bold">Sản Phẩm</th>
-                                        <th className="font-bold">Giá</th>
-                                        <th className="font-bold">Số Lượng</th>
-                                        <th className="font-bold">Thành Tiền</th>
-                                    </thead>
-                                    <tbody className="pt-20">
-                                        <tr
-                                            ng-repeat="item in cart"
-                                            className="relative pb-20"
-                                        >
-                                            <td className="pt-5 font-normal">1</td>
-                                            <td className="pt-5 font-normal">
-                                                <img
-                                                    src="https://res.cloudinary.com/doy3slx9i/image/upload/v1712158639/Ecommere/hf5jncz8d6pxelaxystr.webp"
-                                                    width="90px"
-                                                />
-                                            </td>
-                                            <td className="pl-8 pr-8 pt-0 font-normal">
-                                                <p
-                                                    style={{
-                                                        fontWeight: "400",
-                                                        paddingBottom: "7px",
-                                                        fontSize: "16px",
-                                                    }}
+                                {carts?.length <= 0 ? (
+                                    <>
+                                        {" "}
+                                        <div>
+                                            <h5 className="mt-5 flex items-center justify-center text-xl font-bold">
+                                                Giỏ Hàng Trống !
+                                            </h5>
+                                            <Link to={"/products"}>
+                                                {" "}
+                                                <button
+                                                    className={`btn mb-10 mt-10 flex w-full  items-center justify-center rounded bg-red-500 p-2 pl-10 pr-10 text-white`}
                                                 >
-                                                    Áo T-Shirt cổ tròn C9TSH519M
-                                                </p>
-                                                <p style={{ fontSize: "14px" }}>
-                                                    Kích thước: L<br />
-                                                    Màu sắc: Xám
-                                                </p>
-                                            </td>
-                                            <td className="pl-5 pr-5 font-normal">
-                                                299,000đ
-                                            </td>
-                                            <td className="pl-4 pr-4 font-normal">
-                                                <div className="flex items-center">
-                                                    <button className="h-8 w-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none">
-                                                        -
-                                                    </button>
-                                                    <input
-                                                        type="number"
-                                                        className="w-15 h-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none "
-                                                        min="1"
-                                                        max="9"
-                                                        defaultValue="1"
-                                                    />
-                                                    <button className="h-8 w-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none">
-                                                        +
-                                                    </button>
-                                                </div>
-                                            </td>
-                                            <td className="pl-4 pr-4 font-bold">
-                                                299,000đ
-                                            </td>
-                                            <td className="absolute bottom-2 end-0 translate-y-0 cursor-pointer">
-                                                <ClearOutlined />
-                                            </td>
-                                        </tr>
-                                        <tr
-                                            ng-repeat="item in cart"
-                                            className="relative pb-20"
-                                        >
-                                            <td className="pt-5 font-normal">1</td>
-                                            <td className="pt-5 font-normal">
-                                                <img
-                                                    src="https://res.cloudinary.com/doy3slx9i/image/upload/v1712158639/Ecommere/hf5jncz8d6pxelaxystr.webp"
-                                                    width="90px"
-                                                />
-                                            </td>
-                                            <td className="pl-8 pr-8 pt-0 font-normal">
-                                                <p
-                                                    style={{
-                                                        fontWeight: "400",
-                                                        paddingBottom: "7px",
-                                                        fontSize: "16px",
-                                                    }}
-                                                >
-                                                    Áo T-Shirt cổ tròn C9TSH519M
-                                                </p>
-                                                <p style={{ fontSize: "14px" }}>
-                                                    Kích thước: L<br />
-                                                    Màu sắc: Xám
-                                                </p>
-                                            </td>
-                                            <td className="pl-5 pr-5 font-normal">
-                                                299,000đ
-                                            </td>
-                                            <td className="pl-4 pr-4 font-normal">
-                                                <div className="flex items-center">
-                                                    <button className="h-8 w-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none">
-                                                        -
-                                                    </button>
-                                                    <input
-                                                        type="number"
-                                                        className="w-15 h-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none "
-                                                        min="1"
-                                                        max="9"
-                                                        defaultValue="1"
-                                                    />
-                                                    <button className="h-8 w-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none">
-                                                        +
-                                                    </button>
-                                                </div>
-                                            </td>
-                                            <td className="pl-4 pr-4 font-bold">
-                                                299,000đ
-                                            </td>
-                                            <td className="absolute bottom-2 end-0 translate-y-0 cursor-pointer">
-                                                <ClearOutlined />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                                    {" "}
+                                                    Tiếp tục mua sắm
+                                                </button>
+                                            </Link>
+                                        </div>{" "}
+                                    </>
+                                ) : (
+                                    <table className="font-bold">
+                                        <thead>
+                                            <th className="font-bold">STT</th>
+                                            <th className="font-bold">Ảnh</th>
+                                            <th className="font-bold">Sản Phẩm</th>
+                                            <th className="font-bold">Giá</th>
+                                            <th className="font-bold">Số Lượng</th>
+                                            <th className="font-bold">Thành Tiền</th>
+                                        </thead>
+                                        <tbody className="pt-20">
+                                            {carts?.map((data, index) => {
+                                                return (
+                                                    <>
+                                                        <ProductInCart
+                                                            data={data}
+                                                            key={data?.id}
+                                                            index={index}
+                                                        />
+                                                    </>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </table>
+                                )}
                             </div>
                         </div>
                         <div className="ml-5 w-1/3 bg-gray-100 p-4">
@@ -179,18 +132,28 @@ const Cart = () => {
                                             style={{ fontSize: 20 }}
                                             ng-if="totalPrice"
                                         >
-                                            299,000đ
+                                            {formatNumber(
+                                                check ? totalClick : totalPrice,
+                                            )}
+                                            đ
                                         </h5>
                                     </div>
                                     <hr className="mb-2 mt-4  border-t border-dotted border-gray-400 " />
                                 </div>
 
-                                <a
-                                    className="w-100 btn-danger btn w-full bg-red-500 text-white"
-                                    href="#!checkout"
-                                >
-                                    Tiếp Tục Thanh Toán <ArrowRightOutlined />
-                                </a>
+                                <div className="flex items-center justify-center ">
+                                    <Link to={"/checkout"}>
+                                        <button
+                                            className={`btn w-full ${carts?.length <= 0 ? "bg-gray-500" : "bg-red-500"} flex items-center  justify-center rounded p-2 pl-10 pr-10 text-white`}
+                                            disabled={
+                                                carts?.length <= 0 ? true : false
+                                            }
+                                        >
+                                            Tiếp Tục Thanh Toán{" "}
+                                            <ArrowRightOutlined />
+                                        </button>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     </div>

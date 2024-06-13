@@ -24,8 +24,6 @@ function HomePage() {
     }, [])
 
     const [products, setProducts] = useState<Product[]>([])
-    console.log(products)
-
     const product = products.slice(0, 10)
 
     useEffect(() => {
@@ -82,11 +80,11 @@ function HomePage() {
                 <div className="block-product-name-inner-home flex justify-center text-3xl font-semibold uppercase text-red-600">
                     Mua gì hôm nay?
                 </div>
-                <div className="block-product-image-home w-12/12 m-5 flex space-x-16">
+                <main className="flex w-full space-x-4 overflow-x-auto p-5">
                     {category?.map((data: Category) => (
                         <CategoryInHomePage data={data} key={data.id} />
                     ))}
-                </div>
+                </main>
             </div>
             <div className="block-offer-online container mx-auto my-10 flex max-w-7xl flex-col justify-center">
                 <div className="flex justify-center text-3xl font-semibold uppercase text-red-600">

@@ -1,7 +1,7 @@
 import { CloseOutlined } from "@ant-design/icons"
 import { useState } from "react"
 
-const ColorInProductDetail = ({ data, onColor, product, onSize }) => {
+const ColorInProductDetail = ({ data, onColor, product, onSize, selectedColor }) => {
     const [click, setclick] = useState(null)
     if (!Array.isArray(product) || product.length === 0) {
         return <div>No data available</div>
@@ -9,10 +9,8 @@ const ColorInProductDetail = ({ data, onColor, product, onSize }) => {
 
     let foundValue = undefined
     let idValue = undefined
-    product.forEach((item) => {
-        const foundObj = item.attribute_values.find(
-            (obj) => obj.value === data?.value,
-        )
+    product?.forEach((item) => {
+        const foundObj = item.attributes.find((obj) => obj.value === data?.value)
         if (foundObj) {
             foundValue = foundObj.value
             idValue = foundObj.id
@@ -27,11 +25,10 @@ const ColorInProductDetail = ({ data, onColor, product, onSize }) => {
         onColor(data?.value)
         onSize(idValue)
     }
-
     return (
         <>
             <button
-                className={`m-1 mx-1 h-8 w-8 rounded-full bg-${data?.value}-600  ${click == data?.id ? "border-4 border-gray-200" : "boder border-gray-300"} `}
+                className={`m-1 mx-1 h-8 w-8 rounded-full bg-${data?.value}-600  ${selectedColor == idValue ? "border-4 border-gray-200" : ""}boder border-gray-300 `}
                 onClick={() => HandleClick(data?.id)}
                 disabled={foundValue ? false : true}
                 key={data?.id}

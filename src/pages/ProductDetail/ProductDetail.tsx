@@ -13,6 +13,7 @@ import CategoryInProductDetail from "./CategoryInProductDetail"
 import PriceInProductDetail from "./PriceInProductDetail"
 import ColorInProductDetail from "./ColorInProductDetail"
 import SizeInProductDetail from "./SizeInProductDetail"
+import { toast } from "react-toastify"
 const ProductDetail = () => {
     const { id }: string = useParams()
     const images = [
@@ -35,10 +36,15 @@ const ProductDetail = () => {
         { value: "gray", id: "5" },
     ]
     const [selectedImage, setSelectedImage] = useState(images[0])
+    const [selectedColor, setSelectedColor] = useState(null)
+    const [quantity, setquantity] = useState(1)
+    const carts = JSON.parse(localStorage.getItem("cart") || "[]")
     const handleImageClick = (image: string) => {
         setSelectedImage(image)
     }
     const [product, setProduct] = useState<Product>()
+    const [sizevalue, setSizevalue] = useState()
+    const [prices, setprices] = useState()
     const fetchProducts = async () => {
         const data: Product = await getProductById(id)
         setProduct(data)
@@ -53,6 +59,42 @@ const ProductDetail = () => {
     const [idsize, setIdsize] = useState()
     const HandleSize = (value: string) => {
         setIdsize(value)
+        setSelectedColor(value)
+    }
+    const sizes = (value) => {
+        setSizevalue(value)
+    }
+    const price = (value) => {
+        setprices(value)
+    }
+    const HandleAddtoCart = async () => {
+        const data = {
+            id: carts.length + 1,
+            name_product: product?.product?.name,
+            price: prices,
+            quantity: quantity,
+            size: sizevalue,
+            color: idColor,
+        }
+        if (idsize == undefined) {
+            toast.error("Bạn cần chọn size!")
+        } else if (sizevalue == undefined) {
+            toast.error("Bạn cần chọn color!")
+        } else {
+            const existingProductIndex = carts?.findIndex(
+                (item) =>
+                    item.name_product == product?.product?.name &&
+                    item?.size == sizevalue &&
+                    item?.color == idColor,
+            )
+            if (existingProductIndex !== -1) {
+                carts[existingProductIndex].quantity += Number(quantity)
+            } else {
+                await carts.push(data)
+            }
+            localStorage.setItem("cart", JSON.stringify(carts))
+            toast.success("Bạn đã thêm thành công!")
+        }
     }
     return (
         <>
@@ -101,7 +143,9 @@ const ProductDetail = () => {
                             free ship
                         </button>
                     </div>
-                    <div className="mt-3 text-xl font-bold">{product?.name}</div>
+                    <div className="mt-3 text-xl font-bold">
+                        {product?.product?.name}
+                    </div>
                     <span>SKU: F9UVC020M-015</span>
                     <div className="mt-4 flex">
                         <span>
@@ -111,11 +155,12 @@ const ProductDetail = () => {
                         <p className="ml-2 font-bold">5 </p>đánh giá |
                         <p className="ml-2 font-bold">1334</p> đã bán
                     </div>
-                    <CategoryInProductDetail data={product?.category} />
+                    <CategoryInProductDetail data={product?.product?.category} />
 
                     <PriceInProductDetail
-                        data={product?.variants}
+                        data={product?.product?.variants}
                         idcolor={idColor}
+                        onPrice={price}
                     />
                     <hr className="my-4  w-full border-t border-dashed border-gray-400" />
                     <span className="text-sm font-bold">MÀU SẮC </span>
@@ -127,8 +172,9 @@ const ProductDetail = () => {
                                         data={data}
                                         key={data?.id}
                                         onColor={HandlePrice}
-                                        product={product?.variants}
+                                        product={product?.product?.variants}
                                         onSize={HandleSize}
+                                        selectedColor={selectedColor}
                                     />
                                 </>
                             )
@@ -143,8 +189,9 @@ const ProductDetail = () => {
                                     <SizeInProductDetail
                                         data={data}
                                         key={data?.id}
-                                        product={product?.variants}
+                                        product={product?.product?.variants}
                                         idSize={idsize}
+                                        onSize={sizes}
                                     />
                                 </>
                             )
@@ -153,25 +200,21 @@ const ProductDetail = () => {
                     <div className="mt-6 flex">
                         <span className="text-sm font-bold ">CHỌN SỐ LƯỢNG</span>
                         <div className="ml-auto flex items-center">
-                            <button className="h-8 w-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none">
-                                -
-                            </button>
                             <input
                                 type="number"
                                 className="w-15 h-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none "
                                 min="1"
                                 max="9"
                                 defaultValue="1"
+                                onChange={(e) => setquantity(e.target.value)}
                             />
-                            <button className="h-8 w-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none">
-                                +
-                            </button>
                         </div>
                     </div>
                     <div className="mt-10 flex">
                         <button
                             className="w-2/4 rounded border  border-red-400 p-2"
                             style={{ color: "red" }}
+                            onClick={() => HandleAddtoCart()}
                         >
                             <ShoppingCartOutlined style={{ color: "red" }} /> Thêm
                             giỏ hàng
@@ -187,7 +230,7 @@ const ProductDetail = () => {
                         className="mt-3 w-full rounded  border border-black p-2"
                         style={{ color: "black" }}
                     >
-                        <HddOutlined style={{ color: "black" }} /> Thêm giỏ hàng
+                        <HddOutlined style={{ color: "black" }} /> Mua tại quầy
                     </button>
                 </div>
             </div>

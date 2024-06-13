@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const SizeInProductDetail = ({ data, product, idSize }) => {
+const SizeInProductDetail = ({ data, product, idSize, onSize }) => {
     const [click, setclick] = useState(false)
     if (!Array.isArray(product) || product.length === 0) {
         return <div>No data available</div>
@@ -8,24 +8,23 @@ const SizeInProductDetail = ({ data, product, idSize }) => {
 
     let foundValue = undefined
     product.forEach((item) => {
-        const foundObj = item.attribute_values.find(
-            (obj) => obj.value === data?.value,
-        )
+        const foundObj = item.attributes.find((obj) => obj.value === data?.value)
         if (foundObj) {
             foundValue = foundObj.value
         }
     })
     let sizeValue = undefined
     product.forEach((item) => {
-        const foundObj = item.attribute_values.find((obj) => obj.id === idSize)
+        const foundObj = item.attributes.find((obj) => obj.id === idSize)
         if (foundObj) {
-            const sizeValue1 = item.attribute_values[1]
+            const sizeValue1 = item.attributes[1]
             sizeValue = sizeValue1.value
         }
     })
 
     const HandleClick = () => {
         setclick(!click)
+        onSize(data?.value)
     }
     return (
         <>
