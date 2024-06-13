@@ -2,37 +2,58 @@ import { useEffect, useState } from "react"
 import { Image, List, Rate } from "antd"
 import {
     CarryOutOutlined,
-    CheckCircleOutlined,
     HddOutlined,
     HeartOutlined,
     ShoppingCartOutlined,
 } from "@ant-design/icons"
-type Props = {
-    product: Product
-}
 import { useParams } from "react-router-dom"
 import { getProductById } from "@/api/services/ProductService"
 import { Product } from "@/@types/product"
+import CategoryInProductDetail from "./CategoryInProductDetail"
+import PriceInProductDetail from "./PriceInProductDetail"
+import ColorInProductDetail from "./ColorInProductDetail"
+import SizeInProductDetail from "./SizeInProductDetail"
 const ProductDetail = () => {
-    const { id }: string | number = useParams()
+    const { id }: string = useParams()
     const images = [
         "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.amazonaws.com%2Fcms%2Fproducts%2FF9UVC020M-014%2Ffeabdc18be4641d6a438dfc8fd8b1389_optimized_original_image.jpg&w=1920&q=75",
         "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.amazonaws.com%2Fcms%2Fproducts%2FF9UVC020M-020%2F7b91f75bc4684a578b9eb6b1a3fea98f_optimized_original_image.jpg&w=1920&q=75",
         "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.ap-southeast-1.amazonaws.com%2Fcms%2F17109299569046619.jpg&w=1920&q=75",
     ]
+    const size = [
+        { value: "2XL", id: "1" },
+        { value: "XL", id: "2" },
+        { value: "L", id: "3" },
+        { value: "M", id: "4" },
+        { value: "S", id: "5" },
+    ]
+    const color = [
+        { value: "red", id: "1" },
+        { value: "blue", id: "2" },
+        { value: "green", id: "3" },
+        { value: "white", id: "4" },
+        { value: "gray", id: "5" },
+    ]
     const [selectedImage, setSelectedImage] = useState(images[0])
     const handleImageClick = (image: string) => {
         setSelectedImage(image)
     }
-    const [product, setProduct] = useState<Props>()
+    const [product, setProduct] = useState<Product>()
     const fetchProducts = async () => {
-        const { product }: Props = await getProductById(id)
-        setProduct(product)
+        const data: Product = await getProductById(id)
+        setProduct(data)
     }
-
     useEffect(() => {
         fetchProducts()
     }, [])
+    const [idColor, setIdcolor] = useState()
+    const HandlePrice = (value: string) => {
+        setIdcolor(value)
+    }
+    const [idsize, setIdsize] = useState()
+    const HandleSize = (value: string) => {
+        setIdsize(value)
+    }
     return (
         <>
             <div className="flex pl-40 pr-40 pt-5">
@@ -50,7 +71,7 @@ const ProductDetail = () => {
                         renderItem={(item) => (
                             <List.Item>
                                 <img
-                                    // className='w-1/12'
+                                    className="w-1/2"
                                     src={item}
                                     alt="Thumbnail"
                                     onClick={() => handleImageClick(item)}
@@ -80,61 +101,54 @@ const ProductDetail = () => {
                             free ship
                         </button>
                     </div>
-                    <div className="text-xl font-bold ">{product?.name}</div>
+                    <div className="mt-3 text-xl font-bold">{product?.name}</div>
                     <span>SKU: F9UVC020M-015</span>
                     <div className="mt-4 flex">
-                        <p>
+                        <span>
                             <Rate disabled defaultValue={5} />
-                        </p>
+                        </span>
                         <p className="ml-2 font-bold">5 sao</p> |
                         <p className="ml-2 font-bold">5 </p>đánh giá |
                         <p className="ml-2 font-bold">1334</p> đã bán
                     </div>
-                    <div className="text-xs text-red-700">
-                        {product?.description}
-                    </div>
-                    <div className="mt-5 flex ">
-                        <p className="text-xl font-bold  text-red-500">399,000 đ</p>
-                        <p className="text-xm ml-2 mt-1 text-gray-400 line-through">
-                            399,000 đ
-                        </p>
-                        <p className="ml-auto mt-1 font-bold">
-                            Còn Hàng
-                            <CheckCircleOutlined
-                                className="text-white-500 bg-green-600 "
-                                style={{ color: "white ", borderRadius: "50%" }}
-                            />
-                        </p>
-                    </div>
-                    <span className="text-sm text-red-600">Giảm 53%</span>
+                    <CategoryInProductDetail data={product?.category} />
+
+                    <PriceInProductDetail
+                        data={product?.variants}
+                        idcolor={idColor}
+                    />
                     <hr className="my-4  w-full border-t border-dashed border-gray-400" />
-                    <span className="text-sm font-bold">MÀU SẮC | Red </span>
+                    <span className="text-sm font-bold">MÀU SẮC </span>
                     <div className="mb-2 mt-2 grid grid-cols-8 justify-center">
-                        <button className="m-1 mx-1 h-8 w-8 rounded-full bg-black"></button>
-                        <button className="m-1 mx-1 h-8 w-8 rounded-full bg-red-500 "></button>
-                        <button className="m-1 mx-1 h-8 w-8 rounded-full bg-green-400"></button>
-                        <button className="m-1 mx-1 h-8 w-8 rounded-full bg-blue-400"></button>
-                        <button className="m-1 mx-1 h-8 w-8 rounded-full bg-yellow-400"></button>
-                        <button className="m-1 mx-1 h-8 w-8 rounded-full bg-gray-400"></button>
-                        <button className="m-1 mx-1 h-8 w-8 rounded-full bg-violet-400"></button>
+                        {color?.map((data) => {
+                            return (
+                                <>
+                                    <ColorInProductDetail
+                                        data={data}
+                                        key={data?.id}
+                                        onColor={HandlePrice}
+                                        product={product?.variants}
+                                        onSize={HandleSize}
+                                    />
+                                </>
+                            )
+                        })}
                     </div>
+
                     <span className="text-sm font-bold">KÍCH THƯỚC</span>
                     <div className="mb-2 mt-2 grid grid-cols-5 justify-center">
-                        <button className="m-1 mx-1 h-7 w-16 rounded-full rounded-lg bg-gray-200">
-                            Size M
-                        </button>
-                        <button className="m-1 mx-1 h-7 w-16 rounded-full rounded-lg bg-gray-200">
-                            Size M
-                        </button>
-                        <button className="m-1 mx-1 h-7 w-16 rounded-full rounded-lg bg-gray-200">
-                            Size M
-                        </button>
-                        <button className="m-1 mx-1 h-7 w-16 rounded-full rounded-lg bg-gray-200">
-                            Size M
-                        </button>
-                        <button className="m-1 mx-1 h-7 w-16 rounded-full rounded-lg bg-gray-200">
-                            Size M
-                        </button>
+                        {size?.map((data) => {
+                            return (
+                                <>
+                                    <SizeInProductDetail
+                                        data={data}
+                                        key={data?.id}
+                                        product={product?.variants}
+                                        idSize={idsize}
+                                    />
+                                </>
+                            )
+                        })}
                     </div>
                     <div className="mt-6 flex">
                         <span className="text-sm font-bold ">CHỌN SỐ LƯỢNG</span>

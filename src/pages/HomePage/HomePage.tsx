@@ -24,6 +24,8 @@ function HomePage() {
     }, [])
 
     const [products, setProducts] = useState<Product[]>([])
+    console.log(products)
+
     const product = products.slice(0, 10)
 
     useEffect(() => {
