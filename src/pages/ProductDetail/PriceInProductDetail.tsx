@@ -1,4 +1,3 @@
-
 import { CheckCircleOutlined } from "@ant-design/icons"
 import formatNumber from "../../utilities/FormatTotal"
 import { useEffect } from "react"
