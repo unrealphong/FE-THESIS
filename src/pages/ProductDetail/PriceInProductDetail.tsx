@@ -1,20 +1,21 @@
-import { Variant } from "@/@types/product"
+
 import { CheckCircleOutlined } from "@ant-design/icons"
 import formatNumber from "../../utilities/FormatTotal"
+import { useEffect } from "react"
 
-type Props = {
-    data: Variant[]
-    idcolor: string
-}
-
-const PriceInProductDetail = ({ data, idcolor }: Props) => {
+const PriceInProductDetail = ({ data, idcolor, onPrice }) => {
     if (!Array.isArray(data) || data.length === 0) {
         return <div>No data available</div>
     }
     const data1 = data[0]
     const priceProduct = data?.find((data) =>
-        data?.attribute_values?.find((data3) => data3?.value === idcolor),
+        data?.attributes?.find((data3) => data3?.value === idcolor),
     )?.price
+    useEffect(() => {
+        if (priceProduct !== undefined) {
+            onPrice(priceProduct)
+        }
+    }, [priceProduct, onPrice])
     return (
         <>
             <div className="mt-5 flex ">

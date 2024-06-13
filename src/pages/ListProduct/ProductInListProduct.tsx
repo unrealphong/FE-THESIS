@@ -1,6 +1,5 @@
 import { Product } from "@/@types/product"
 import { Link } from "react-router-dom"
-import formatNumber from "../../utilities/FormatTotal"
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons"
 type Props = {
     data: Product
@@ -10,8 +9,8 @@ const ProductInListProduct = ({ data }: Props) => {
         <>
             {" "}
             <Link to={`/products/${data?.id}`}>
-                <div className="custom-card-hover group card relative">
-                    <div className="absolute bottom-64 right-2 flex flex-col gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="custom-card-hover card group relative">
+                    <div className="absolute bottom-60 right-2 flex flex-col gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         <ShoppingCartOutlined className="icon-heart ml-2 text-xl" />
                         <HeartOutlined className="icon-heart ml-2 text-xl" />
                     </div>

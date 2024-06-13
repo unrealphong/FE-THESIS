@@ -1,4 +1,3 @@
-import { User } from "@/@types/user"
 import logo from "@/assets/images/logo/logo.webp"
 import {
     DashboardOutlined,
@@ -8,11 +7,13 @@ import {
 } from "@ant-design/icons"
 import { Button, Dropdown, Menu } from "antd"
 import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 import localStorage from "redux-persist/es/storage"
 
 function Header() {
     const [isScrolled, setIsScrolled] = useState(false)
-    const [user] = useState<User | null>(null)
+    const [carts, setCarts] = useState([])
+
     useEffect(() => {
         const handleScroll = () => {
             const scrollTop = window.scrollY
@@ -45,6 +46,7 @@ function Header() {
         if (key === "logout") {
             localStorage.removeItem("accessToken")
             localStorage.removeItem("role")
+            toast.success("Bạn đã đăng xuất!")
         }
     }
     const userMenu = (
@@ -76,6 +78,27 @@ function Header() {
             </Menu.Item>
         </Menu>
     )
+    const [role, setrole] = useState(0)
+    useEffect(() => {
+        const fetchStoredCarts = async () => {
+            try {
+                const storedCartsString = await localStorage.getItem("cart")
+                const role1 = await localStorage.getItem("role")
+                if (storedCartsString) {
+                    const storedCarts = JSON.parse(storedCartsString) || []
+                    setCarts(storedCarts)
+                    setrole(role1)
+                } else {
+                    setCarts([])
+                }
+            } catch (error) {
+                console.error("Error fetching or parsing stored carts:", error)
+            }
+        }
+
+        fetchStoredCarts()
+    }, [])
+
     return (
         <>
             <header className="header">
@@ -157,11 +180,15 @@ function Header() {
                                 </button>
                             </div>
                         </div>
+
                         <div className="actions flex items-center space-x-4">
                             <a
-                                href="#"
-                                className="text-gray-700 hover:text-gray-900"
+                                href="/cart"
+                                className="relative p-2 text-gray-700 hover:text-gray-900"
                             >
+                                <span className="absolute bottom-5 left-8 right-0 h-4 w-3 rounded  bg-red-500 py-0 text-center text-xs text-white">
+                                    {carts?.length}
+                                </span>
                                 <svg
                                     width="25"
                                     height="24"
@@ -216,13 +243,13 @@ function Header() {
                                 </svg>
                             </a>
                             <div>
-                                {user ? (
+                                {role ? (
                                     <Dropdown overlay={userMenu} trigger={["click"]}>
                                         <Button
                                             icon={<UserOutlined />}
                                             className="flex items-center"
                                         >
-                                            {user.name}
+                                            {/* {user.name} */}
                                         </Button>
                                     </Dropdown>
                                 ) : (
