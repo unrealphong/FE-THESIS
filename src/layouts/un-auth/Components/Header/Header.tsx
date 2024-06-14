@@ -7,13 +7,14 @@ import {
 } from "@ant-design/icons"
 import { Button, Dropdown, Menu } from "antd"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import localStorage from "redux-persist/es/storage"
 
 function Header() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [carts, setCarts] = useState([])
-
+    const navigate = useNavigate()
     useEffect(() => {
         const handleScroll = () => {
             const scrollTop = window.scrollY
@@ -35,18 +36,17 @@ function Header() {
         const fetchRole = async () => {
             const role = await localStorage.getItem("role")
             if (role) {
-                // do something with the role
             }
         }
-
         fetchRole()
     }, [])
 
     const handleMenuClick = ({ key }: { key: string }) => {
         if (key === "logout") {
-            localStorage.removeItem("accessToken")
-            localStorage.removeItem("role")
+            localStorage.removeItem("user")
             toast.success("Bạn đã đăng xuất!")
+            navigate("/")
+            window.location.reload()
         }
     }
     const userMenu = (
@@ -83,11 +83,12 @@ function Header() {
         const fetchStoredCarts = async () => {
             try {
                 const storedCartsString = await localStorage.getItem("cart")
-                const role1 = await localStorage.getItem("role")
+                const user = await localStorage.getItem("user")
+
                 if (storedCartsString) {
                     const storedCarts = JSON.parse(storedCartsString) || []
                     setCarts(storedCarts)
-                    setrole(role1)
+                    setrole(user)
                 } else {
                     setCarts([])
                 }
@@ -95,7 +96,6 @@ function Header() {
                 console.error("Error fetching or parsing stored carts:", error)
             }
         }
-
         fetchStoredCarts()
     }, [])
 

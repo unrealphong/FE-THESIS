@@ -6,15 +6,71 @@ import {
     EnvironmentOutlined,
     UserOutlined,
 } from "@ant-design/icons"
-import { Button, Input, Radio, Select } from "antd"
+import { Button, Form, Input, Modal, Radio, Select } from "antd"
 import TextArea from "antd/es/input/TextArea"
+import ProvinceInCheckOut from "./ProvinceInCheckOut"
+import { useEffect, useState } from "react"
+import DistrictInCheckOut from "./DistrictInCheckOut"
+import WardInCheckOut from "./WardInCheckOut"
+import CartInCheckOut from "./CartInCheckOut"
+import formatNumber from "@/utilities/FormatTotal"
+import { useNavigate } from "react-router-dom"
 const CheckOut = () => {
+    const [provinceId, setprovinceId] = useState<any>()
+    const [provinceName, setprovinceName] = useState<any>()
+    const [districtId, setdistrictId] = useState<any>()
+    const [districtName, setDistrictName] = useState<any>()
     const { Search } = Input
     const buttonStyle = {
         backgroundColor: "red",
         borderColor: "red",
         color: "white",
     }
+    const nameprovince = (name) => {
+        setprovinceName(name)
+    }
+    const idprovince = (id) => {
+        setprovinceId(id)
+    }
+    const namedistrict = (name) => {
+        setDistrictName(name)
+    }
+    const iddistrict = (id) => {
+        setdistrictId(id)
+    }
+    const carts = JSON.parse(localStorage.getItem("cart") || "[]")
+    const totalCartPrice = carts.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0,
+    )
+    const user = JSON.parse(localStorage.getItem("user") || "null")
+    const navigate = useNavigate()
+    const handleOk = () => {
+        navigate("/dang-nhap")
+    }
+    const handleCancel = () => {
+        navigate("/dang-ki")
+    }
+    if (user == null) {
+        return (
+            <>
+                <Modal
+                    title="Cảnh báo !"
+                    open={true}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                    okText="Đăng nhập"
+                    cancelText="Đăng kí"
+                >
+                    <p>Bạn cần đăng nhập hoặc đăng kí!</p>
+                </Modal>
+            </>
+        )
+    }
+    const [form] = Form.useForm()
+    useEffect(() => {
+        form.setFieldsValue(user?.data)
+    }, [user?.data])
     return (
         <>
             <main className="body m-36 mt-10 bg-gray-100 p-5">
@@ -56,19 +112,23 @@ const CheckOut = () => {
                                         Địa Chỉ Giao Hàng
                                     </h4>
                                 </div>
-                                <a
-                                    className="text-danger fw-bold mb-0 ml-auto text-sm text-red-500"
-                                    ng-show="!isLogin"
-                                    href="#!login"
-                                >
-                                    <UserOutlined />
-                                    <span className="text-danger ml-2 ">
-                                        Đăng Nhập
-                                    </span>
-                                </a>
+                                {user != null ? (
+                                    ""
+                                ) : (
+                                    <a
+                                        className="text-danger fw-bold mb-0 ml-auto text-sm text-red-500"
+                                        ng-show="!isLogin"
+                                        href="#!login"
+                                    >
+                                        <UserOutlined />
+                                        <span className="text-danger ml-2 ">
+                                            Đăng Nhập
+                                        </span>
+                                    </a>
+                                )}
                             </div>
 
-                            <div className="row p-0 pt-8">
+                            <Form className="row p-0 pt-8" form={form}>
                                 <div className="flex">
                                     <div className="w-2/4">
                                         <label
@@ -78,10 +138,21 @@ const CheckOut = () => {
                                             Họ Tên
                                             <span className="text-red-500">*</span>
                                         </label>
-                                        <Input
-                                            placeholder="Nhập họ tên của bạn"
-                                            className="mt-3 p-2"
-                                        />
+                                        <Form.Item
+                                            name="name"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        "Không được để trống tên ",
+                                                },
+                                            ]}
+                                        >
+                                            <Input
+                                                placeholder="Nhập họ tên của bạn"
+                                                className="mt-3 p-2"
+                                            />
+                                        </Form.Item>
                                     </div>
                                     <div className="ml-10 w-2/4">
                                         <label
@@ -91,10 +162,21 @@ const CheckOut = () => {
                                             Email
                                             <span className="text-red-500">*</span>
                                         </label>
-                                        <Input
-                                            placeholder="Nhập email của bạn"
-                                            className="mt-3 p-2"
-                                        />
+                                        <Form.Item
+                                            name="email"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        "Không được để trống email ",
+                                                },
+                                            ]}
+                                        >
+                                            <Input
+                                                placeholder="Nhập email của bạn"
+                                                className="mt-3 p-2"
+                                            />
+                                        </Form.Item>
                                     </div>
                                 </div>
                                 <div className="mt-5 flex">
@@ -106,97 +188,37 @@ const CheckOut = () => {
                                             Số điện thoại
                                             <span className="text-red-500">*</span>
                                         </label>
-                                        <Input
-                                            placeholder="Nhập họ tên của bạn"
-                                            className="mt-3 p-2"
-                                        />
+                                        <Form.Item
+                                            name="number"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        "Không được để trống số điện thoại ",
+                                                },
+                                            ]}
+                                        >
+                                            <Input
+                                                placeholder="Nhập họ tên của bạn"
+                                                className="mt-3 p-2"
+                                            />
+                                        </Form.Item>
                                     </div>
                                     <div className="ml-10 w-2/4"></div>
                                 </div>
                                 <div className="mt-5 flex">
-                                    <div className="w-2/6">
-                                        <label
-                                            htmlFor="name"
-                                            className="pl-1 text-sm font-bold"
-                                        >
-                                            Chọn tỉnh / thành phố
-                                            <span className="text-red-500">*</span>
-                                        </label>
-                                        <Select
-                                            defaultValue="lucy"
-                                            className=" mt-3 w-5/6"
-                                            style={{ height: "42px" }}
-                                            options={[
-                                                { value: "jack", label: "Jack" },
-                                                { value: "lucy", label: "Lucy" },
-                                                {
-                                                    value: "Yiminghe",
-                                                    label: "yiminghe",
-                                                },
-                                                {
-                                                    value: "disabled",
-                                                    label: "Disabled",
-                                                    disabled: true,
-                                                },
-                                            ]}
-                                        />
-                                    </div>
+                                    <ProvinceInCheckOut
+                                        onIDProvince={idprovince}
+                                        onNameProvince={nameprovince}
+                                    />
 
-                                    <div className="w-2/6">
-                                        <label
-                                            htmlFor="name"
-                                            className="pl-1 text-sm font-bold"
-                                        >
-                                            Chọn quận / huyện
-                                            <span className="text-red-500">*</span>
-                                        </label>
-                                        <Select
-                                            defaultValue="lucy"
-                                            className=" mt-3 w-5/6"
-                                            style={{ height: "42px" }}
-                                            options={[
-                                                { value: "jack", label: "Jack" },
-                                                { value: "lucy", label: "Lucy" },
-                                                {
-                                                    value: "Yiminghe",
-                                                    label: "yiminghe",
-                                                },
-                                                {
-                                                    value: "disabled",
-                                                    label: "Disabled",
-                                                    disabled: true,
-                                                },
-                                            ]}
-                                        />
-                                    </div>
+                                    <DistrictInCheckOut
+                                        id={provinceId}
+                                        onIDDistrict={iddistrict}
+                                        onNameDistrict={namedistrict}
+                                    />
 
-                                    <div className="w-2/6">
-                                        <label
-                                            htmlFor="name"
-                                            className="pl-1 text-sm font-bold"
-                                        >
-                                            Chọn phường / xã
-                                            <span className="text-red-500">*</span>
-                                        </label>
-                                        <Select
-                                            defaultValue="lucy"
-                                            style={{ height: "42px" }}
-                                            className=" mt-3 w-5/6"
-                                            options={[
-                                                { value: "jack", label: "Jack" },
-                                                { value: "lucy", label: "Lucy" },
-                                                {
-                                                    value: "Yiminghe",
-                                                    label: "yiminghe",
-                                                },
-                                                {
-                                                    value: "disabled",
-                                                    label: "Disabled",
-                                                    disabled: true,
-                                                },
-                                            ]}
-                                        />
-                                    </div>
+                                    <WardInCheckOut id={districtId} />
                                 </div>
 
                                 <div className="mt-5">
@@ -227,7 +249,7 @@ const CheckOut = () => {
                                         autoSize={{ minRows: 3, maxRows: 5 }}
                                     />
                                 </div>
-                            </div>
+                            </Form>
 
                             <div className="row mt-10">
                                 <div className="col-12 col-md-6">
@@ -291,13 +313,13 @@ const CheckOut = () => {
                                     <div className="mt-5 flex">
                                         <p className="text-sm">Tạm Tính</p>
                                         <p className="fw-bold mb-0 ml-auto text-sm font-bold">
-                                            40.000đ
+                                            {formatNumber(totalCartPrice)} đ
                                         </p>
                                     </div>
                                     <div className="mt-3 flex">
                                         <p className="text-sm">Giảm Giá</p>
                                         <p className="fw-bold mb-0 ml-auto text-sm font-bold">
-                                            -2.000đ
+                                            0đ
                                         </p>
                                     </div>
                                     <div className="mt-3 flex">
@@ -312,7 +334,7 @@ const CheckOut = () => {
                                     <div className="flex">
                                         <h5 className="">Tổng Tiền</h5>
                                         <h5 className="fw-bold mb-0 ml-auto font-bold text-red-500 ">
-                                            20.000đ
+                                            {formatNumber(totalCartPrice)} đ
                                         </h5>
                                     </div>
                                 </div>
@@ -328,112 +350,7 @@ const CheckOut = () => {
                     </div>
                 </div>
 
-                <div className="mt-5 bg-white p-5">
-                    <h5 className="text-xl font-bold">
-                        {" "}
-                        Giỏ hàng{" "}
-                        <span className="text-xs text-red-600">(5) sản phẩm</span>
-                    </h5>
-                    <table className="table-striped table mt-5 ">
-                        <thead>
-                            <th className="text-sm">Ảnh</th>
-                            <th className="text-sm">Sản Phẩm</th>
-                            <th className="text-sm">Giá</th>
-                            <th className="text-sm">Số Lượng</th>
-                            <th className="text-sm">Tổng Tiền</th>
-                        </thead>
-
-                        <tbody>
-                            <tr
-                                ng-repeat="item in cart"
-                                className="position-relative"
-                            >
-                                <td>
-                                    <img
-                                        src="https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.amazonaws.com%2Fcms%2Fproducts%2FK2F9UVJ084K02%2F4de6307af8244398aef8af615b3ff526_thumbnail.jpg&w=128&q=75"
-                                        className="w-20"
-                                    />
-                                </td>
-                                <td className="ml-10 mr-10 w-60 whitespace-normal  ">
-                                    <h6>
-                                        <a href="#">
-                                            NỮ/Áo chống nắng Sunstop Air mũ liền
-                                            K2/F9UVJ084K
-                                        </a>
-                                    </h6>
-                                    <p className="mt-5">
-                                        Kích thước:{" "}
-                                        <span className="font-bold">L</span>
-                                        <br />
-                                        Màu sắc:{" "}
-                                        <span className="font-bold">Red</span>
-                                    </p>
-                                </td>
-                                <td className="font-bold text-red-500">20.000đ</td>
-                                <td className="pl-9">2</td>
-                                <td className="font-bold ">40.000đ</td>
-                            </tr>
-                            <tr
-                                ng-repeat="item in cart"
-                                className="position-relative"
-                            >
-                                <td>
-                                    <img
-                                        src="https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.amazonaws.com%2Fcms%2Fproducts%2FK2F9UVJ084K02%2F4de6307af8244398aef8af615b3ff526_thumbnail.jpg&w=128&q=75"
-                                        className="w-20"
-                                    />
-                                </td>
-                                <td className="ml-10 mr-10 w-60 whitespace-normal  ">
-                                    <h6>
-                                        <a href="#">
-                                            NỮ/Áo chống nắng Sunstop Air mũ liền
-                                            K2/F9UVJ084K
-                                        </a>
-                                    </h6>
-                                    <p className="mt-5">
-                                        Kích thước:{" "}
-                                        <span className="font-bold">L</span>
-                                        <br />
-                                        Màu sắc:{" "}
-                                        <span className="font-bold">Red</span>
-                                    </p>
-                                </td>
-                                <td className="font-bold text-red-500">20.000đ</td>
-                                <td className="pl-9">2</td>
-                                <td className="font-bold ">40.000đ</td>
-                            </tr>
-                            <tr
-                                ng-repeat="item in cart"
-                                className="position-relative"
-                            >
-                                <td>
-                                    <img
-                                        src="https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.amazonaws.com%2Fcms%2Fproducts%2FK2F9UVJ084K02%2F4de6307af8244398aef8af615b3ff526_thumbnail.jpg&w=128&q=75"
-                                        className="w-20"
-                                    />
-                                </td>
-                                <td className="ml-10 mr-10 w-60 whitespace-normal  ">
-                                    <h6>
-                                        <a href="#">
-                                            NỮ/Áo chống nắng Sunstop Air mũ liền
-                                            K2/F9UVJ084K
-                                        </a>
-                                    </h6>
-                                    <p className="mt-5">
-                                        Kích thước:{" "}
-                                        <span className="font-bold">L</span>
-                                        <br />
-                                        Màu sắc:{" "}
-                                        <span className="font-bold">Red</span>
-                                    </p>
-                                </td>
-                                <td className="font-bold text-red-500">20.000đ</td>
-                                <td className="pl-9">2</td>
-                                <td className="font-bold ">40.000đ</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <CartInCheckOut />
             </main>
         </>
     )

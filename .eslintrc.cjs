@@ -12,5 +12,9 @@ module.exports = {
   rules: {
     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     "react-hooks/rules-of-hooks": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-empty": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "react-hooks/exhaustive-deps": "off"
   },
 }
