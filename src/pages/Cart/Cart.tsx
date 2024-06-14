@@ -10,8 +10,6 @@ import { Link } from "react-router-dom"
 const Cart = () => {
     const [carts, setCarts] = useState([])
     const [totalPrice, setTotalPrice] = useState(0)
-    const [check] = useState()
-    const [totalClick] = useState(0)
     useEffect(() => {
         const storedCarts = JSON.parse(localStorage.getItem("cart")!) || []
         setCarts(storedCarts)
@@ -132,10 +130,7 @@ const Cart = () => {
                                             style={{ fontSize: 20 }}
                                             ng-if="totalPrice"
                                         >
-                                            {formatNumber(
-                                                check ? totalClick : totalPrice,
-                                            )}
-                                            đ
+                                            {formatNumber(totalPrice)}đ
                                         </h5>
                                     </div>
                                     <hr className="mb-2 mt-4  border-t border-dotted border-gray-400 " />

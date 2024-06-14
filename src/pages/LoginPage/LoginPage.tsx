@@ -43,10 +43,8 @@ const LoginPage = () => {
     const onSubmit = async (data1) => {
         try {
             const response = await httpRequest.post("/login", data1)
-            const { token } = response.data.data
             const { data } = response.data.data
-            localStorage.setItem("accessToken", JSON.stringify(token))
-            localStorage.setItem("role", JSON.stringify(data.role_id))
+            localStorage.setItem("user", JSON.stringify(response.data.data))
             if (data.role_id == 1) {
                 navigate("/")
                 toast.success("Đăng nhập thành công!")
@@ -56,7 +54,7 @@ const LoginPage = () => {
             }
         } catch (error) {
             console.error(error)
-            toast.error("Đăng nhập thất bại!") // Show error toast
+            toast.error("Đăng nhập thất bại!")
         }
     }
 
