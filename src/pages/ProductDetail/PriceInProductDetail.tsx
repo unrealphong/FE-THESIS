@@ -4,7 +4,7 @@ import { useEffect } from "react"
 
 const PriceInProductDetail = ({ data, idcolor, onPrice }) => {
     if (!Array.isArray(data) || data.length === 0) {
-        return <div>No data available</div>
+        return <div></div>
     }
     const data1 = data[0]
     const priceProduct = data?.find((data) =>
