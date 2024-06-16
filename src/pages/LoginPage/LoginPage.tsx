@@ -1,129 +1,108 @@
-import httpRequest from "@/api/axios-instance"
 import iconFb from "@/assets/images/icons/icon-fb.svg"
 import iconGg from "@/assets/images/icons/icon-gg.svg"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
+import { Button, Form, Input, Typography } from "antd"
+import { Controller, useForm } from "react-hook-form"
+import { login } from "@/api/services/AuthService"
 import { toast } from "react-toastify"
-import { object, string } from "zod"
-
-const loginSchema = object({
-    email: string()
-        .min(1, "Email address is required")
-        .email("Email Address is invalid"),
-    password: string()
-        .min(1, "Password is required")
-        .min(8, "Password must be more than 8 characters")
-        .max(32, "Password must be less than 32 characters"),
-})
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+const { Text, Link } = Typography
 
 const LoginPage = () => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        resolver: zodResolver(loginSchema),
-    })
-    const [showPassword, setShowPassword] = useState(false)
-
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword)
-    }
     const navigate = useNavigate()
+    const {
+        handleSubmit,
+        control,
+        formState: { errors },
+    } = useForm()
+    const onSubmit = async (data: { email: string; password: string }) => {
+        const { email, password } = data
 
+        try {
+            const response = await login(email, password)
+            console.log(response)
+            if (response && response.accessToken) {
+                localStorage.setItem("accessToken", response.accessToken)
+                if (response.role == 1) {
+                    navigate("/")
+                } else if (response.role == 0) {
+                    navigate("/thong-ke")
+                    toast.success("Hello admin!")
+                }
+            } else {
+                toast.error("Đăng nhập thất bại. Vui lòng thử lại!")
+            }
+        } catch (error) {
+            console.error("Login failed!", error.message)
+            toast.error("Đăng nhập thất bại. Vui lòng thử lại!")
+        }
+    }
     useEffect(() => {
         const accessToken = localStorage.getItem("accessToken")
         if (accessToken) {
             navigate("/")
         }
     }, [navigate])
-
-    const onSubmit = async (data1) => {
-        try {
-            const response = await httpRequest.post("/login", data1)
-            const { data } = response.data.data
-            localStorage.setItem("user", JSON.stringify(response.data.data))
-            if (data.role_id == 1) {
-                navigate("/")
-                toast.success("Đăng nhập thành công!")
-            } else if (data.role_id == 0) {
-                navigate("/thong-ke")
-                toast.success("Hello admin!")
-            }
-        } catch (error) {
-            console.error(error)
-            toast.error("Đăng nhập thất bại!")
-        }
-    }
-
     return (
         <div className="mx-auto my-10 max-w-md">
             <h3 className="mb-3 text-center font-medium">Đăng Nhập</h3>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="my-2">
-                    <label htmlFor="email" className="label">
-                        Email
-                    </label>
-                    <input
-                        type="email"
-                        id="email"
-                        className="input input-bordered w-full max-w-md"
-                        {...register("email")}
+            <Form onFinish={handleSubmit(onSubmit)} layout="vertical">
+                <Form.Item label="Username">
+                    <Controller
+                        name="email"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => <Input size="large" {...field} />}
                     />
-                    {errors.email && (
-                        <span className="text-red-500">{errors.email.message}</span>
-                    )}
-                </div>
-                <div className="relative my-2">
-                    <label htmlFor="password" className="mb-1 block">
-                        Mật Khẩu
-                    </label>
-                    <input
-                        type={showPassword ? "text" : "password"}
-                        id="password"
-                        className="input input-bordered w-full max-w-md"
-                        {...register("password")}
+                </Form.Item>
+                <Form.Item label="Password">
+                    <Controller
+                        name="password"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                            <Input.Password size="large" {...field} />
+                        )}
                     />
-                    <i
-                        className="fa-solid fa-eye absolute right-0 top-0 mr-3 mt-2 cursor-pointer"
-                        onClick={togglePasswordVisibility}
-                    ></i>
-                    {errors.password && (
-                        <span className="text-red-500">
-                            {errors.password.message}
-                        </span>
-                    )}
-                </div>
-                <div className="mb-3">
-                    <button
-                        type="submit"
-                        className="btn w-full rounded bg-red-600 py-2 text-white"
+                </Form.Item>
+                <Form.Item>
+                    <Button
+                        size="large"
+                        type="primary"
+                        htmlType="submit"
+                        className="w-full"
                     >
                         Đăng Nhập
-                    </button>
-                </div>
-                <p className="mb-2 flex items-center gap-2">
+                    </Button>
+                </Form.Item>
+                <Text className="mb-2 flex items-center gap-2">
                     Bạn chưa có tài khoản?{" "}
-                    <a className="text-red-600" href="#!register">
+                    <Link style={{ color: "red" }} href="#!register">
                         Đăng Ký Ngay
-                    </a>
-                </p>
-                <a href="#!password/forgot" className="text-red-600">
-                    Quên Mật Khẩu
-                </a>
-            </form>
-            <p className="my-3 text-center font-bold">Hoặc</p>
+                    </Link>
+                </Text>
+                <Text>
+                    <Link style={{ color: "red" }} href="#!password/forgot">
+                        Quên Mật Khẩu
+                    </Link>
+                </Text>
+            </Form>
+            <Text className="my-3 text-center font-bold">Hoặc</Text>
             <div className="flex flex-col gap-3">
-                <div className="flex cursor-pointer items-center justify-center gap-2 rounded bg-blue-600 py-2 text-white">
-                    <img src={iconFb} alt="Facebook" className="h-5 w-5" />
+                <Button
+                    size="large"
+                    className="flex items-center justify-center gap-2 rounded bg-blue-600 py-2 text-white"
+                    icon={<img src={iconFb} alt="Facebook" className="h-5 w-5" />}
+                >
                     <span className="font-medium">Đăng Nhập Với Facebook</span>
-                </div>
-                <div className="flex cursor-pointer items-center justify-center gap-2 rounded bg-red-600 py-2 text-white">
-                    <img src={iconGg} alt="Google" className="h-5 w-5" />
+                </Button>
+                <Button
+                    size="large"
+                    className="flex items-center justify-center gap-2 rounded bg-red-600 py-2 text-white"
+                    icon={<img src={iconGg} alt="Google" className="h-5 w-5" />}
+                >
                     <span className="font-medium">Đăng Nhập Với Google</span>
-                </div>
+                </Button>
             </div>
         </div>
     )

@@ -16,7 +16,7 @@ const getAllCategory = async (): Promise<Category[]> => {
     }
 }
 
-const getCategoryById = async (id: string): Promise<Category> => {
+const getCategoryById = async (id: number): Promise<Category> => {
     try {
         const response: AxiosResponse<{ data: { category: Category } }> =
             await httpRequest.get(`/categories/${id}`)
