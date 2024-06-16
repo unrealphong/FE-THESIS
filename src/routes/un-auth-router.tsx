@@ -3,6 +3,8 @@ import CheckOut from "@/pages/CheckOut/CheckOut"
 import HomePage from "@/pages/HomePage/HomePage"
 import ListProduct from "@/pages/ListProduct/ListProduct"
 import LoginPage from "@/pages/LoginPage/LoginPage"
+import ListOrder from "@/pages/Order/ListOrder"
+import OrderDetail from "@/pages/OrderDetail/OrderDetail"
 import ProductDetail from "@/pages/ProductDetail/ProductDetail"
 import RegisterPage from "@/pages/RegisterPage/RegisterPage"
 import { pathName } from "@/routes/path-name"
@@ -35,5 +37,13 @@ export const UnAuthRouter = [
     {
         path: pathName.PRODUCT_DETAIL,
         element: <ProductDetail />,
+    },
+    {
+        path: pathName.ORDERS,
+        element: <ListOrder />,
+    },
+    {
+        path: pathName.ORDERS_DETAIL,
+        element: <OrderDetail />,
     },
 ]

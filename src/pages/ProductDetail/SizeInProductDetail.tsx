@@ -3,7 +3,7 @@ import { useState } from "react"
 const SizeInProductDetail = ({ data, product, idSize, onSize }) => {
     const [click, setclick] = useState(false)
     if (!Array.isArray(product) || product.length === 0) {
-        return <div>No data available</div>
+        return <div></div>
     }
 
     let foundValue = undefined

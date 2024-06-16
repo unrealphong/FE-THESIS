@@ -4,7 +4,7 @@ import { useState } from "react"
 const ColorInProductDetail = ({ data, onColor, product, onSize, selectedColor }) => {
     const [click, setclick] = useState(null)
     if (!Array.isArray(product) || product.length === 0) {
-        return <div>No data available</div>
+        return <div></div>
     }
 
     let foundValue = undefined
@@ -28,10 +28,11 @@ const ColorInProductDetail = ({ data, onColor, product, onSize, selectedColor })
     return (
         <>
             <button
-                className={`m-1 mx-1 h-8 w-8 rounded-full bg-${data?.value}-600  ${selectedColor == idValue ? "border-4 border-gray-200" : ""}boder border-gray-300 `}
+                className={`m-1 mx-1 h-8 w-8 rounded-full  ${selectedColor == idValue ? "border-4 border-gray-200" : ""} boder border-gray-300 `}
                 onClick={() => HandleClick(data?.id)}
                 disabled={foundValue ? false : true}
                 key={data?.id}
+                style={{ backgroundColor: `${data?.value}` }}
             >
                 {foundValue ? (
                     ""

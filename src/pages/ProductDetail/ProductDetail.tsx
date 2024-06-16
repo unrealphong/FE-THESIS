@@ -34,6 +34,9 @@ const ProductDetail = () => {
         { value: "green", id: "3" },
         { value: "white", id: "4" },
         { value: "gray", id: "5" },
+        { value: "yellow", id: "6" },
+        { value: "violet", id: "7" },
+        { value: "black", id: "8" },
     ]
     const [selectedImage, setSelectedImage] = useState(images[0])
     const [selectedColor, setSelectedColor] = useState(null)
