@@ -11,6 +11,7 @@ export const pathName = {
     PRODUCT_DETAIL: "/products/:id",
     ORDERS: "/orders",
     ORDERS_DETAIL: "/orders/:id",
+    ORDERS_DONE: "/order_done",
 
     // ADMIN PATH
     DASHBOARD: "/thong-ke",

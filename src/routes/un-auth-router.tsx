@@ -5,6 +5,7 @@ import ListProduct from "@/pages/ListProduct/ListProduct"
 import LoginPage from "@/pages/LoginPage/LoginPage"
 import ListOrder from "@/pages/Order/ListOrder"
 import OrderDetail from "@/pages/OrderDetail/OrderDetail"
+import OrderDone from "@/pages/OrderDone/OrderDone"
 import ProductDetail from "@/pages/ProductDetail/ProductDetail"
 import RegisterPage from "@/pages/RegisterPage/RegisterPage"
 import { pathName } from "@/routes/path-name"
@@ -45,5 +46,9 @@ export const UnAuthRouter = [
     {
         path: pathName.ORDERS_DETAIL,
         element: <OrderDetail />,
+    },
+    {
+        path: pathName.ORDERS_DONE,
+        element: <OrderDone />,
     },
 ]

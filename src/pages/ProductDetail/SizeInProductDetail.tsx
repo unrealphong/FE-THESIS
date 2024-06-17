@@ -8,19 +8,20 @@ const SizeInProductDetail = ({ data, product, idSize, onSize }) => {
 
     let foundValue = undefined
     product.forEach((item) => {
-        const foundObj = item.attributes.find((obj) => obj.value === data?.value)
-        if (foundObj) {
-            foundValue = foundObj.value
+        const foundObj = item.attributes[1].pivot
+        if (foundObj.name == data?.value) {
+            foundValue = foundObj.name
         }
     })
     let sizeValue = undefined
     product.forEach((item) => {
-        const foundObj = item.attributes.find((obj) => obj.id === idSize)
-        if (foundObj) {
-            const sizeValue1 = item.attributes[1]
-            sizeValue = sizeValue1.value
+        const foundObj = item.attributes[1]?.pivot
+        if (foundObj.variant_id == idSize) {
+            const sizeValue1 = item.attributes[1].pivot
+            sizeValue = sizeValue1.name
         }
     })
+    console.log(sizeValue)
 
     const HandleClick = () => {
         setclick(!click)

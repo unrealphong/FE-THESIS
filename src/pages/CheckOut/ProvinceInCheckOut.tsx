@@ -13,7 +13,6 @@ const ProvinceInCheckOut = ({ onIDProvince, onNameProvince }) => {
 
         fetchProvince()
     }, [])
-    console.log(province)
     const handleProvince = (e: any) => {
         const selectedValue = e
         const selectedProvinceId = selectedValue.split(":")[1]
@@ -35,7 +34,7 @@ const ProvinceInCheckOut = ({ onIDProvince, onNameProvince }) => {
                     onChange={handleProvince}
                 >
                     <Option value="">Chọn Tỉnh</Option>
-                    {province?.map((data) => {
+                    {province?.map((data: any) => {
                         return (
                             <>
                                 <Option
