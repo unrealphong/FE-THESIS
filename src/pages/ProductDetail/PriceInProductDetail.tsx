@@ -8,8 +8,10 @@ const PriceInProductDetail = ({ data, idcolor, onPrice }) => {
     }
     const data1 = data[0]
     const priceProduct = data?.find((data) =>
-        data?.attributes?.find((data3) => data3?.value === idcolor),
+        data?.attributes?.find((data3) => data3?.pivot?.name === idcolor),
     )?.price
+    console.log(idcolor);
+    
     useEffect(() => {
         if (priceProduct !== undefined) {
             onPrice(priceProduct)

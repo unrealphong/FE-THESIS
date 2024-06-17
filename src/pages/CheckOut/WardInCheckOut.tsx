@@ -3,7 +3,7 @@ import { Select } from "antd"
 import { Option } from "antd/es/mentions"
 import { useEffect, useState } from "react"
 
-const WardInCheckOut = ({ id }) => {
+const WardInCheckOut = ({ id, onNameWard }: any) => {
     const [ward, setward] = useState([])
     useEffect(() => {
         const fetchWard = async () => {
@@ -12,6 +12,12 @@ const WardInCheckOut = ({ id }) => {
         }
         fetchWard()
     }, [id])
+    const handleWard = (e: any) => {
+        const selectedValue = e
+        const selectedProvinceName = selectedValue.split(":")[0]
+        console.log(selectedProvinceName);
+        onNameWard(selectedProvinceName)
+    }
     return (
         <>
             <div className="w-2/6">
@@ -23,9 +29,10 @@ const WardInCheckOut = ({ id }) => {
                     defaultValue="Chọn Xã"
                     style={{ height: "42px" }}
                     className=" mt-3 w-5/6"
+                    onChange={handleWard}
                 >
                     <Option value="">Chọn Xã</Option>
-                    {ward?.map((data) => {
+                    {ward?.map((data:any) => {
                         return (
                             <>
                                 <Option

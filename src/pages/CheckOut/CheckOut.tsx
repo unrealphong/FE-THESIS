@@ -15,35 +15,49 @@ import WardInCheckOut from "./WardInCheckOut"
 import CartInCheckOut from "./CartInCheckOut"
 import formatNumber from "@/utilities/FormatTotal"
 import { useNavigate } from "react-router-dom"
+import { AddOrder, addOrder } from "@/api/services/Order"
 const CheckOut = () => {
+    const [form] = Form.useForm()
+    const user = JSON.parse(localStorage.getItem("user") || "null")
+    useEffect(() => {
+        form.setFieldsValue(user?.data)
+        console.log('ok');
+        
+    }, [])
     const [provinceId, setprovinceId] = useState<any>()
     const [provinceName, setprovinceName] = useState<any>()
     const [districtId, setdistrictId] = useState<any>()
     const [districtName, setDistrictName] = useState<any>()
+    const [wardName, setWardName] = useState<any>()
+    const [adressdetail, setadressdetail] = useState<any>()
+    const [phone, setPhone] = useState<any>();
     const { Search } = Input
     const buttonStyle = {
         backgroundColor: "red",
         borderColor: "red",
         color: "white",
     }
-    const nameprovince = (name) => {
+    const nameprovince = (name: any) => {
         setprovinceName(name)
     }
-    const idprovince = (id) => {
+    const idprovince = (id: any) => {
         setprovinceId(id)
     }
-    const namedistrict = (name) => {
+    const namedistrict = (name: any) => {
         setDistrictName(name)
     }
-    const iddistrict = (id) => {
+    const iddistrict = (id: any) => {
         setdistrictId(id)
+    }
+    const nameWard = (name: any) => {
+        setWardName(name)
     }
     const carts = JSON.parse(localStorage.getItem("cart") || "[]")
     const totalCartPrice = carts.reduce(
-        (total, item) => total + item.price * item.quantity,
+        (total: any, item: any) => total + item.price * item.quantity,
         0,
     )
-    const user = JSON.parse(localStorage.getItem("user") || "null")
+   
     const navigate = useNavigate()
     const handleOk = () => {
         navigate("/dang-nhap")
@@ -51,6 +65,34 @@ const CheckOut = () => {
     const handleCancel = () => {
         navigate("/dang-ki")
     }
+    const handleAdress = (e: any) => {
+        setadressdetail(e.target.value)
+    }
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+    
+    const handleOrder = async() => {
+        const data = {
+            user_id: user?.data?.id,
+            address: `${adressdetail}, ${wardName}, ${districtName}, ${provinceName}`,
+            number: phone,
+            total_amount: totalCartPrice,
+            status: "pending",
+            order_date: "2004-08-29"
+        }
+        const response = await addOrder(data)
+        localStorage.removeItem('cart')
+        console.log(response);
+        navigate("/order_done")
+    }
+
     if (user == null) {
         return (
             <>
@@ -67,10 +109,8 @@ const CheckOut = () => {
             </>
         )
     }
-    const [form] = Form.useForm()
-    useEffect(() => {
-        form.setFieldsValue(user?.data)
-    }, [user?.data])
+
+
     return (
         <>
             <main className="body m-36 mt-10 bg-gray-100 p-5">
@@ -128,7 +168,7 @@ const CheckOut = () => {
                                 )}
                             </div>
 
-                            <Form className="row p-0 pt-8" form={form}>
+                            <Form className="row p-0 pt-8" form={form} onFinish={handleOrder}>
                                 <div className="flex">
                                     <div className="w-2/4">
                                         <label
@@ -199,8 +239,10 @@ const CheckOut = () => {
                                             ]}
                                         >
                                             <Input
-                                                placeholder="Nhập họ tên của bạn"
+                                                placeholder="Nhập số điện thoại của bạn"
                                                 className="mt-3 p-2"
+                                                type="number"
+                                                onChange={(e) => setPhone(e.target.value)}
                                             />
                                         </Form.Item>
                                     </div>
@@ -218,7 +260,7 @@ const CheckOut = () => {
                                         onNameDistrict={namedistrict}
                                     />
 
-                                    <WardInCheckOut id={districtId} />
+                                    <WardInCheckOut id={districtId} onNameWard={nameWard} />
                                 </div>
 
                                 <div className="mt-5">
@@ -232,6 +274,7 @@ const CheckOut = () => {
                                     <Input
                                         placeholder="Nhập địa chỉ cụ thể của bạn"
                                         className="mt-3 p-2"
+                                        onChange={(e: any) => handleAdress(e)}
                                     />
                                 </div>
 
@@ -272,7 +315,6 @@ const CheckOut = () => {
                                         <h5 className="fw-medium d-flex align-items-center mb-0 mb-2 gap-2 text-left">
                                             <i className="fa-solid fa-truck"></i>
                                             <Radio value={2}>
-                                                {" "}
                                                 Thẻ ATM/Visa/Master/JCB/QR Pay qua
                                                 VNPAY-QR
                                             </Radio>
@@ -339,12 +381,12 @@ const CheckOut = () => {
                                     </div>
                                 </div>
                                 <hr className="w-full border-t border-dashed border-gray-500 " />
-                                <button
-                                    type="submit"
+                                <Button
+                                    onClick={()=>handleOrder()}
                                     className="align-center mt-5 w-full rounded bg-red-600 p-2 text-white"
                                 >
                                     Đặt Hàng
-                                </button>
+                                </Button>
                             </div>
                         </div>
                     </div>
