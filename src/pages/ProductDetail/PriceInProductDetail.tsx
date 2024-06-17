@@ -10,8 +10,8 @@ const PriceInProductDetail = ({ data, idcolor, onPrice }) => {
     const priceProduct = data?.find((data) =>
         data?.attributes?.find((data3) => data3?.pivot?.name === idcolor),
     )?.price
-    console.log(idcolor);
-    
+    console.log(idcolor)
+
     useEffect(() => {
         if (priceProduct !== undefined) {
             onPrice(priceProduct)

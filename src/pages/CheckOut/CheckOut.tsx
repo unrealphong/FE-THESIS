@@ -21,8 +21,7 @@ const CheckOut = () => {
     const user = JSON.parse(localStorage.getItem("user") || "null")
     useEffect(() => {
         form.setFieldsValue(user?.data)
-        console.log('ok');
-        
+        console.log("ok")
     }, [])
     const [provinceId, setprovinceId] = useState<any>()
     const [provinceName, setprovinceName] = useState<any>()
@@ -30,7 +29,7 @@ const CheckOut = () => {
     const [districtName, setDistrictName] = useState<any>()
     const [wardName, setWardName] = useState<any>()
     const [adressdetail, setadressdetail] = useState<any>()
-    const [phone, setPhone] = useState<any>();
+    const [phone, setPhone] = useState<any>()
     const { Search } = Input
     const buttonStyle = {
         backgroundColor: "red",
@@ -57,7 +56,7 @@ const CheckOut = () => {
         (total: any, item: any) => total + item.price * item.quantity,
         0,
     )
-   
+
     const navigate = useNavigate()
     const handleOk = () => {
         navigate("/dang-nhap")
@@ -68,28 +67,28 @@ const CheckOut = () => {
     const handleAdress = (e: any) => {
         setadressdetail(e.target.value)
     }
-    const [currentTime, setCurrentTime] = useState(new Date());
+    const [currentTime, setCurrentTime] = useState(new Date())
 
     useEffect(() => {
         const timer = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000);
+            setCurrentTime(new Date())
+        }, 1000)
 
-        return () => clearInterval(timer);
-    }, []);
-    
-    const handleOrder = async() => {
+        return () => clearInterval(timer)
+    }, [])
+
+    const handleOrder = async () => {
         const data = {
             user_id: user?.data?.id,
             address: `${adressdetail}, ${wardName}, ${districtName}, ${provinceName}`,
             number: phone,
             total_amount: totalCartPrice,
             status: "pending",
-            order_date: "2004-08-29"
+            order_date: "2004-08-29",
         }
         const response = await addOrder(data)
-        localStorage.removeItem('cart')
-        console.log(response);
+        localStorage.removeItem("cart")
+        console.log(response)
         navigate("/order_done")
     }
 
@@ -109,7 +108,6 @@ const CheckOut = () => {
             </>
         )
     }
-
 
     return (
         <>
@@ -168,7 +166,11 @@ const CheckOut = () => {
                                 )}
                             </div>
 
-                            <Form className="row p-0 pt-8" form={form} onFinish={handleOrder}>
+                            <Form
+                                className="row p-0 pt-8"
+                                form={form}
+                                onFinish={handleOrder}
+                            >
                                 <div className="flex">
                                     <div className="w-2/4">
                                         <label
@@ -242,7 +244,9 @@ const CheckOut = () => {
                                                 placeholder="Nhập số điện thoại của bạn"
                                                 className="mt-3 p-2"
                                                 type="number"
-                                                onChange={(e) => setPhone(e.target.value)}
+                                                onChange={(e) =>
+                                                    setPhone(e.target.value)
+                                                }
                                             />
                                         </Form.Item>
                                     </div>
@@ -260,7 +264,10 @@ const CheckOut = () => {
                                         onNameDistrict={namedistrict}
                                     />
 
-                                    <WardInCheckOut id={districtId} onNameWard={nameWard} />
+                                    <WardInCheckOut
+                                        id={districtId}
+                                        onNameWard={nameWard}
+                                    />
                                 </div>
 
                                 <div className="mt-5">
@@ -382,7 +389,7 @@ const CheckOut = () => {
                                 </div>
                                 <hr className="w-full border-t border-dashed border-gray-500 " />
                                 <Button
-                                    onClick={()=>handleOrder()}
+                                    onClick={() => handleOrder()}
                                     className="align-center mt-5 w-full rounded bg-red-600 p-2 text-white"
                                 >
                                     Đặt Hàng

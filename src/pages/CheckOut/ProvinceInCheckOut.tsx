@@ -34,7 +34,7 @@ const ProvinceInCheckOut = ({ onIDProvince, onNameProvince }) => {
                     onChange={handleProvince}
                 >
                     <Option value="">Chọn Tỉnh</Option>
-                    {province?.map((data:any) => {
+                    {province?.map((data: any) => {
                         return (
                             <>
                                 <Option

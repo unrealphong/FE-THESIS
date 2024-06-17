@@ -21,7 +21,7 @@ const SizeInProductDetail = ({ data, product, idSize, onSize }) => {
             sizeValue = sizeValue1.name
         }
     })
-    console.log(sizeValue);
+    console.log(sizeValue)
 
     const HandleClick = () => {
         setclick(!click)

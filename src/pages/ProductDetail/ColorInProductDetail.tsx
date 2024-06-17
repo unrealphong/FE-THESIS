@@ -2,7 +2,7 @@ import { CloseOutlined } from "@ant-design/icons"
 import { useState } from "react"
 
 const ColorInProductDetail = ({ data, onColor, product, onSize, selectedColor }) => {
-    console.log(product);
+    console.log(product)
 
     const [click, setclick] = useState(null)
     if (!Array.isArray(product) || product.length === 0) {
@@ -13,7 +13,7 @@ const ColorInProductDetail = ({ data, onColor, product, onSize, selectedColor })
     let idValue = undefined
     product?.forEach((item) => {
         const foundObj = item.attributes[0].pivot
-        console.log(foundObj);
+        console.log(foundObj)
 
         if (foundObj?.name == data?.value) {
             foundValue = foundObj.name
@@ -29,7 +29,7 @@ const ColorInProductDetail = ({ data, onColor, product, onSize, selectedColor })
         onColor(data?.value)
         onSize(idValue)
     }
-    console.log(foundValue);
+    console.log(foundValue)
 
     return (
         <>

@@ -15,7 +15,7 @@ const WardInCheckOut = ({ id, onNameWard }: any) => {
     const handleWard = (e: any) => {
         const selectedValue = e
         const selectedProvinceName = selectedValue.split(":")[0]
-        console.log(selectedProvinceName);
+        console.log(selectedProvinceName)
         onNameWard(selectedProvinceName)
     }
     return (
@@ -32,7 +32,7 @@ const WardInCheckOut = ({ id, onNameWard }: any) => {
                     onChange={handleWard}
                 >
                     <Option value="">Chọn Xã</Option>
-                    {ward?.map((data:any) => {
+                    {ward?.map((data: any) => {
                         return (
                             <>
                                 <Option
