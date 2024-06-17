@@ -1,26 +1,61 @@
 import { AuthResponse, LoginSuccessInfo } from "@/@types/auth"
 import httpRequest from "@/api/axios-instance"
+import { toast } from "react-toastify"
 
-export const loginUser = async (
-    username: string,
+const login = async (
+    email: string,
     password: string,
 ): Promise<LoginSuccessInfo | null> => {
     try {
         const response = await httpRequest.post<AuthResponse>("/login", {
-            username,
+            email,
             password,
         })
 
-        if (response.data && response.data.success) {
+        if (response.data.data) {
+            toast.success("Đăng nhập thành công!")
             return {
-                accessToken: response.data.accessToken || "",
+                role: response.data.data.data.role_id,
+                accessToken: response.data.data.token || "",
                 refreshToken: response.data.refreshToken || "",
                 expiresIn: response.data.expiresIn || 0,
             }
+        } else {
+            toast.error("Đăng nhập thất bại!")
+            return null
         }
-        return null
     } catch (error) {
         console.error("An error occurred during login:", error)
+        toast.error("Đăng nhập thất bại!")
         return null
     }
 }
+
+const register = async (
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+) => {
+    try {
+        const response = await httpRequest.post("/register", {
+            name,
+            email,
+            password,
+            confirmPassword,
+        })
+        if (response.data) {
+            toast.success("Đăng ký thành công!")
+            return true
+        } else {
+            toast.error("Đăng ký thất bại!")
+            return false
+        }
+    } catch (error) {
+        console.error("An error occurred during registration:", error)
+        toast.error("Đăng ký thất bại!")
+        return false
+    }
+}
+
+export { login, register }

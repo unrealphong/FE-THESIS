@@ -1,6 +1,6 @@
-import { Category } from "@/@types/category"
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
 import { toast } from "react-toastify"
+
 const baseUrl = "https://vapi.vnappmob.com/api/province/"
 const requestConfig: AxiosRequestConfig = {
     baseURL: import.meta.env.VITE_ENDPOINT_URL || `${baseUrl}`,

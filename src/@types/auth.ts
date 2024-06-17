@@ -1,10 +1,10 @@
-// Import các type hoặc interface cần thiết
 import { User } from "./user"
 
 export interface LoginSuccessInfo {
+    role: number
     accessToken: string
-    refreshToken: string
-    expiresIn: number
+    refreshToken?: string
+    expiresIn?: number
 }
 
 export interface AuthResponse {
@@ -18,6 +18,24 @@ export interface AuthResponse {
 
 export interface AuthState {
     accessToken: string | null
+    loading: boolean
+    user: User | null
+    error: string | null
+    success: boolean
+}
+
+export interface RegisterSuccessInfo {
+    message: string
+    user: User
+}
+
+export interface RegisterResponse {
+    success: boolean
+    message?: string
+    user?: User
+}
+
+export interface RegisterState {
     loading: boolean
     user: User | null
     error: string | null
