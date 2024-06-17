@@ -20,7 +20,6 @@ const LoginPage = () => {
 
         try {
             const response = await login(email, password)
-            console.log(response)
             if (response && response.accessToken) {
                 localStorage.setItem("accessToken", response.accessToken)
                 if (response.role == 1) {

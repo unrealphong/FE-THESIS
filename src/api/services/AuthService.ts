@@ -11,7 +11,6 @@ const login = async (
             email,
             password,
         })
-        console.log(response.data.data.data.role_id)
 
         if (response.data.data) {
             toast.success("Đăng nhập thành công!")
@@ -34,17 +33,18 @@ const login = async (
 
 const register = async (
     name: string,
-    password: string,
     email: string,
-): Promise<boolean> => {
+    password: string,
+    confirmPassword: string,
+) => {
     try {
         const response = await httpRequest.post("/register", {
             name,
-            password,
             email,
+            password,
+            confirmPassword,
         })
-
-        if (response.data && response.data.success) {
+        if (response.data) {
             toast.success("Đăng ký thành công!")
             return true
         } else {
