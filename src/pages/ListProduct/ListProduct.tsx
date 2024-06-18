@@ -50,11 +50,11 @@ const ListProduct = () => {
         <>
             <div className="pl-36 pr-28">
                 <div className="pb-12 pt-16 text-lg">
-                    <a href="#">Trang chủ</a> |{" "}
-                    <a className="font-bold">Danh sách sản phẩm</a>
+                    <a href="#">Trang chủ</a> |
+                    <a className="font-bold"> Danh sách sản phẩm</a>
                 </div>
                 <div className="flex">
-                    <div className="" style={{ width: "30%" }}>
+                    <div className="mr-10 w-1/4">
                         <div className="space-y-3">
                             <a
                                 href="#!product"
@@ -142,11 +142,9 @@ const ListProduct = () => {
                             {isSubject ? (
                                 <div>
                                     <div>
-                                        {" "}
                                         <Checkbox>Nam</Checkbox>
                                     </div>
                                     <div>
-                                        {" "}
                                         <Checkbox>Nữ</Checkbox>
                                     </div>
                                 </div>
@@ -155,7 +153,7 @@ const ListProduct = () => {
                             )}
                         </div>
                     </div>
-                    <div className="px-8">
+                    <div className="w-3/4 px-8">
                         <div className="">
                             <div className="">
                                 <h1 className="text-xl font-bold ">
@@ -197,7 +195,7 @@ const ListProduct = () => {
                         </div>
                         <div className="row row-gap-4 mt-3">
                             <div
-                                className="grid grid-cols-5 gap-4"
+                                className="grid w-full grid-cols-5 gap-4"
                                 ng-repeat="product in displayedProducts"
                             >
                                 {displayedProducts?.map((data: Product) => {
@@ -212,12 +210,14 @@ const ListProduct = () => {
                                 })}
                             </div>
                             <div className="mb-20 mt-10 flex justify-center">
-                                <button
-                                    className="rounded border border-red-500 bg-red-500 px-4 py-2 text-white"
-                                    onClick={loadMore}
-                                >
-                                    Xem thêm
-                                </button>
+                                {visibleCount < products?.length && (
+                                    <button
+                                        className="rounded border border-red-500 bg-red-500 px-4 py-2 text-white"
+                                        onClick={loadMore}
+                                    >
+                                        Xem thêm
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>

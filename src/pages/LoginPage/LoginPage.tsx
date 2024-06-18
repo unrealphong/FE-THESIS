@@ -19,9 +19,12 @@ const LoginPage = () => {
         const { email, password } = data
 
         try {
-            const response = await login(email, password)
-            if (response && response.accessToken) {
+            const response: any = await login(email, password)
+            console.log(response)
+
+            if (response) {
                 localStorage.setItem("accessToken", response.accessToken)
+                localStorage.setItem("user", JSON.stringify(response))
                 if (response.role == 1) {
                     navigate("/")
                 } else if (response.role == 0) {

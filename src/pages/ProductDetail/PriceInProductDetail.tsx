@@ -2,15 +2,15 @@ import { CheckCircleOutlined } from "@ant-design/icons"
 import formatNumber from "../../utilities/FormatTotal"
 import { useEffect } from "react"
 
-const PriceInProductDetail = ({ data, idcolor, onPrice }) => {
+const PriceInProductDetail = ({ data, idcolor, onPrice }: any) => {
     if (!Array.isArray(data) || data.length === 0) {
         return <div></div>
     }
     const data1 = data[0]
     const priceProduct = data?.find((data) =>
-        data?.attributes?.find((data3) => data3?.pivot?.name === idcolor),
+        data?.attribute_values?.find((data3: any) => data3?.value === idcolor),
     )?.price
-    console.log(idcolor)
+    console.log(priceProduct)
 
     useEffect(() => {
         if (priceProduct !== undefined) {
@@ -22,9 +22,9 @@ const PriceInProductDetail = ({ data, idcolor, onPrice }) => {
             <div className="mt-5 flex ">
                 <p className="text-xl font-bold  text-red-500">
                     {idcolor ? (
-                        <>{formatNumber(priceProduct)}đ</>
+                        <>{formatNumber(priceProduct)} đ</>
                     ) : (
-                        <>{formatNumber(data1?.price)}đ</>
+                        <>{formatNumber(data1?.price)} đ</>
                     )}
                 </p>
                 {/* <p className="text-xm ml-2 mt-1 text-gray-400 line-through">

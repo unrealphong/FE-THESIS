@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const SizeInProductDetail = ({ data, product, idSize, onSize }) => {
+const SizeInProductDetail = ({ data, product, idSize, onSize }: any) => {
     const [click, setclick] = useState(false)
     if (!Array.isArray(product) || product.length === 0) {
         return <div></div>
@@ -8,17 +8,22 @@ const SizeInProductDetail = ({ data, product, idSize, onSize }) => {
 
     let foundValue = undefined
     product.forEach((item) => {
-        const foundObj = item.attributes[1].pivot
-        if (foundObj.name == data?.value) {
-            foundValue = foundObj.name
+        const foundObj = item.attribute_values[1]
+        console.log(foundObj)
+        if (foundObj.value == data?.value) {
+            foundValue = foundObj.value
         }
     })
+    console.log(product)
+
     let sizeValue = undefined
     product.forEach((item) => {
-        const foundObj = item.attributes[1]?.pivot
-        if (foundObj.variant_id == idSize) {
-            const sizeValue1 = item.attributes[1].pivot
-            sizeValue = sizeValue1.name
+        const foundObj = item.attribute_values[1]
+        if (item?.id == idSize) {
+            const sizeValue1 = item.attribute_values[1]
+            console.log(sizeValue1)
+
+            sizeValue = sizeValue1.value
         }
     })
     console.log(sizeValue)

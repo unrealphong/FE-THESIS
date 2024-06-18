@@ -15,7 +15,7 @@ import ColorInProductDetail from "./ColorInProductDetail"
 import SizeInProductDetail from "./SizeInProductDetail"
 import { toast } from "react-toastify"
 const ProductDetail = () => {
-    const { id }: string = useParams()
+    const { id }: any = useParams()
     const images = [
         "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.amazonaws.com%2Fcms%2Fproducts%2FF9UVC020M-014%2Ffeabdc18be4641d6a438dfc8fd8b1389_optimized_original_image.jpg&w=1920&q=75",
         "https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.amazonaws.com%2Fcms%2Fproducts%2FF9UVC020M-020%2F7b91f75bc4684a578b9eb6b1a3fea98f_optimized_original_image.jpg&w=1920&q=75",
@@ -45,29 +45,29 @@ const ProductDetail = () => {
     const handleImageClick = (image: string) => {
         setSelectedImage(image)
     }
-    const [product, setProduct] = useState<Product>()
+    const [product, setProduct] = useState<any>()
     const [sizevalue, setSizevalue] = useState()
     const [prices, setprices] = useState()
     const fetchProducts = async () => {
-        const data: Product = await getProductById(id)
+        const data: any = await getProductById(id)
         setProduct(data)
     }
     useEffect(() => {
         fetchProducts()
     }, [])
     const [idColor, setIdcolor] = useState()
-    const HandlePrice = (value: string) => {
+    const HandlePrice = (value: any) => {
         setIdcolor(value)
     }
     const [idsize, setIdsize] = useState()
-    const HandleSize = (value: string) => {
+    const HandleSize = (value: any) => {
         setIdsize(value)
         setSelectedColor(value)
     }
-    const sizes = (value) => {
+    const sizes = (value: any) => {
         setSizevalue(value)
     }
-    const price = (value) => {
+    const price = (value: any) => {
         setprices(value)
     }
     const HandleAddtoCart = async () => {
@@ -85,7 +85,7 @@ const ProductDetail = () => {
             toast.error("Bạn cần chọn color!")
         } else {
             const existingProductIndex = carts?.findIndex(
-                (item) =>
+                (item: any) =>
                     item.name_product == product?.product?.name &&
                     item?.size == sizevalue &&
                     item?.color == idColor,
@@ -96,14 +96,18 @@ const ProductDetail = () => {
                 await carts.push(data)
             }
             localStorage.setItem("cart", JSON.stringify(carts))
+
             toast.success("Bạn đã thêm thành công!")
+            setTimeout(() => {
+                window.location.reload()
+            }, 500)
         }
     }
     return (
         <>
             <div className="flex pl-40 pr-40 pt-5">
                 <div className="flex w-2/3">
-                    <List
+                    {/* <List
                         className="h-600 overflow-y-auto"
                         dataSource={images}
                         style={{
@@ -123,16 +127,16 @@ const ProductDetail = () => {
                                 />
                             </List.Item>
                         )}
-                    />
-                    <div className="thumbnails ml-6">
+                    /> */}
+                    <div className="thumbnails ml-10">
                         <Image
                             className=""
-                            src={selectedImage}
+                            src={product?.product?.image}
                             alt="Selected"
                             style={{
-                                width: "98%",
-                                maxWidth: "650px",
-                                maxHeight: "866px",
+                                width: "100%",
+                                maxWidth: "750px",
+                                maxHeight: "966px",
                             }}
                         />
                     </div>
@@ -209,7 +213,7 @@ const ProductDetail = () => {
                                 min="1"
                                 max="9"
                                 defaultValue="1"
-                                onChange={(e) => setquantity(e.target.value)}
+                                onChange={(e: any) => setquantity(e.target.value)}
                             />
                         </div>
                     </div>

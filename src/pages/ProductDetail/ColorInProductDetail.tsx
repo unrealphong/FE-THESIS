@@ -1,26 +1,31 @@
 import { CloseOutlined } from "@ant-design/icons"
 import { useState } from "react"
 
-const ColorInProductDetail = ({ data, onColor, product, onSize, selectedColor }) => {
+const ColorInProductDetail = ({
+    data,
+    onColor,
+    product,
+    onSize,
+    selectedColor,
+}: any) => {
     console.log(product)
-
     const [click, setclick] = useState(null)
     if (!Array.isArray(product) || product.length === 0) {
         return <div></div>
     }
 
     let foundValue = undefined
-    let idValue = undefined
+    let idValue: any = undefined
     product?.forEach((item) => {
-        const foundObj = item.attributes[0].pivot
+        const foundObj = item.attribute_values[0]
         console.log(foundObj)
 
-        if (foundObj?.name == data?.value) {
-            foundValue = foundObj.name
-            idValue = foundObj.variant_id
+        if (foundObj?.value == data?.value) {
+            foundValue = foundObj.value
+            idValue = item.id
         }
     })
-    const HandleClick = (id) => {
+    const HandleClick = (id: any) => {
         if (click == data?.id) {
             setclick(null)
         } else {
@@ -29,25 +34,21 @@ const ColorInProductDetail = ({ data, onColor, product, onSize, selectedColor })
         onColor(data?.value)
         onSize(idValue)
     }
-    console.log(foundValue)
-
     return (
         <>
-            <button
-                className={`m-1 mx-1 h-8 w-8 rounded-full  ${selectedColor == idValue ? "border-4 border-gray-100" : ""}  boder border-gray-600 `}
-                onClick={() => HandleClick(data?.id)}
-                disabled={foundValue ? false : true}
-                key={data?.id}
-                style={{ backgroundColor: `${data?.value}` }}
-            >
-                {foundValue ? (
-                    ""
-                ) : (
-                    <>
-                        <CloseOutlined className="text-red-500" />
-                    </>
-                )}
-            </button>
+            {foundValue ? (
+                <>
+                    <button
+                        className={`m-1 mx-1 h-8 w-8 rounded-full  ${selectedColor == idValue ? "border-4 border-gray-100" : ""}  boder border-gray-100 `}
+                        onClick={() => HandleClick(data?.id)}
+                        disabled={foundValue ? false : true}
+                        key={data?.id}
+                        style={{ backgroundColor: `${data?.value}` }}
+                    ></button>
+                </>
+            ) : (
+                ""
+            )}
         </>
     )
 }

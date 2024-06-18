@@ -1,8 +1,52 @@
+import { getAllBillDetail, getBillDetail } from "@/api/services/Bill"
+import { getOrderDetail } from "@/api/services/Order"
 import { CarOutlined, LeftOutlined } from "@ant-design/icons"
 import { Tag } from "antd"
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { Link, useParams } from "react-router-dom"
+import ProductInOrderDetail from "./ProductInOrderDetail"
+import formatNumber from "@/utilities/FormatTotal"
 
 const OrderDetail = () => {
+    const { id } = useParams()
+    const [bill, setBill] = useState<any>()
+    const [billdetail, setBillDetail] = useState<any>()
+    const [totalPrice, setTotalPrice] = useState(0)
+    const fetchOrder = async () => {
+        const data: any = await getBillDetail(id)
+        setBill(data)
+    }
+    useEffect(() => {
+        fetchOrder()
+    }, [])
+    const fetchBillDetail = async () => {
+        const data: any = await getAllBillDetail()
+        setBillDetail(data)
+    }
+    useEffect(() => {
+        fetchBillDetail()
+    }, [])
+    const ProductInbill = billdetail?.filter((data: any) => data?.bill_id == id)
+    useEffect(() => {
+        const totalPrice: any = calculateTotalClick()
+        setTotalPrice(totalPrice)
+    }, [ProductInbill])
+
+    const calculateTotalClick = () => {
+        let total = 0
+        if (ProductInbill) {
+            ProductInbill.forEach((product: any) => {
+                const price = parseFloat(product.price)
+                const quantity = parseInt(product.quantity, 10)
+                if (!isNaN(price) && !isNaN(quantity)) {
+                    total += price * quantity
+                }
+            })
+            return total
+        }
+    }
+    console.log(totalPrice)
+
     return (
         <>
             <div className="w-full p-5 pl-60 pr-60">
@@ -16,14 +60,14 @@ const OrderDetail = () => {
                     </div>
                     <div className="mt-10 flex">
                         <span className="text-2xl font-bold">
-                            CHI TIẾT ĐƠN HÀNG #K6AAAO6M38
+                            CHI TIẾT ĐƠN HÀNG #{bill?.id}
                         </span>
-                        <Tag
+                        {/* <Tag
                             color="success"
                             className="ml-auto mt-1 text-sm font-bold"
                         >
                             success
-                        </Tag>
+                        </Tag> */}
                     </div>
                     <div className="mt-5 flex w-full">
                         <div className="mr-2 w-1/3 ">
@@ -35,11 +79,8 @@ const OrderDetail = () => {
                                 style={{ minHeight: "200px" }}
                             >
                                 <span className="font-bold">nguyen van A</span>
-                                <p>
-                                    Địa chỉ: Tỉnh Lạng Sơn | Huyện Chi Lăng | Xã Hữu
-                                    Kiên, Na Son, Điện Biên Đông, Điện Biên Điện
-                                    thoại: 84987425342
-                                </p>
+                                <p>Địa chỉ: {bill?.Recipient_address}</p>
+                                <p>Điện thoại: {bill?.Recipient_phone}</p>
                             </div>
                         </div>
                         <div className="mr-2 w-1/3">
@@ -86,88 +127,21 @@ const OrderDetail = () => {
                                 <th className="p-2">Tạm Tính</th>
                             </thead>
                             <tbody className="bg-white text-center align-middle">
-                                <tr>
-                                    <td className="w-1/4">
-                                        <div className="m-2 flex">
-                                            <img src="https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.amazonaws.com%2Fcms%2Fproducts%2FK2F9UVJ084K02%2F4de6307af8244398aef8af615b3ff526_thumbnail.jpg&w=128&q=75" />
-                                            <div className="m-2">
-                                                <p className="mb-2 text-sm">
-                                                    NỮ/Áo chống nắng Sunstop Master
-                                                    công nghệ mới 40000465
-                                                </p>
-                                                <span className="text-sm ">
-                                                    Kích thước:
-                                                    <span className="font-bold">
-                                                        XL
-                                                    </span>
-                                                </span>
-                                                <br />
-                                                <span className="text-sm">
-                                                    Màu sắc:
-                                                    <span className="font-bold">
-                                                        red
-                                                    </span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>499.000 đ</td>
-                                    <td>x1</td>
-                                    <td>
-                                        <p className="font-bold">499.000 đ</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="w-1/4">
-                                        <div className="m-2 flex">
-                                            <img src="https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.amazonaws.com%2Fcms%2Fproducts%2FK2F9UVJ084K02%2F4de6307af8244398aef8af615b3ff526_thumbnail.jpg&w=128&q=75" />
-                                            <div className="m-2">
-                                                <p className="mb-2 text-sm">
-                                                    NỮ/Áo chống nắng Sunstop Master
-                                                    công nghệ mới 40000465
-                                                </p>
-                                                <span className="text-sm ">
-                                                    Kích thước:
-                                                    <span className="font-bold">
-                                                        XL
-                                                    </span>
-                                                </span>
-                                                <br />
-                                                <span className="text-sm">
-                                                    Màu sắc:
-                                                    <span className="font-bold">
-                                                        red
-                                                    </span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>499.000 đ</td>
-                                    <td>x1</td>
-                                    <td>
-                                        <p className="font-bold">499.000 đ</p>
-                                    </td>
-                                </tr>
+                                {ProductInbill?.map((data: any) => {
+                                    return (
+                                        <>
+                                            <ProductInOrderDetail data={data} />
+                                        </>
+                                    )
+                                })}
                             </tbody>
                         </table>
-                        <hr className="my-4 ml-2 mr-2 w-full border-t border-dashed border-gray-400" />
-                        <div className="flex">
-                            <p className="text-xl">Tạm tính</p>
-                            <p className="ml-auto text-xl font-bold">249,000 đ</p>
-                        </div>
-                        <div className="mt-5 flex">
-                            <p className="text-xl">Phí vận chuyển</p>
-                            <p className="ml-auto text-xl font-bold">0 đ</p>
-                        </div>
-                        <div className="mt-5 flex">
-                            <p className="text-xl">Mã giảm giá</p>
-                            <p className="ml-auto text-xl font-bold">0 đ</p>
-                        </div>
+
                         <hr className="my-4 ml-2 mr-2 w-full border-t border-dashed border-gray-400" />
                         <div className="flex">
                             <p className="text-xl">Tổng cộng</p>
                             <p className="mb-20 ml-auto text-3xl font-bold text-red-500">
-                                249,000 đ
+                                {formatNumber(totalPrice)} đ
                             </p>
                         </div>
                     </div>
