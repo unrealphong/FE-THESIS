@@ -16,4 +16,26 @@ const addOrder = async (data: any) => {
         return undefined
     }
 }
-export { addOrder }
+const getAllOrder = async () => {
+    try {
+        const response: AxiosResponse<{ data: { data: any } }> =
+            await httpRequest.get("/orders")
+        return response.data?.data?.data ?? []
+    } catch (error) {
+        console.error("An error occurred while fetching products")
+        toast.error("Failed to fetch products. Please try again later.")
+        return []
+    }
+}
+const getOrderDetail = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: { data: any } }> =
+            await httpRequest.get(`/orders/${id}`)
+        return response.data?.data?.data ?? []
+    } catch (error) {
+        console.error("An error occurred while fetching products")
+        toast.error("Failed to fetch products. Please try again later.")
+        return []
+    }
+}
+export { addOrder, getAllOrder, getOrderDetail }

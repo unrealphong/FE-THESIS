@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons"
 import { Button, Dropdown, Menu } from "antd"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import localStorage from "redux-persist/es/storage"
 
@@ -44,6 +44,7 @@ function Header() {
     const handleMenuClick = ({ key }: { key: string }) => {
         if (key === "logout") {
             localStorage.removeItem("user")
+            localStorage.removeItem("accessToken")
             toast.success("Bạn đã đăng xuất!")
             navigate("/")
             window.location.reload()
@@ -54,9 +55,11 @@ function Header() {
             <Menu.Item key="profile" icon={<UserOutlined />}>
                 Thông tin cá nhân
             </Menu.Item>
-            <Menu.Item key="orders" icon={<SettingOutlined />}>
-                Đơn hàng
-            </Menu.Item>
+            <Link to={"/orders"}>
+                <Menu.Item key="orders" icon={<SettingOutlined />}>
+                    Đơn hàng
+                </Menu.Item>
+            </Link>
             {localStorage.getItem("role") === Promise.resolve("admin") && (
                 <Menu.Item key="admin" icon={<DashboardOutlined />}>
                     Quản trị
@@ -83,7 +86,7 @@ function Header() {
         const fetchStoredCarts = async () => {
             try {
                 const storedCartsString = await localStorage.getItem("cart")
-                const user = await localStorage.getItem("user")
+                const user: any = await localStorage.getItem("user")
 
                 if (storedCartsString) {
                     const storedCarts = JSON.parse(storedCartsString) || []

@@ -15,13 +15,12 @@ import WardInCheckOut from "./WardInCheckOut"
 import CartInCheckOut from "./CartInCheckOut"
 import formatNumber from "@/utilities/FormatTotal"
 import { useNavigate } from "react-router-dom"
-import { AddOrder, addOrder } from "@/api/services/Order"
+import { addBill, addBillDetail } from "@/api/services/Bill"
 const CheckOut = () => {
     const [form] = Form.useForm()
     const user = JSON.parse(localStorage.getItem("user") || "null")
     useEffect(() => {
         form.setFieldsValue(user?.data)
-        console.log("ok")
     }, [])
     const [provinceId, setprovinceId] = useState<any>()
     const [provinceName, setprovinceName] = useState<any>()
@@ -80,16 +79,35 @@ const CheckOut = () => {
     const handleOrder = async () => {
         const data = {
             user_id: user?.data?.id,
-            address: `${adressdetail}, ${wardName}, ${districtName}, ${provinceName}`,
-            number: phone,
+            recipient_address: `${adressdetail}, ${wardName}, ${districtName}, ${provinceName}`,
+            recipient_phone: phone,
             total_amount: totalCartPrice,
             status: "pending",
-            order_date: "2004-08-29",
+            bill_date: "2004-08-29",
         }
-        const response = await addOrder(data)
-        localStorage.removeItem("cart")
-        console.log(response)
-        navigate("/order_done")
+        const response: any = await addBill(data)
+        if (response) {
+            const data2: any = { data: [] }
+            await Promise.all(
+                carts.map(async (element: any) => {
+                    const data1 = {
+                        product_name: element?.name_product,
+                        attribute_name: "null",
+                        price: element?.price,
+                        quantity: element?.quantity,
+                        bill_id: response?.data?.id,
+                        voucher: "null",
+                        image: "null",
+                    }
+                    data2.data.push(data1)
+                }),
+            )
+
+            console.log(data2)
+            await addBillDetail(data2)
+            localStorage.removeItem("cart")
+            navigate(`/order_done/${response?.data?.id}`)
+        }
     }
 
     if (user == null) {

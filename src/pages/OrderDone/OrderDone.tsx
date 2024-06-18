@@ -1,8 +1,9 @@
 import { Button, Result } from "antd"
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 
 const OrderDone = () => {
+    const { id }: any = useParams()
     const [title, settitle] = useState("Bạn Đã Đặt Hàng Thành Công!")
     return (
         <>
@@ -21,7 +22,7 @@ const OrderDone = () => {
                                                 Trang chủ
                                             </Button>
                                         </Link>,
-                                        <Link to={`/orderdetail`}>
+                                        <Link to={`/orders/${id}`}>
                                             <Button key="buy">
                                                 Xem chi tiết đơn hàng
                                             </Button>

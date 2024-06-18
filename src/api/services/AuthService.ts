@@ -7,19 +7,14 @@ const login = async (
     password: string,
 ): Promise<LoginSuccessInfo | null> => {
     try {
-        const response = await httpRequest.post<AuthResponse>("/login", {
+        const response: any = await httpRequest.post<AuthResponse>("/login", {
             email,
             password,
         })
 
         if (response.data.data) {
             toast.success("Đăng nhập thành công!")
-            return {
-                role: response.data.data.data.role_id,
-                accessToken: response.data.data.token || "",
-                refreshToken: response.data.refreshToken || "",
-                expiresIn: response.data.expiresIn || 0,
-            }
+            return response.data.data
         } else {
             toast.error("Đăng nhập thất bại!")
             return null

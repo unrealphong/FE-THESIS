@@ -21,7 +21,7 @@ const Cart = () => {
 
     const calculateTotalClick = () => {
         let total = 0
-        carts.forEach((product) => {
+        carts.forEach((product: any) => {
             const price = parseFloat(product.price)
             const quantity = parseInt(product.quantity, 10)
             if (!isNaN(price) && !isNaN(quantity)) {
@@ -89,7 +89,7 @@ const Cart = () => {
                                             <th className="font-bold">Thành Tiền</th>
                                         </thead>
                                         <tbody className="pt-20">
-                                            {carts?.map((data, index) => {
+                                            {carts?.map((data: any, index) => {
                                                 return (
                                                     <>
                                                         <ProductInCart

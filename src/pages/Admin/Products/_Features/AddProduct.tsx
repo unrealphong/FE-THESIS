@@ -49,13 +49,13 @@ const AddProduct = () => {
     }
 
     const onSubmit = async (data: FieldValues) => {
-        const formattedData = {
+        const formattedData: any = {
             name: data.name,
             category_id: data.category_id,
             brand: data.brand,
             description: data.description,
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            variants: data.variants.map((variant: Variant, index: number) => ({
+            variants: data.variants.map((variant: any, index: number) => ({
                 price: variant.price,
                 quantity: variant.quantity,
                 attribute_values: Object.keys(variant.attributes).map(
@@ -197,7 +197,6 @@ const AddProduct = () => {
                                                     </Option>
                                                     <Option value="blue">
                                                         Blue
-
                                                     </Option>
                                                 </>
                                             ) : attribute.type.toLowerCase() ===

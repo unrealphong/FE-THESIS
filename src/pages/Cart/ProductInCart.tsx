@@ -3,25 +3,25 @@ import { useEffect, useState } from "react"
 import formatNumber from "../../utilities/FormatTotal"
 import { toast } from "react-toastify"
 
-const ProductInCart = ({ data, index }) => {
+const ProductInCart = ({ data, index }: any) => {
     const [carts, setCarts] = useState([])
     const [displayQuantity, setDisplayQuantity] = useState(data.quantity)
-    const [setcheck] = useState(false)
+    const [setcheck] = useState<any>(false)
     const sumtotal = data?.price * displayQuantity
     useEffect(() => {
         const storedCarts = JSON.parse(localStorage.getItem("cart")!) || []
         setCarts(storedCarts)
     }, [carts])
-    const handleDecrease = (id) => {
-        let updatedCarts = [...carts]
-        const index = updatedCarts.findIndex((item) => item.id === id)
+    const handleDecrease = (id: any) => {
+        let updatedCarts: any = [...carts]
+        const index = updatedCarts.findIndex((item: any) => item.id === id)
         if (index !== -1) {
             if (updatedCarts[index].quantity > 1) {
                 updatedCarts[index].quantity--
             } else {
                 const check = confirm("Bạn có muốn xóa?")
                 if (check == true) {
-                    updatedCarts = updatedCarts.filter((item) => item.id !== id)
+                    updatedCarts = updatedCarts.filter((item: any) => item.id !== id)
                     window.location.href = "/cart"
                 }
             }
@@ -33,9 +33,9 @@ const ProductInCart = ({ data, index }) => {
         }
     }
 
-    const handleIncrease = (id) => {
-        const updatedCarts = [...carts]
-        const index = updatedCarts.findIndex((item) => item.id === id)
+    const handleIncrease = (id: any) => {
+        const updatedCarts: any = [...carts]
+        const index = updatedCarts.findIndex((item: any) => item.id === id)
         if (index !== -1) {
             updatedCarts[index].quantity++
             setDisplayQuantity(updatedCarts[index].quantity)
@@ -45,18 +45,20 @@ const ProductInCart = ({ data, index }) => {
             return
         }
     }
-    const HandleRemove = (productToRemove) => {
+    const HandleRemove = (productToRemove: any) => {
         console.log(productToRemove)
         const check = confirm("Bạn có muốn xóa?")
         if (check == true) {
             const carts = JSON.parse(localStorage.getItem("cart")!) || []
-            const updatedCart = carts.filter((item) => item.id !== productToRemove)
+            const updatedCart = carts.filter(
+                (item: any) => item.id !== productToRemove,
+            )
             console.log(JSON.stringify(updatedCart))
             localStorage.setItem("cart", JSON.stringify(updatedCart))
             toast.success("Bạn đã xóa sản phẩm đó khỏi giỏ hàng!")
-            setTimeout(() => {
-                window.location.reload()
-            }, 1000)
+            // setTimeout(() => {
+            //     window.location.reload()
+            // }, 1000)
         }
     }
     return (
