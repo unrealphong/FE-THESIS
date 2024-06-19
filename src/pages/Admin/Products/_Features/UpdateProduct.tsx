@@ -1,6 +1,5 @@
 import { Category } from "@/@types/category"
 import { Attribute, Variant } from "@/@types/product"
-import { getAllAttribute } from "@/api/services/AttributeService"
 import { getAllCategory } from "@/api/services/CategoryService"
 import { getProductById, updateProduct } from "@/api/services/ProductService"
 import {
@@ -13,15 +12,15 @@ import { Button, Form, Input, Select, Space } from "antd"
 import { useCallback, useEffect, useState } from "react"
 import { Controller, FieldValues, useForm } from "react-hook-form"
 import { useNavigate, useParams } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const { Option } = Select
 
 const UpdateProduct = () => {
     const [categories, setCategories] = useState<Category[]>([])
     const [variants, setVariants] = useState<Variant[]>([])
-    const [attributes, setAttributes] = useState<Attribute[]>([])
     const navigate = useNavigate()
-    const { id } = useParams<{ id: string }>()
+    const { id } = useParams()
 
     const {
         control,
@@ -40,34 +39,25 @@ const UpdateProduct = () => {
                 setValue("brand", product.brand)
                 setValue("description", product.description)
 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const formattedVariants = product.variants.map((variant: any) => {
-                    const attributesObj: { [key: string]: string } = {}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    variant.attribute_values.forEach((attr: any) => {
-                        attributesObj[attr.attribute_id] = attr.value
-                    })
-
-                    return {
-                        price: variant.price,
-                        quantity: variant.quantity,
-                        attribute_values: attributesObj,
-                    }
-                })
-                formattedVariants.forEach((variant, index: number) => {
-                    setValue(`variants[${index}].price`, variant.price)
-                    setValue(`variants[${index}].quantity`, variant.quantity)
-
-                    Object.entries(variant.attribute_values).forEach(
-                        ([attributeId, value]: [number, string]) => {
-                            setValue(
-                                `variants[${index}].attributes[${attributeId}]`,
-                                value,
-                            )
+                if (product.variants?.length > 0) {
+                    const formattedVariants = product.variants.map(
+                        (variant: any) => {
+                            const attributes: { [key: string]: string } = {}
+                            variant.attribute_values.forEach((attr: any) => {
+                                attributes[attr.attribute_name.name] = attr.value
+                            })
+                            return {
+                                ...variant,
+                                attributes,
+                            }
                         },
                     )
-                })
-                console.log(formattedVariants)
+                    setVariants(formattedVariants)
+                } else {
+                    console.log(
+                        "Product has no variants or variants data is missing",
+                    )
+                }
             } catch (error) {
                 console.error("Failed to fetch product details:", error)
             }
@@ -75,7 +65,6 @@ const UpdateProduct = () => {
     }, [id, setValue])
     useEffect(() => {
         fetchCategories()
-        fetchAttributes()
         fetchProductDetails()
     }, [fetchProductDetails])
 
@@ -84,35 +73,33 @@ const UpdateProduct = () => {
         setCategories(allCategory)
     }
 
-    const fetchAttributes = async () => {
-        const allAttribute = await getAllAttribute()
-        setAttributes(allAttribute)
-    }
-
     const onSubmit = async (data: FieldValues) => {
-        const formattedData = {
+        const formattedData: any = {
             name: data.name,
             category_id: data.category_id,
             brand: data.brand,
             description: data.description,
-            variants: data.variants.map((variant: Variant) => ({
+            image: "https://via.placeholder.com/640x480.png/00eeee?text=est",
+            variants: variants.map((variant) => ({
                 price: variant.price,
+                price_promotional: variant.price_promotional,
                 quantity: variant.quantity,
-                attribute_values: Object.keys(variant.attributes).map(
-                    (attributeId) => ({
-                        attribute_id: parseInt(attributeId),
-                        value: variant.attributes[attributeId],
-                    }),
-                ),
+                attributes: [
+                    { name: "color", value: variant.attributes.color },
+                    { name: "size", value: variant.attributes.size },
+                ],
             })),
         }
-
+        console.log(formattedData)
         try {
-            const response = await updateProduct(id, formattedData)
-            console.log("Product updated successfully:", response)
+            const jsonData = JSON.stringify(formattedData)
+            const response = await updateProduct(id, jsonData)
+            console.log("Product created successfully:", response)
+            toast.success("Product created successfully.")
             navigate("/quan-ly-san-pham")
         } catch (error) {
-            console.error("Failed to update product:", error)
+            console.error("Failed to create product:", error)
+            toast.error("Failed to create product. Please try again later.")
         }
     }
 
@@ -125,9 +112,18 @@ const UpdateProduct = () => {
             ...variants,
             {
                 price: 0,
+                price_promotional: 0,
                 quantity: 0,
+                attributes: {
+                    color: "",
+                    size: "",
+                },
             },
         ])
+    }
+    const handleRemoveVariant = (index: number) => {
+        const newVariants = variants.filter((_, i) => i !== index)
+        setVariants(newVariants)
     }
 
     return (
@@ -217,66 +213,88 @@ const UpdateProduct = () => {
                     </div>
                 </div>
                 <h3 className="mt-4 text-lg font-semibold">Sản phẩm biến thể</h3>
-                {variants.map((_variant, variantIndex) => (
-                    <div key={variantIndex} className="flex flex-wrap space-x-4">
-                        {attributes.map((attribute) => (
-                            <Form.Item key={attribute.id} label={attribute.name}>
-                                <Controller
-                                    name={`variants[${variantIndex}].attributes[${attribute.id}]`}
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field }) => (
-                                        <Select
-                                            {...field}
-                                            size="large"
-                                            style={{ width: 240 }}
-                                            placeholder={`Chọn ${attribute.name}`}
-                                        >
-                                            <Option value="">Chọn</Option>
-                                            {attribute.type.toLowerCase() ===
-                                            "color" ? (
-                                                <>
-                                                    <Option value="red">Đỏ</Option>
-                                                    <Option value="green">
-                                                        Xanh lá
-                                                    </Option>
-                                                    <Option value="blue">
-                                                        Xanh dương
-                                                    </Option>
-                                                </>
-                                            ) : attribute.type.toLowerCase() ===
-                                              "size" ? (
-                                                <>
-                                                    <Option value="S">S</Option>
-                                                    <Option value="M">M</Option>
-                                                    <Option value="L">L</Option>
-                                                    <Option value="XL">XL</Option>
-                                                </>
-                                            ) : null}
-                                        </Select>
-                                    )}
-                                />
-                            </Form.Item>
-                        ))}
+                {variants.map((variant, index) => (
+                    <div key={index} className="flex flex-wrap space-x-4">
                         <Form.Item label="Giá gốc">
-                            <Controller
-                                name={`variants[${variantIndex}].price`}
-                                control={control}
-                                defaultValue=""
-                                render={({ field }) => (
-                                    <Input size="large" type="number" {...field} />
-                                )}
+                            <Input
+                                size="large"
+                                type="number"
+                                value={variant.price}
+                                onChange={(e) => {
+                                    const newVariants = [...variants]
+                                    newVariants[index].price = parseFloat(
+                                        e.target.value,
+                                    )
+                                    setVariants(newVariants)
+                                }}
+                            />
+                        </Form.Item>
+                        <Form.Item label="Giá khuyến mãi">
+                            <Input
+                                size="large"
+                                type="number"
+                                value={variant.price_promotional}
+                                onChange={(e) => {
+                                    const newVariants = [...variants]
+                                    newVariants[index].price_promotional =
+                                        parseFloat(e.target.value)
+                                    setVariants(newVariants)
+                                }}
                             />
                         </Form.Item>
                         <Form.Item label="Số lượng">
-                            <Controller
-                                name={`variants[${variantIndex}].quantity`}
-                                control={control}
-                                defaultValue=""
-                                render={({ field }) => (
-                                    <Input size="large" type="number" {...field} />
-                                )}
+                            <Input
+                                size="large"
+                                type="number"
+                                value={variant.quantity}
+                                onChange={(e) => {
+                                    const newVariants = [...variants]
+                                    newVariants[index].quantity = parseFloat(
+                                        e.target.value,
+                                    )
+                                    setVariants(newVariants)
+                                }}
                             />
+                        </Form.Item>
+                        <Form.Item label="Màu sắc">
+                            <Select
+                                size="large"
+                                style={{ width: 240 }}
+                                placeholder="Color"
+                                value={variant.attributes.color}
+                                onChange={(value) => {
+                                    const newVariants = [...variants]
+                                    newVariants[index].attributes.color = value
+                                    setVariants(newVariants)
+                                }}
+                            >
+                                <Option value="">Chọn</Option>
+                                <Option value="red">Đỏ</Option>
+                                <Option value="green">Xanh Lá</Option>
+                                <Option value="blue">Xanh Dương</Option>
+                                <Option value="white">Trắng</Option>
+                                <Option value="black">Đen</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item label="Kích thước">
+                            <Select
+                                size="large"
+                                style={{ width: 240 }}
+                                placeholder="Kích thước"
+                                value={variant.attributes.size}
+                                onChange={(value) => {
+                                    const newVariants = [...variants]
+                                    newVariants[index].attributes.size = value
+                                    setVariants(newVariants)
+                                }}
+                            >
+                                <Option value="">Chọn</Option>
+                                <Option value="S">S</Option>
+                                <Option value="M">M</Option>
+                                <Option value="L">L</Option>
+                                <Option value="XL">XL</Option>
+                                <Option value="XXL">XXL</Option>
+                            </Select>
                         </Form.Item>
                         <Form.Item className="flex items-end">
                             <Button
@@ -284,6 +302,7 @@ const UpdateProduct = () => {
                                 type="dashed"
                                 danger
                                 icon={<DeleteOutlined />}
+                                onClick={() => handleRemoveVariant(index)}
                             />
                         </Form.Item>
                     </div>
