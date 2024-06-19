@@ -88,12 +88,11 @@ function Header() {
                 const storedCartsString = await localStorage.getItem("cart")
                 const user: any = await localStorage.getItem("user")
                 const users = JSON.parse(user) || []
-                 setrole(users?.data?.role_id)
+                setrole(users?.data?.role_id)
                 if (storedCartsString) {
                     const storedCarts = JSON.parse(storedCartsString) || []
-                  
+
                     setCarts(storedCarts)
-                   
                 } else {
                     setCarts([])
                 }
@@ -103,7 +102,7 @@ function Header() {
         }
         fetchStoredCarts()
     }, [role])
-console.log(role);
+    console.log(role)
 
     return (
         <>
