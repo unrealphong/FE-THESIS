@@ -8,11 +8,10 @@ const addBill = async (data: any) => {
             data,
         )
         const createdProduct = response.data?.data
-        toast.success("Product created successfully.")
         return createdProduct
     } catch (error) {
         console.error("An error occurred while creating product")
-        toast.error("Failed to create product. Please try again later.")
+        toast.error("Failed to create orders. Please try again later.")
         return undefined
     }
 }
@@ -23,11 +22,10 @@ const addBillDetail = async (data1: any) => {
             data1,
         )
         const createdProduct = response.data?.data
-        toast.success("Product created successfully.")
         return createdProduct
     } catch (error) {
         console.error("An error occurred while creating product")
-        toast.error("Failed to create product. Please try again later.")
+        toast.error("Failed to create orders. Please try again later.")
         return undefined
     }
 }
@@ -38,7 +36,7 @@ const getAllBill = async () => {
         return response.data?.data?.data ?? []
     } catch (error) {
         console.error("An error occurred while fetching products")
-        toast.error("Failed to fetch products. Please try again later.")
+        toast.error("Failed to fetch orders. Please try again later.")
         return []
     }
 }
@@ -49,7 +47,7 @@ const getBillDetail = async (id: any) => {
         return response.data?.data?.data ?? []
     } catch (error) {
         console.error("An error occurred while fetching products")
-        toast.error("Failed to fetch products. Please try again later.")
+        toast.error("Failed to fetch orders. Please try again later.")
         return []
     }
 }
@@ -60,7 +58,7 @@ const getAllBillDetail = async () => {
         return response.data?.data?.data ?? []
     } catch (error) {
         console.error("An error occurred while fetching products")
-        toast.error("Failed to fetch products. Please try again later.")
+        toast.error("Failed to fetch orders. Please try again later.")
         return []
     }
 }

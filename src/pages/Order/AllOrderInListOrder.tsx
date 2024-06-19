@@ -3,12 +3,8 @@ import { useState } from "react"
 import ProductInAllOrderInListOrder from "./ProductInAllOrderInListOrder"
 
 const AllOrderInListOrder = ({ data }: any) => {
-    // console.log(data);
-
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
-
-    // Tính toán số sản phẩm hiện tại
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
     const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem)
