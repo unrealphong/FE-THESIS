@@ -81,17 +81,19 @@ function Header() {
             </Menu.Item>
         </Menu>
     )
-    const [role, setrole] = useState(0)
+    const [role, setrole] = useState<any>()
     useEffect(() => {
         const fetchStoredCarts = async () => {
             try {
                 const storedCartsString = await localStorage.getItem("cart")
                 const user: any = await localStorage.getItem("user")
-
+                const users = JSON.parse(user) || []
+                 setrole(users?.data?.role_id)
                 if (storedCartsString) {
                     const storedCarts = JSON.parse(storedCartsString) || []
+                  
                     setCarts(storedCarts)
-                    setrole(user)
+                   
                 } else {
                     setCarts([])
                 }
@@ -100,7 +102,8 @@ function Header() {
             }
         }
         fetchStoredCarts()
-    }, [])
+    }, [role])
+console.log(role);
 
     return (
         <>

@@ -26,15 +26,15 @@ const NameProductInListOrderAdmin = ({ data }: any) => {
                     {billsProduct?.product_name}
                 </td>
                 <td className="w-1/9 flex items-center justify-center p-2">
-                    {" "}
                     <img
-                        className="h-24 w-20"
+                        className="h-26 w-20"
                         src="https://tokyolife.vn/_next/image?url=https%3A%2F%2Fpm2ec.s3.amazonaws.com%2Fcms%2Fproducts%2FC9TSH519M-001%2F4240d58deb7245b0a452453c8f4dd81b_optimized_original_image.jpg&w=1920&q=75"
                         alt=""
                     />
                 </td>
                 <td className="p-2 text-center font-normal" style={{ width: "20%" }}>
-                    {data?.Recipient_address}
+                   <span className="font-bold">Đ/c</span>: {data?.Recipient_address}<br/>
+                    <span className="font-bold">Sđt</span>: {data?.Recipient_phone}
                 </td>
                 <td
                     className="p-2 text-center font-normal "
@@ -47,7 +47,6 @@ const NameProductInListOrderAdmin = ({ data }: any) => {
                 </td>
                 <td className="p-2 text-center font-normal">COD</td>
                 <td className="p-2 text-center font-normal">
-                    {" "}
                     <Tag color="success">success</Tag>
                 </td>
                 <td className="p-2 font-normal" style={{ width: "10%" }}>
