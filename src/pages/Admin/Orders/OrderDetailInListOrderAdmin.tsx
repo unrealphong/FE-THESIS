@@ -1,5 +1,3 @@
-
-
 const OrderDetailInListOrderAdmin = () => {
     return <div>OrderDetailInListOrderAdmin</div>
 }
