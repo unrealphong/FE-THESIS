@@ -1,7 +1,8 @@
 import AttributeManagement from "@/pages/Admin/Attributes"
 import CategoryManagement from "@/pages/Admin/Categories"
 import Dashboard from "@/pages/Admin/Dashboard"
-import OrderManagement from "@/pages/Admin/Orders"
+import ListOrderAdmin from "@/pages/Admin/Orders/ListOrderAdmin"
+import OrderManagement from "@/pages/Admin/Orders/ListOrderAdmin"
 import AddProduct from "@/pages/Admin/Products/_Features/AddProduct"
 import UpdateProduct from "@/pages/Admin/Products/_Features/UpdateProduct"
 import ProductManagement from "@/pages/Admin/Products/ProductList"
@@ -38,7 +39,7 @@ export const AuthRouter = [
     },
     {
         path: pathName.ORDER_MANAGEMENT,
-        element: <OrderManagement />,
+        element: <ListOrderAdmin />,
     },
     {
         path: pathName.ATTR_MANAGEMENT,

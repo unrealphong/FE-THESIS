@@ -62,21 +62,18 @@ const Cart = () => {
                             <div className="bg-gray-100 p-4">
                                 {carts?.length <= 0 ? (
                                     <>
-                                        {" "}
                                         <div>
                                             <h5 className="mt-5 flex items-center justify-center text-xl font-bold">
                                                 Giỏ Hàng Trống !
                                             </h5>
                                             <Link to={"/products"}>
-                                                {" "}
                                                 <button
                                                     className={`btn mb-10 mt-10 flex w-full  items-center justify-center rounded bg-red-500 p-2 pl-10 pr-10 text-white`}
                                                 >
-                                                    {" "}
                                                     Tiếp tục mua sắm
                                                 </button>
                                             </Link>
-                                        </div>{" "}
+                                        </div>
                                     </>
                                 ) : (
                                     <table className="font-bold">

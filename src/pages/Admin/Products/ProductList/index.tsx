@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom"
 const ProductManagement = () => {
     const navigate = useNavigate()
     const [products, setProducts] = useState<Product[]>([])
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+    const [selectedProduct, setSelectedProduct] = useState<any>(null)
     const [isModalVisible, setIsModalVisible] = useState(false)
 
     const fetchProducts = async () => {
@@ -34,7 +34,6 @@ const ProductManagement = () => {
             console.error("An error occurred while deleting product:", error)
         }
     }
-
 
     const handleUpdate = (id: number) => {
         navigate(`/quan-ly-san-pham/sua/${id}`)
@@ -119,7 +118,7 @@ const ProductManagement = () => {
         {
             title: "Thuộc tính",
             key: "attribute_values",
-            render: (record: Product) =>
+            render: (record: any) =>
                 record.attribute_values.map((attribute: AttributeValue) => (
                     <p key={attribute.id}>
                         {attribute.attribute.name}: {attribute.value}
@@ -174,7 +173,6 @@ const ProductManagement = () => {
                     />
                 </Modal>
             )}
-
         </>
     )
 }

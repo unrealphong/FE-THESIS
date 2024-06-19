@@ -13,39 +13,28 @@ const requestConfig: AxiosRequestConfig = {
 const httpRequest = axios.create(requestConfig)
 const getAllProvince = async () => {
     try {
-        const response: AxiosResponse<{ data: { results } }> =
-            await httpRequest.get("/")
+        const response: any = await httpRequest.get("/")
         return response?.data?.results
     } catch (error) {
-        console.error("An error occurred while fetching categories")
-
-        toast.error("Failed to fetch categories. Please try again later.")
+        toast.error("Lấy tỉnh thất bại.")
         return []
     }
 }
-const getAllDistrict = async (id) => {
+const getAllDistrict = async (id: any) => {
     try {
-        const response: AxiosResponse<{ data: { results } }> = await httpRequest.get(
-            `/district/${id}`,
-        )
+        const response: any = await httpRequest.get(`/district/${id}`)
         return response?.data?.results
     } catch (error) {
-        console.error("An error occurred while fetching categories")
-
-        toast.error("Failed to fetch categories. Please try again later.")
+        toast.error("Lấy huyện thất bại.")
         return []
     }
 }
-const getAllWard = async (id) => {
+const getAllWard = async (id: any) => {
     try {
-        const response: AxiosResponse<{ data: { results } }> = await httpRequest.get(
-            `/ward/${id}`,
-        )
+        const response: any = await httpRequest.get(`/ward/${id}`)
         return response?.data?.results
     } catch (error) {
-        console.error("An error occurred while fetching categories")
-
-        toast.error("Failed to fetch categories. Please try again later.")
+        toast.error("Lấy xã thất bại.")
         return []
     }
 }

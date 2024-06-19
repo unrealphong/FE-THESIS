@@ -1,28 +1,12 @@
-import { getAllBillDetail, getBillDetail } from "@/api/services/Bill"
+import { getAllBillDetail } from "@/api/services/Bill"
 import formatNumber from "@/utilities/FormatTotal"
-import { LoadingOutlined } from "@ant-design/icons"
-import { Spin, Tag } from "antd"
-import React, { useEffect, useState } from "react"
+
+import { Tag } from "antd"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 const ProductInAllOrderInListOrder = ({ data }: any) => {
-    const [billdetail, setBillDetail] = useState<any>()
-    const [loading, setLoading] = useState<boolean>(true)
-
-    const fetchBillDetail = async () => {
-        try {
-            const data: any = await getAllBillDetail()
-            setBillDetail(data)
-        } catch (error) {
-            console.error("Error fetching bill details:", error)
-        }
-    }
-
-    useEffect(() => {
-        fetchBillDetail()
-    }, [])
-
-    const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
+    currentItems
 
     return (
         <>
