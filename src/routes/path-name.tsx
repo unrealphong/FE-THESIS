@@ -22,5 +22,6 @@ export const pathName = {
     UPDATE_PRODUCT: "/quan-ly-san-pham/sua/:id",
     USER_MANAGEMENT: "/quan-ly-nguoi-dung",
     ORDER_MANAGEMENT: "/quan-ly-orders",
+    ORDER_DETAIL_MANAGEMENT: "/quan-ly-orders/:id",
     ATTR_MANAGEMENT: "quan-ly-attr",
 } as const
