@@ -45,7 +45,6 @@ const OrderDetail = () => {
             return total
         }
     }
-    console.log(totalPrice)
 
     return (
         <>

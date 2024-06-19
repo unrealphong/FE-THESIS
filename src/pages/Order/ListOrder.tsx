@@ -49,7 +49,6 @@ const ListOrder = () => {
                         </>
                     ) : (
                         <>
-                            {" "}
                             <AllOrderInListOrder data={bills} />
                         </>
                     )}
