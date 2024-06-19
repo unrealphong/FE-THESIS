@@ -33,7 +33,8 @@ const NameProductInListOrderAdmin = ({ data }: any) => {
                     />
                 </td>
                 <td className="p-2 text-center font-normal" style={{ width: "20%" }}>
-                   <span className="font-bold">Đ/c</span>: {data?.Recipient_address}<br/>
+                    <span className="font-bold">Đ/c</span>: {data?.Recipient_address}
+                    <br />
                     <span className="font-bold">Sđt</span>: {data?.Recipient_phone}
                 </td>
                 <td
