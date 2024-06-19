@@ -1,6 +1,6 @@
 import formatNumber from "../../utilities/FormatTotal"
 
-const ProductInCartCheckOut = ({ data, index }) => {
+const ProductInCartCheckOut = ({ data, index }: any) => {
     return (
         <>
             <tr className="bg-gray-100">
