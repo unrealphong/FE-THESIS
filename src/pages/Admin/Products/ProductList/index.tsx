@@ -35,7 +35,6 @@ const ProductManagement = () => {
         }
     }
 
-
     const handleUpdate = (id: number) => {
         navigate(`/quan-ly-san-pham/sua/${id}`)
     }
@@ -118,12 +117,10 @@ const ProductManagement = () => {
         },
         {
             title: "Thuộc tính",
-            key: "attribute_values",
+            key: "attribute_name",
             render: (record: Product) =>
-                record.attribute_values.map((attribute: AttributeValue) => (
-                    <p key={attribute.id}>
-                        {attribute.attribute.name}: {attribute.value}
-                    </p>
+                record.attribute_names.map((attribute: AttributeValue) => (
+                    <p key={attribute.id}>{attribute.value}</p>
                 )),
         },
     ]
@@ -174,7 +171,6 @@ const ProductManagement = () => {
                     />
                 </Modal>
             )}
-
         </>
     )
 }

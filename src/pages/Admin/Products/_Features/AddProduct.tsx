@@ -60,10 +60,10 @@ const AddProduct = () => {
                 ],
             })),
         }
-
+        console.log(formattedData)
         try {
-            const jsonData = JSON.stringify(formattedData)
-            const response = await createProduct(jsonData)
+            // const jsonData = JSON.stringify(formattedData)
+            const response = await createProduct(formattedData)
             console.log("Product created successfully:", response)
             toast.success("Product created successfully.")
             navigate("/quan-ly-san-pham")
@@ -72,6 +72,7 @@ const AddProduct = () => {
             toast.error("Failed to create product. Please try again later.")
         }
     }
+    console.log(variants)
 
     const handleAddVariant = () => {
         setVariants([

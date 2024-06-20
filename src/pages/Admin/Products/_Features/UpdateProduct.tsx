@@ -38,13 +38,16 @@ const UpdateProduct = () => {
                 setValue("category_id", product.category_id)
                 setValue("brand", product.brand)
                 setValue("description", product.description)
-
                 if (product.variants?.length > 0) {
                     const formattedVariants = product.variants.map(
                         (variant: any) => {
                             const attributes: { [key: string]: string } = {}
-                            variant.attribute_values.forEach((attr: any) => {
-                                attributes[attr.attribute_name.name] = attr.value
+                            variant.attribute_names.forEach((attr: any) => {
+                                if (attr.attribute_name_id === 1) {
+                                    attributes["size"] = attr.value
+                                } else if (attr.attribute_name_id === 2) {
+                                    attributes["color"] = attr.value
+                                }
                             })
                             return {
                                 ...variant,
@@ -94,12 +97,12 @@ const UpdateProduct = () => {
         try {
             const jsonData = JSON.stringify(formattedData)
             const response = await updateProduct(id, jsonData)
-            console.log("Product created successfully:", response)
-            toast.success("Product created successfully.")
+            console.log("Product updated successfully:", response)
+            toast.success("Product updated successfully.")
             navigate("/quan-ly-san-pham")
         } catch (error) {
-            console.error("Failed to create product:", error)
-            toast.error("Failed to create product. Please try again later.")
+            console.error("Failed to updated product:", error)
+            toast.error("Failed to updated product. Please try again later.")
         }
     }
 
