@@ -1,5 +1,4 @@
 import { getAllBillDetail, getBillDetail } from "@/api/services/Bill"
-import { getOrderDetail } from "@/api/services/Order"
 import {
     CarOutlined,
     LeftOutlined,
@@ -57,6 +56,32 @@ const OrderDetailInListOrderAdmin = () => {
             return total
         }
     }
+    const [color, setcolor] = useState<any>()
+    const [status, setstatus] = useState<any>()
+    const [check, setcheck] = useState<any>(false)
+    useEffect(() => {
+        if (bill?.status == "Pending") {
+            setcolor("warning")
+            setstatus("Chờ xác nhận")
+            setcheck(true)
+        } else if (bill?.status == "Confirm") {
+            setcolor("processing")
+            setstatus("Chờ giao hàng")
+        } else if (bill?.status == "Paid") {
+            setcolor("brown")
+            setstatus("Chờ xác nhận")
+            setcheck(true)
+        } else if (bill?.status == "Shiping") {
+            setcolor("purple")
+            setstatus("Đang giao hàng")
+        } else if (bill?.status == "Done") {
+            setcolor("green")
+            setstatus("Hoàn thành")
+        } else if (bill?.status == "Cancel") {
+            setcolor("error")
+            setstatus("Hủy hàng")
+        }
+    }, [bill])
 
     return (
         <>
@@ -68,15 +93,21 @@ const OrderDetailInListOrderAdmin = () => {
                                 <LeftOutlined /> Quay lại
                             </button>
                         </Link>
-                        <Link to="/bill/1" className="ml-auto mt-1">
-                            <button>
-                                Xem hóa đơn <RightOutlined />
-                            </button>
-                        </Link>
+                        {check ? (
+                            <>
+                                {" "}
+                                <Link to="/bill/1" className="ml-auto mt-1">
+                                    <button>
+                                        Xem hóa đơn <RightOutlined />
+                                    </button>
+                                </Link>
+                            </>
+                        ) : (
+                            ""
+                        )}
                     </div>
                     {loading ? (
                         <>
-                            {" "}
                             <div
                                 style={{
                                     display: "flex",
@@ -102,10 +133,10 @@ const OrderDetailInListOrderAdmin = () => {
                                     CHI TIẾT ĐƠN HÀNG #{bill?.id}
                                 </span>
                                 <Tag
-                                    color="success"
+                                    color={color}
                                     className="ml-auto mt-1 text-sm font-bold"
                                 >
-                                    success
+                                    {status}
                                 </Tag>
                             </div>
                             <div className="mt-5 flex w-full">
@@ -156,7 +187,9 @@ const OrderDetailInListOrderAdmin = () => {
                                 </div>
                             </div>
                             <div className="mb-4 mt-4">
-                                <span className="text-xl font-bold">GIỎ HÀNG</span>
+                                <span className="text-xl font-bold">
+                                    THÔNG TIN SẢN PHẨM
+                                </span>
                                 <span text-sm className="text-red-500">
                                     ({ProductInbill?.length} sản phẩm)
                                 </span>
@@ -189,6 +222,66 @@ const OrderDetailInListOrderAdmin = () => {
                                         {formatNumber(totalPrice)} đ
                                     </p>
                                 </div>
+                            </div>
+                            <div className="mb-4 mt-4">
+                                <span className="text-xl font-bold">
+                                    LỊCH SỬ UPDATE ĐƠN HÀNG
+                                </span>
+                            </div>
+                            <div>
+                                <table className="mb-10 w-full bg-gray-200">
+                                    <thead>
+                                        <th className="p-2">Người update</th>
+                                        <th className="p-2">Nội dung update</th>
+                                        <th className="p-2">Thời gian update</th>
+                                    </thead>
+                                    <tbody className="bg-white text-center align-middle ">
+                                        <tr className="w-1/4 border border-gray-200 ">
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                ADMIN
+                                            </th>
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                Trạng thái : Hoàn thành
+                                            </th>
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                11:34:23
+                                            </th>
+                                        </tr>
+                                        <tr className="w-1/4 border border-gray-200">
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                ADMIN
+                                            </th>
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                Trạng thái : Hoàn thành
+                                            </th>
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                11:34:23
+                                            </th>
+                                        </tr>
+                                        <tr className="w-1/4 border border-gray-200">
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                ADMIN
+                                            </th>
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                Trạng thái : Hoàn thành
+                                            </th>
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                11:34:23
+                                            </th>
+                                        </tr>
+                                        <tr className="w-1/4 border border-gray-200">
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                ADMIN
+                                            </th>
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                Trạng thái : Hoàn thành
+                                            </th>
+                                            <th className="border border-gray-200 p-2 font-normal">
+                                                11:34:23
+                                            </th>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </>
                     )}
