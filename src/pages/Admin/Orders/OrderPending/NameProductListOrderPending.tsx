@@ -1,13 +1,13 @@
-import { getAllBillDetail, updateCancel } from "@/api/services/Bill"
 import { useEffect, useState } from "react"
 import formatNumber from "@/utilities/FormatTotal"
 import { Tag } from "antd"
 import { Link } from "react-router-dom"
+import { getAllBillDetail, updateCancel } from "@/api/services/Bill"
 import { toast } from "react-toastify"
 
-const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
+const NameProductListOrderPending = ({ data, onCheck }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
-    const [check, setcheck] = useState<any>(false)
+    const [check, setCheck] = useState<any>()
     const fetchBillDetail = async () => {
         try {
             const data: any = await getAllBillDetail()
@@ -20,33 +20,14 @@ const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
         fetchBillDetail()
     }, [])
     const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
-
     const [color, setcolor] = useState<any>()
-    const [status, setstatus] = useState<any>()
-
+    const [status, setstatus] = useState<any>(false)
     useEffect(() => {
         if (data?.status == "Pending") {
             setcolor("warning")
             setstatus("Chờ xác nhận")
-            setcheck(true)
-        } else if (data?.status == "Confirm") {
-            setcolor("processing")
-            setstatus("Chờ giao hàng")
-        } else if (data?.status == "Paid") {
-            setcolor("brown")
-            setstatus("Chờ xác nhận")
-            setcheck(true)
-        } else if (data?.status == "Shiping") {
-            setcolor("purple")
-            setstatus("Đang giao hàng")
-        } else if (data?.status == "Done") {
-            setcolor("green")
-            setstatus("Hoàn thành")
-        } else if (data?.status == "Cancel") {
-            setcolor("error")
-            setstatus("Hủy hàng")
         }
-    }, [data, key1])
+    }, [data])
     const HandleCancel = async (id: any) => {
         let input: any = ""
         while (input.trim() === "") {
@@ -56,11 +37,12 @@ const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
             }
             if (input.trim() !== "") {
                 console.log("Reason entered:", input)
+
                 await updateCancel(id).then(() => {
                     toast.success("Banbạn đã hủy đơn hàng")
                     setcolor("error")
                     setstatus("Hủy hàng")
-                    setcheck(false)
+                    onCheck(status)
                 })
                 return
             } else {
@@ -97,36 +79,24 @@ const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
                     <Tag color={color}>{status}</Tag>
                 </td>
                 <td className="p-2 font-normal" style={{ width: "10%" }}>
-                    {check ? (
-                        <>
-                            <button
-                                className="mb-1 w-24 rounded bg-red-500 p-1 text-white"
-                                onClick={() => HandleCancel(data?.id)}
-                            >
-                                Hủy
-                            </button>
-                            <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white">
-                                Xác nhận
-                            </button>
-                            <Link to={`/quan-ly-orders/${data?.id}`}>
-                                <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
-                                    Chi tiết
-                                </button>
-                            </Link>
-                        </>
-                    ) : (
-                        <>
-                            <Link to={`/quan-ly-orders/${data?.id}`}>
-                                <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
-                                    Chi tiết
-                                </button>
-                            </Link>
-                        </>
-                    )}
+                    <button
+                        className="mb-1 w-24 rounded bg-red-500 p-1 text-white"
+                        onClick={() => HandleCancel(data?.id)}
+                    >
+                        Hủy
+                    </button>
+                    <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white">
+                        Xác nhận
+                    </button>
+                    <Link to={`/quan-ly-orders/${data?.id}`}>
+                        <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
+                            Chi tiết
+                        </button>
+                    </Link>
                 </td>
             </tr>
         </>
     )
 }
 
-export default NameProductInListOrderAdmin
+export default NameProductListOrderPending

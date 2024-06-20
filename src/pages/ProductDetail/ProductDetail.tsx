@@ -78,6 +78,7 @@ const ProductDetail = () => {
             quantity: quantity,
             size: sizevalue,
             color: idColor,
+            image: product?.product?.image,
         }
         if (idsize == undefined) {
             toast.error("Bạn cần chọn size!")
