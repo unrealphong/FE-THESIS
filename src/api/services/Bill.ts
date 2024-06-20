@@ -122,6 +122,15 @@ const getBillPaid = async () => {
         return []
     }
 }
+const getBillsDetail = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: { data: any } }> =
+            await httpRequest.get(`/bills-with-billDetail/${id}`)
+        return response.data?.data?.data ?? []
+    } catch (error) {
+        return []
+    }
+}
 const updateCancel = async (id: any) => {
     try {
         const response: AxiosResponse<{ data: any }> = await httpRequest.post(
@@ -146,4 +155,5 @@ export {
     getBillCancel,
     getBillPaid,
     updateCancel,
+    getBillsDetail,
 }

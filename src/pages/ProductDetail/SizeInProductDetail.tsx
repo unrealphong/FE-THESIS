@@ -5,22 +5,21 @@ const SizeInProductDetail = ({ data, product, idSize, onSize }: any) => {
     if (!Array.isArray(product) || product.length === 0) {
         return <div></div>
     }
-
+    console.log(product)
     let foundValue = undefined
     product.forEach((item) => {
-        const foundObj = item.attribute_values[1]
+        const foundObj = item.attribute_names[1]
         console.log(foundObj)
         if (foundObj.value == data?.value) {
             foundValue = foundObj.value
         }
     })
-    console.log(product)
 
     let sizeValue = undefined
     product.forEach((item) => {
-        const foundObj = item.attribute_values[1]
+        const foundObj = item.attribute_names[1]
         if (item?.id == idSize) {
-            const sizeValue1 = item.attribute_values[1]
+            const sizeValue1 = item.attribute_names[1]
             console.log(sizeValue1)
 
             sizeValue = sizeValue1.value
