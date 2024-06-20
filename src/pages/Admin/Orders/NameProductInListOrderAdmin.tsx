@@ -1,4 +1,4 @@
-import { getAllBillDetail, getBillsDetail, updateCancel } from "@/api/services/Bill"
+import { getAllBillDetail, getBillsDetail, updateCancel, updateConfirm } from "@/api/services/Bill"
 import { useEffect, useState } from "react"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
@@ -59,7 +59,7 @@ const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
             if (input.trim() !== "") {
                 console.log("Reason entered:", input)
                 await updateCancel(id).then(() => {
-                    toast.success("Banbạn đã hủy đơn hàng")
+                    toast.success("Bạn đã hủy đơn hàng")
                     setcolor("error")
                     setstatus("Hủy hàng")
                     setcheck(false)
@@ -69,6 +69,15 @@ const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
                 alert("Vui lòng nhập lý do hủy đơn hàng.")
             }
         }
+    }
+    const HandleConfirm = async (id: any) => {
+        await updateConfirm(id).then(() => {
+            toast.success("Bạn đã xác nhận đơn hàng")
+            setcolor("processing")
+            setstatus("Chờ giao hàng")
+            setcheck(false)
+        })
+
     }
     return (
         <>
@@ -141,7 +150,8 @@ const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
                                     >
                                         Hủy
                                     </button>
-                                    <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white">
+                                    <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
+                                        onClick={() => HandleConfirm(billdetail?.id)}>
                                         Xác nhận
                                     </button>
                                     <Link to={`/quan-ly-orders/${billdetail?.id}`}>
