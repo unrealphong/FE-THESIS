@@ -1,4 +1,4 @@
-import { getAllBillDetail, getBillDetail } from "@/api/services/Bill"
+import { getAllBillDetail, getBillDetail, getBillsDetail } from "@/api/services/Bill"
 import {
     CarOutlined,
     LeftOutlined,
@@ -15,29 +15,23 @@ import ProductOrderDetailInAdmin from "./ProductOrderDetailInAdmin"
 const OrderDetailInListOrderAdmin = () => {
     const { id } = useParams()
     const [bill, setBill] = useState<any>()
-    const [billdetail, setBillDetail] = useState<any>()
     const [totalPrice, setTotalPrice] = useState(0)
     const [loading, setloading] = useState(true)
     const fetchOrder = async () => {
-        const data: any = await getBillDetail(id)
-        setBill(data)
-    }
-    useEffect(() => {
-        fetchOrder()
-    }, [])
-    const fetchBillDetail = async () => {
         try {
-            const data: any = await getAllBillDetail()
-            setBillDetail(data)
+            const data: any = await getBillsDetail(id)
+            setBill(data)
         } catch {
         } finally {
             setloading(false)
         }
     }
     useEffect(() => {
-        fetchBillDetail()
+        fetchOrder()
     }, [])
-    const ProductInbill = billdetail?.filter((data: any) => data?.bill_id == id)
+    const ProductInbill = bill?.bill_details?.filter(
+        (data: any) => data?.bill_id == id,
+    )
     useEffect(() => {
         const totalPrice: any = calculateTotalClick()
         setTotalPrice(totalPrice)
@@ -82,7 +76,7 @@ const OrderDetailInListOrderAdmin = () => {
             setstatus("Hủy hàng")
         }
     }, [bill])
-
+    console.log(check)
     return (
         <>
             <div className="w-full bg-white p-5 pl-10 pr-10">
@@ -94,16 +88,15 @@ const OrderDetailInListOrderAdmin = () => {
                             </button>
                         </Link>
                         {check ? (
+                            ""
+                        ) : (
                             <>
-                                {" "}
                                 <Link to="/bill/1" className="ml-auto mt-1">
                                     <button>
                                         Xem hóa đơn <RightOutlined />
                                     </button>
                                 </Link>
                             </>
-                        ) : (
-                            ""
                         )}
                     </div>
                     {loading ? (
@@ -203,15 +196,37 @@ const OrderDetailInListOrderAdmin = () => {
                                         <th className="p-2">Tạm Tính</th>
                                     </thead>
                                     <tbody className="bg-white text-center align-middle">
-                                        {ProductInbill?.map((data: any) => {
-                                            return (
-                                                <>
-                                                    <ProductOrderDetailInAdmin
-                                                        data={data}
+                                        {loading ? (
+                                            <>
+                                                <div className="flex h-24 items-center justify-center">
+                                                    <Spin
+                                                        indicator={
+                                                            <LoadingOutlined
+                                                                style={{
+                                                                    fontSize: 48,
+                                                                }}
+                                                                spin
+                                                            />
+                                                        }
                                                     />
-                                                </>
-                                            )
-                                        })}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {bill?.bill_details?.map(
+                                                    (data: any) => {
+                                                        return (
+                                                            <>
+                                                                <ProductOrderDetailInAdmin
+                                                                    data={data}
+                                                                    loading={loading}
+                                                                />
+                                                            </>
+                                                        )
+                                                    },
+                                                )}
+                                            </>
+                                        )}
                                     </tbody>
                                 </table>
 

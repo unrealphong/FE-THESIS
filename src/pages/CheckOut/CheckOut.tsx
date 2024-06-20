@@ -91,7 +91,7 @@ const CheckOut = () => {
             recipient_address: `${adressdetail}, ${wardName}, ${districtName}, ${provinceName}`,
             recipient_phone: phone,
             total_amount: totalCartPrice,
-            status: "pending",
+            status: "Pending",
             pay: paymentMethod,
             bill_date: "2004-08-29",
         }
@@ -116,6 +116,7 @@ const CheckOut = () => {
             await addBillDetail(data2)
             toast.success("Đặt hàng thành công")
             localStorage.removeItem("cart")
+            window.location.reload()
             navigate(`/order_done/${response?.data?.id}`)
         }
     }
