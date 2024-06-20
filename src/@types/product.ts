@@ -4,8 +4,6 @@ interface Product {
     brand: string
     description?: string
     category_id: number
-    images?: ProductImage[]
-    variants: Variant[]
 }
 
 interface Attribute {
@@ -18,22 +16,18 @@ interface AttributeValue {
     id: number
     value: string
     attribute_id: number
-    attribute: Attribute
 }
 
 interface Variant {
     id?: number
     product_id?: number
     price: number
+    price_promotional: number
     quantity: number
-    attributes?: Attribute[]
-    attribute_values?: AttributeValue[]
-}
-
-interface ProductImage {
-    url: string
-    alt?: string
-    title?: string
+    attributes: {
+        color?: string
+        size?: string
+    }
 }
 
 export type { Attribute, AttributeValue, Product, Variant }

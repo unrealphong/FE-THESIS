@@ -31,7 +31,7 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
     }, [data])
     return (
         <>
-            {loading ? (
+         {loading ? (
                 <>
                     <tr className="mt-2">
                         <td colSpan={9}>

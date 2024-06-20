@@ -17,10 +17,8 @@ const getAllProduct = async (): Promise<Product[]> => {
 
 const getProductById = async (id: number): Promise<Product | undefined> => {
     try {
-        const response: AxiosResponse<{ data: Product }> = await httpRequest.get(
-            `/products/${id}`,
-        )
-        return response.data?.data
+        const response = await httpRequest.get(`/products/${id}`)
+        return response.data.data.product
     } catch (error) {
         console.error(`An error occurred while fetching product with ID ${id}`)
         toast.error(`Failed to fetch product with ID ${id}. Please try again later.`)
@@ -28,19 +26,15 @@ const getProductById = async (id: number): Promise<Product | undefined> => {
     }
 }
 
-const createProduct = async (product: Product): Promise<Product | undefined> => {
+const createProduct = async (product) => {
     try {
-        const response: AxiosResponse<{ data: Product }> = await httpRequest.post(
-            "/products",
-            product,
-        )
-        const createdProduct = response.data?.data
+        const response = await httpRequest.post("/products", product)
         toast.success("Product created successfully.")
-        return createdProduct
+        return response.data
     } catch (error) {
-        console.error("An error occurred while creating product")
+        console.error("An error occurred while creating product:", error)
         toast.error("Failed to create product. Please try again later.")
-        return undefined
+        throw error // Throwing error để component gọi hàm này có thể xử lý tiếp
     }
 }
 
@@ -61,7 +55,7 @@ const updateProduct = async (
         toast.error(
             `Failed to update product with ID ${id}. Please try again later.`,
         )
-        return undefined
+        throw error
     }
 }
 

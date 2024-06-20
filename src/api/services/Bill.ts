@@ -122,6 +122,7 @@ const getBillPaid = async () => {
         return []
     }
 }
+
 const getBillsDetail = async (id: any) => {
     try {
         const response: AxiosResponse<{ data: { data: any } }> =

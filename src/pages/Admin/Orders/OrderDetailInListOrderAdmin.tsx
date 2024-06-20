@@ -77,7 +77,6 @@ const OrderDetailInListOrderAdmin = () => {
         }
     }, [bill])
     console.log(check)
-
     return (
         <>
             <div className="w-full bg-white p-5 pl-10 pr-10">
