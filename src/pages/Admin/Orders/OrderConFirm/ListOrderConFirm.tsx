@@ -4,7 +4,6 @@ import { Pagination, Spin } from "antd"
 import { useEffect, useState } from "react"
 import NameProductInListOrderConfirm from "./NameListProductConfirm"
 
-
 const ListOrderConFirm = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
