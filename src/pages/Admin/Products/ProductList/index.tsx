@@ -119,10 +119,8 @@ const ProductManagement = () => {
             title: "Thuộc tính",
             key: "attribute_values",
             render: (record: any) =>
-                record.attribute_values.map((attribute: AttributeValue) => (
-                    <p key={attribute.id}>
-                        {attribute.attribute.name}: {attribute.value}
-                    </p>
+                record.attribute_names.map((attribute: AttributeValue) => (
+                    <p key={attribute.id}>{attribute.value}</p>
                 )),
         },
     ]

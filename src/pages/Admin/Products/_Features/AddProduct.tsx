@@ -60,9 +60,7 @@ const AddProduct = () => {
                 ],
             })),
         }
-        console.log(formattedData)
         try {
-            // const jsonData = JSON.stringify(formattedData)
             const response = await createProduct(formattedData)
             console.log("Product created successfully:", response)
             toast.success("Product created successfully.")

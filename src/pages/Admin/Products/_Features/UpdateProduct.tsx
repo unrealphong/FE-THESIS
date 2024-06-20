@@ -7,8 +7,9 @@ import {
     DeleteOutlined,
     PlusCircleOutlined,
     PlusOutlined,
+    UploadOutlined,
 } from "@ant-design/icons"
-import { Button, Form, Input, Select, Space } from "antd"
+import { Button, Form, Input, Select, Space, Upload } from "antd"
 import { useCallback, useEffect, useState } from "react"
 import { Controller, FieldValues, useForm } from "react-hook-form"
 import { useNavigate, useParams } from "react-router-dom"
@@ -19,6 +20,7 @@ const { Option } = Select
 const UpdateProduct = () => {
     const [categories, setCategories] = useState<Category[]>([])
     const [variants, setVariants] = useState<Variant[]>([])
+    const [fileList, setFileList] = useState([])
     const navigate = useNavigate()
     const { id } = useParams()
 
@@ -105,7 +107,7 @@ const UpdateProduct = () => {
             toast.error("Failed to updated product. Please try again later.")
         }
     }
-
+    const handleFileChange = ({ fileList }) => setFileList(fileList)
     const handleGoBack = () => {
         navigate("/quan-ly-san-pham")
     }
@@ -214,6 +216,16 @@ const UpdateProduct = () => {
                             />
                         </Form.Item>
                     </div>
+                    <Form.Item label="Hình ảnh">
+                        <Upload
+                            listType="picture"
+                            fileList={fileList}
+                            onChange={handleFileChange}
+                            beforeUpload={() => false}
+                        >
+                            <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
+                        </Upload>
+                    </Form.Item>
                 </div>
                 <h3 className="mt-4 text-lg font-semibold">Sản phẩm biến thể</h3>
                 {variants.map((variant, index) => (
