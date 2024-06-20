@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
 import { Link } from "react-router-dom"
-import { getAllBillDetail, updateCancel } from "@/api/services/Bill"
+import { getAllBillDetail, updateCancel, updateConfirm } from "@/api/services/Bill"
 import { toast } from "react-toastify"
 
 const NameProductListOrderPending = ({ data, onCheck }: any) => {
@@ -52,6 +52,14 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
                 alert("Vui lòng nhập lý do hủy đơn hàng.")
             }
         }
+    }
+    const HandleConfirm = async (id: any) => {
+        await updateConfirm(id).then(() => {
+            toast.success("Bạn đã xác nhận đơn hàng")
+            setcolor("processing")
+            setstatus("Chờ giao hàng")
+            onCheck(status)
+        })
     }
     return (
         <>
@@ -109,7 +117,10 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
                             >
                                 Hủy
                             </button>
-                            <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white">
+                            <button
+                                className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
+                                onClick={() => HandleConfirm(data?.id)}
+                            >
                                 Xác nhận
                             </button>
                             <Link to={`/quan-ly-orders/${data?.id}`}>

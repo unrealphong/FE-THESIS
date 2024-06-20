@@ -10,7 +10,7 @@ import { Skeleton, Tag } from "antd"
 import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 
-const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
+const NameProductInListOrderAdmin = ({ data }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
     const [check, setcheck] = useState<any>(false)
     const [loading, setloading] = useState<any>(true)
@@ -106,7 +106,7 @@ const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
                         </td>
                         <td className="p-2 text-center font-normal">
                             {billdetail?.bill_details[0]
-                                ? billdetail?.bill_details[0].product_name
+                                ? billdetail?.bill_details[0]?.product_name
                                 : ""}
                         </td>
                         <td className="w-1/9 flex items-center justify-center p-2">
@@ -114,7 +114,7 @@ const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
                                 className="h-26 w-20"
                                 src={
                                     billdetail?.bill_details[0]
-                                        ? billdetail?.bill_details[0].image
+                                        ? billdetail?.bill_details[0]?.image
                                         : ""
                                 }
                                 alt=""

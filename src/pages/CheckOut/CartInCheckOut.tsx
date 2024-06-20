@@ -23,7 +23,7 @@ const CartInCheckOut = () => {
 
                     <tbody>
                         <hr className="my-1 w-full border-t border-dashed border-white " />
-                        {carts?.map((data, index) => {
+                        {carts?.map((data: any, index: any) => {
                             return (
                                 <>
                                     <ProductInCartCheckOut

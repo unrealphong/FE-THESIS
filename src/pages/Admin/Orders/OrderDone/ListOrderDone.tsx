@@ -4,7 +4,7 @@ import { Pagination, Spin } from "antd"
 import { getBillDone } from "@/api/services/Bill"
 import { LoadingOutlined } from "@ant-design/icons"
 
-const ListOrderDone = () => {
+const ListOrderDones = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
     const fetchBills = async () => {
@@ -19,7 +19,9 @@ const ListOrderDone = () => {
 
     useEffect(() => {
         fetchBills()
+        console.log(bill)
     }, [])
+
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
     const indexOfLastItem = currentPage * itemsPerPage
@@ -83,4 +85,4 @@ const ListOrderDone = () => {
     )
 }
 
-export default ListOrderDone
+export default ListOrderDones

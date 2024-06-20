@@ -19,19 +19,22 @@ const OrderDone = () => {
     console.log(bill)
 
     useEffect(() => {
-        if (bill?.status == "pending") {
+        if (bill?.status == "Pending") {
             setcolor("warning")
-            setstatus("Đã đặt hàng")
-        } else if (bill?.status == "confirm") {
+            setstatus("Chờ xác nhận")
+        } else if (bill?.status == "Confirm") {
             setcolor("processing")
-            setstatus("Đã xác nhận")
-        } else if (bill?.status == "paidShiping") {
-            setcolor("red")
-            setstatus("Không nhận hàng")
-        } else if (bill?.status == "shiping") {
+            setstatus("Chờ giao hàng")
+        } else if (bill?.status == "Paid") {
+            setcolor("brown")
+            setstatus("Chờ xác nhận")
+        } else if (bill?.status == "Shiping") {
             setcolor("purple")
             setstatus("Đang giao hàng")
-        } else if (bill?.status == "cancel") {
+        } else if (bill?.status == "Done") {
+            setcolor("green")
+            setstatus("Hoàn thành")
+        } else if (bill?.status == "Cancel") {
             setcolor("error")
             setstatus("Hủy hàng")
         }

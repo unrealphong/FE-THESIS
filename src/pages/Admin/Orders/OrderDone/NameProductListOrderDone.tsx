@@ -29,15 +29,27 @@ const NameProductListOrderDone = ({ data }: any) => {
             setstatus("Hoàn thành")
         }
     }, [data])
+    console.log("okoko")
+
     return (
         <>
             <tr className="items-center justify-center p-2" key={data?.id}>
                 <td className="p-2 text-center font-normal">{data?.id}</td>
                 <td className="p-2 text-center font-normal">
-                    {billsProduct?.product_name}
+                    {billdetail?.bill_details[0]
+                        ? billdetail?.bill_details[0].product_name
+                        : ""}
                 </td>
                 <td className="w-1/9 flex items-center justify-center p-2">
-                    <img className="h-26 w-20" src={billsProduct?.image} alt="" />
+                    <img
+                        className="h-26 w-20"
+                        src={
+                            billdetail?.bill_details[0]
+                                ? billdetail?.bill_details[0].image
+                                : ""
+                        }
+                        alt=""
+                    />
                 </td>
                 <td className="p-2 text-center font-normal" style={{ width: "20%" }}>
                     <span className="font-bold">Đ/c</span>: {data?.Recipient_address}
@@ -65,7 +77,7 @@ const NameProductListOrderDone = ({ data }: any) => {
                     </Link>
                 </td>
             </tr>
-            {loading ? (
+            {/* {loading ? (
                 <>
                     <tr className="mt-2">
                         <td colSpan={9}>
@@ -127,7 +139,7 @@ const NameProductListOrderDone = ({ data }: any) => {
                         </td>
                     </tr>
                 </>
-            )}
+            )} */}
         </>
     )
 }

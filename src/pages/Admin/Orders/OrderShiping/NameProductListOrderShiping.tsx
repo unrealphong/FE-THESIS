@@ -1,10 +1,11 @@
-import { getAllBillDetail, getBillsDetail } from "@/api/services/Bill"
+import { getAllBillDetail, getBillsDetail, updateDone } from "@/api/services/Bill"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { toast } from "react-toastify"
 
-const NameProductListOrderShiping = ({ data }: any) => {
+const NameProductListOrderShiping = ({ data, onCheck }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
     const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
@@ -29,6 +30,14 @@ const NameProductListOrderShiping = ({ data }: any) => {
             setstatus("Đang giao hàng")
         }
     }, [data])
+    const HandleDone = async (id: any) => {
+        await updateDone(id).then(() => {
+            toast.success("Đơn hàng đã hoàn thành")
+            setcolor("green")
+            setstatus("Hoàn thành")
+            onCheck(status)
+        })
+    }
     return (
         <>
             {loading ? (
@@ -85,10 +94,13 @@ const NameProductListOrderShiping = ({ data }: any) => {
                             <Tag color={color}>{status}</Tag>
                         </td>
                         <td className="p-2 font-normal" style={{ width: "10%" }}>
-                            <button className="mb-1 w-24 rounded bg-red-500 p-1 text-white">
+                            {/* <button className="mb-1 w-24 rounded bg-red-500 p-1 text-white">
                                 Không nhận
-                            </button>
-                            <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white">
+                            </button> */}
+                            <button
+                                className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
+                                onClick={() => HandleDone(data?.id)}
+                            >
                                 Đã nhận hàng
                             </button>
                             <Link to={`/quan-ly-orders/${data?.id}`}>

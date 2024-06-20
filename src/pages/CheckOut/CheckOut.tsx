@@ -116,8 +116,9 @@ const CheckOut = () => {
             await addBillDetail(data2)
             toast.success("Đặt hàng thành công")
             localStorage.removeItem("cart")
-            window.location.reload()
+
             navigate(`/order_done/${response?.data?.id}`)
+            window.location.reload()
         }
     }
 

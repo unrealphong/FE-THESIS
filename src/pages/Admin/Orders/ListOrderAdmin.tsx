@@ -10,10 +10,11 @@ import ListOrderSiping from "./OrderShiping/ListOrderSiping"
 import ListOrderDone from "./OrderDone/ListOrderDone"
 import ListOrderCancel from "./OrderCancel/ListOrderCancel"
 import ListOrderPaid from "./OrderPaid/ListOrderPaid"
+import ListOrderDones from "./OrderDone/ListOrderDone"
 const ListOrderAdmin = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
-    const [keys, setkey] = useState<any>(0)
+
     const fetchBills = async () => {
         try {
             const allBills: any = await getAllBill()
@@ -26,7 +27,7 @@ const ListOrderAdmin = () => {
 
     useEffect(() => {
         fetchBills()
-    }, [keys])
+    }, [])
 
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
@@ -36,9 +37,6 @@ const ListOrderAdmin = () => {
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page)
-    }
-    const onChange = (key: any) => {
-        setkey(key)
     }
     const items: any = [
         {
@@ -81,7 +79,6 @@ const ListOrderAdmin = () => {
                                     <NameProductInListOrderAdmin
                                         key={data.id}
                                         data={data}
-                                        key1={keys}
                                     />
                                 ))
                             )}
@@ -139,7 +136,7 @@ const ListOrderAdmin = () => {
             label: "Đã giao",
             children: (
                 <>
-                    <ListOrderDone />
+                    <ListOrderDones />
                 </>
             ),
         },
@@ -159,7 +156,6 @@ const ListOrderAdmin = () => {
                 <Tabs
                     defaultActiveKey="1"
                     items={items}
-                    onChange={onChange}
                     className="text-2xl font-bold text-red-500"
                 />
             </div>

@@ -154,6 +154,28 @@ const updateConfirm = async (id: any) => {
         return undefined
     }
 }
+const updateShiping = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.post(
+            `/bills-shiping/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
+const updateDone = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.post(
+            `/bills-done/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
 export {
     addBill,
     getAllBill,
@@ -169,4 +191,6 @@ export {
     updateCancel,
     getBillsDetail,
     updateConfirm,
+    updateShiping,
+    updateDone,
 }

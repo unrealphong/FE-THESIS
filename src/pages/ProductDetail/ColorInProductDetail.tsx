@@ -39,7 +39,7 @@ const ColorInProductDetail = ({
             {foundValue ? (
                 <>
                     <button
-                        className={`m-1 mx-1 h-8 w-8 rounded-full  ${selectedColor == idValue ? "border-4 border-gray-100" : ""}  boder border-gray-100 `}
+                        className={` m-1 mx-1 h-8 w-8 rounded-full   ${selectedColor == idValue ? "border-4 border-gray-200" : "boder border-gray-200"}   `}
                         onClick={() => HandleClick(data?.id)}
                         disabled={foundValue ? false : true}
                         key={data?.id}

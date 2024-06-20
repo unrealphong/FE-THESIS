@@ -73,12 +73,12 @@ const ProductDetail = () => {
     const HandleAddtoCart = async () => {
         const data = {
             id: carts.length + 1,
-            name_product: product?.product?.name,
+            name_product: product?.name,
             price: prices,
             quantity: quantity,
             size: sizevalue,
             color: idColor,
-            image: product?.product?.image,
+            image: product?.image,
         }
         if (idsize == undefined) {
             toast.error("Bạn cần chọn size!")
@@ -106,8 +106,8 @@ const ProductDetail = () => {
     }
     return (
         <>
-            <div className="flex pl-40 pr-40 pt-5">
-                <div className="flex w-2/3">
+            <div className="flex pl-40 pr-40 pt-5 ">
+                <div className="flex w-2/3 ">
                     {/* <List
                         className="h-600 overflow-y-auto"
                         dataSource={images}
@@ -132,7 +132,7 @@ const ProductDetail = () => {
                     <div className="thumbnails ml-10">
                         <Image
                             className=""
-                            src={product?.product?.image}
+                            src={product?.image}
                             alt="Selected"
                             style={{
                                 width: "100%",
@@ -142,7 +142,7 @@ const ProductDetail = () => {
                         />
                     </div>
                 </div>
-                <div className="w-1/3">
+                <div className="w-1.6/3 ">
                     <div className="flex">
                         <button className="rounded bg-red-500 pl-2 pr-2 text-white">
                             bán chạy
@@ -151,9 +151,7 @@ const ProductDetail = () => {
                             free ship
                         </button>
                     </div>
-                    <div className="mt-3 text-xl font-bold">
-                        {product?.product?.name}
-                    </div>
+                    <div className="mt-3 text-xl font-bold">{product?.name}</div>
                     <span>SKU: F9UVC020M-015</span>
                     <div className="mt-4 flex">
                         <span>
@@ -163,16 +161,16 @@ const ProductDetail = () => {
                         <p className="ml-2 font-bold">5 </p>đánh giá |
                         <p className="ml-2 font-bold">1334</p> đã bán
                     </div>
-                    <CategoryInProductDetail data={product?.product?.category} />
+                    <CategoryInProductDetail data={product?.category} />
 
                     <PriceInProductDetail
-                        data={product?.product?.variants}
+                        data={product?.variants}
                         idcolor={idColor}
                         onPrice={price}
                     />
                     <hr className="my-4  w-full border-t border-dashed border-gray-400" />
                     <span className="text-sm font-bold">MÀU SẮC </span>
-                    <div className="mb-2 mt-2 grid grid-cols-8 justify-center">
+                    <div className="mb-2 mt-2 grid grid-cols-8 justify-center ">
                         {color?.map((data) => {
                             return (
                                 <>
@@ -180,7 +178,7 @@ const ProductDetail = () => {
                                         data={data}
                                         key={data?.id}
                                         onColor={HandlePrice}
-                                        product={product?.product?.variants}
+                                        product={product?.variants}
                                         onSize={HandleSize}
                                         selectedColor={selectedColor}
                                     />
@@ -197,7 +195,7 @@ const ProductDetail = () => {
                                     <SizeInProductDetail
                                         data={data}
                                         key={data?.id}
-                                        product={product?.product?.variants}
+                                        product={product?.variants}
                                         idSize={idsize}
                                         onSize={sizes}
                                     />
