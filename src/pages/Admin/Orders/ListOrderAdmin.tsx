@@ -79,7 +79,6 @@ const ListOrderAdmin = () => {
                                     <NameProductInListOrderAdmin
                                         key={data.id}
                                         data={data}
-
                                     />
                                 ))
                             )}
@@ -150,7 +149,6 @@ const ListOrderAdmin = () => {
                 </>
             ),
         },
-
     ]
     return (
         <>

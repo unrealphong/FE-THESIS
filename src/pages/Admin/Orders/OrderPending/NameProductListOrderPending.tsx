@@ -117,7 +117,10 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
                             >
                                 Hủy
                             </button>
-                                <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white" onClick={() => HandleConfirm(data?.id)}>
+                            <button
+                                className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
+                                onClick={() => HandleConfirm(data?.id)}
+                            >
                                 Xác nhận
                             </button>
                             <Link to={`/quan-ly-orders/${data?.id}`}>

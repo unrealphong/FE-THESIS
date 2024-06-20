@@ -151,9 +151,7 @@ const ProductDetail = () => {
                             free ship
                         </button>
                     </div>
-                    <div className="mt-3 text-xl font-bold">
-                        {product?.name}
-                    </div>
+                    <div className="mt-3 text-xl font-bold">{product?.name}</div>
                     <span>SKU: F9UVC020M-015</span>
                     <div className="mt-4 flex">
                         <span>

@@ -7,7 +7,7 @@ import { getBillShiping } from "@/api/services/Bill"
 const ListOrderSiping = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
-        const [check1, setcheck] = useState<boolean>()
+    const [check1, setcheck] = useState<boolean>()
     const fetchBills = async () => {
         try {
             const allBills: any = await getBillShiping()
@@ -71,7 +71,11 @@ const ListOrderSiping = () => {
                         </tr>
                     ) : (
                         currentItems?.map((data: any) => (
-                            <NameProductListOrderShiping key={data.id} data={data} onCheck={check}/>
+                            <NameProductListOrderShiping
+                                key={data.id}
+                                data={data}
+                                onCheck={check}
+                            />
                         ))
                     )}
                 </tbody>

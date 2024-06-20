@@ -97,7 +97,10 @@ const NameProductListOrderShiping = ({ data, onCheck }: any) => {
                             {/* <button className="mb-1 w-24 rounded bg-red-500 p-1 text-white">
                                 Không nhận
                             </button> */}
-                            <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white" onClick={() => HandleDone(data?.id)}>
+                            <button
+                                className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
+                                onClick={() => HandleDone(data?.id)}
+                            >
                                 Đã nhận hàng
                             </button>
                             <Link to={`/quan-ly-orders/${data?.id}`}>

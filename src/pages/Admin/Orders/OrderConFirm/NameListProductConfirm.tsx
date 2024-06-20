@@ -5,7 +5,7 @@ import { Skeleton, Tag } from "antd"
 import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 
-const NameProductInListOrderConfirm = ({ data , onCheck}: any) => {
+const NameProductInListOrderConfirm = ({ data, onCheck }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
     const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
@@ -95,7 +95,10 @@ const NameProductInListOrderConfirm = ({ data , onCheck}: any) => {
                             <Tag color={color}>{status}</Tag>
                         </td>
                         <td className="p-2 font-normal" style={{ width: "10%" }}>
-                            <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white" onClick={() => HandleShiping(data?.id)}>
+                            <button
+                                className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
+                                onClick={() => HandleShiping(data?.id)}
+                            >
                                 Đẫ lấy
                             </button>
                             <Link to={`/quan-ly-orders/${data?.id}`}>

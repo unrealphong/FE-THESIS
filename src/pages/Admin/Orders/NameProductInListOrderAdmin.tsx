@@ -113,7 +113,8 @@ const NameProductInListOrderAdmin = ({ data }: any) => {
                             <img
                                 className="h-26 w-20"
                                 src={
-                                    billdetail?.bill_details[0] ? billdetail?.bill_details[0]?.image
+                                    billdetail?.bill_details[0]
+                                        ? billdetail?.bill_details[0]?.image
                                         : ""
                                 }
                                 alt=""

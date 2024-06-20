@@ -19,10 +19,9 @@ const ListOrderDones = () => {
 
     useEffect(() => {
         fetchBills()
-        console.log(bill);
+        console.log(bill)
     }, [])
 
-    
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
     const indexOfLastItem = currentPage * itemsPerPage

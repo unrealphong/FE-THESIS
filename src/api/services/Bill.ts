@@ -165,7 +165,7 @@ const updateShiping = async (id: any) => {
         return undefined
     }
 }
-const updateDone= async (id: any) => {
+const updateDone = async (id: any) => {
     try {
         const response: AxiosResponse<{ data: any }> = await httpRequest.post(
             `/bills-done/${id}`,
@@ -192,5 +192,5 @@ export {
     getBillsDetail,
     updateConfirm,
     updateShiping,
-    updateDone
+    updateDone,
 }
