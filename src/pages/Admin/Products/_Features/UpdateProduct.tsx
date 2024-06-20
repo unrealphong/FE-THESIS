@@ -36,12 +36,12 @@ const UpdateProduct = () => {
         if (id) {
             try {
                 const product = await getProductById(id)
-                setValue("name", product.name)
-                setValue("category_id", product.category_id)
-                setValue("brand", product.brand)
-                setValue("description", product.description)
-                if (product.variants?.length > 0) {
-                    const formattedVariants = product.variants.map(
+                setValue("name", product?.name)
+                setValue("category_id", product?.category_id)
+                setValue("brand", product?.brand)
+                setValue("description", product?.description)
+                if (product?.variants?.length > 0) {
+                    const formattedVariants = product?.variants?.map(
                         (variant: any) => {
                             const attributes: { [key: string]: string } = {}
                             variant.attribute_names.forEach((attr: any) => {
