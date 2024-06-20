@@ -1,17 +1,20 @@
 import { getAllBillDetail } from "@/api/services/Bill"
 import formatNumber from "@/utilities/FormatTotal"
-import { Tag } from "antd"
+import { Skeleton, Tag } from "antd"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 const NameProductListOrderCancel = ({ data, data1 }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
+    const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
         try {
             const data: any = await getAllBillDetail()
             setBillDetail(data)
         } catch (error) {
             console.error("Error fetching bill details:", error)
+        } finally {
+            setloading(false)
         }
     }
     useEffect(() => {
@@ -28,7 +31,13 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
     }, [data])
     return (
         <>
-            <tr className="items-center justify-center p-2" key={data?.id}>
+            {loading ? <><tr className="mt-2">
+                <td colSpan={9}>
+                    <div className="flex h-24 items-center justify-center mt-5">
+                        <Skeleton active />
+                    </div>
+                </td>
+            </tr></> : <> <tr className="items-center justify-center p-2" key={data?.id}>
                 <td className="p-2 text-center font-normal">{data?.id}</td>
                 <td className="p-2 text-center font-normal">
                     {billsProduct?.product_name}
@@ -61,7 +70,8 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
                         </button>
                     </Link>
                 </td>
-            </tr>
+            </tr></> }
+            
         </>
     )
 }

@@ -8,7 +8,7 @@ const PriceInProductDetail = ({ data, idcolor, onPrice }: any) => {
     }
     const data1 = data[0]
     const priceProduct = data?.find((data) =>
-        data?.attribute_values?.find((data3: any) => data3?.value === idcolor),
+        data?.attribute_names?.find((data3: any) => data3?.value === idcolor),
     )?.price
     console.log(priceProduct)
 

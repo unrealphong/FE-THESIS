@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import formatNumber from "@/utilities/FormatTotal"
-import { Tag } from "antd"
+import { Skeleton, Tag } from "antd"
 import { Link } from "react-router-dom"
 import { getAllBillDetail, updateCancel } from "@/api/services/Bill"
 import { toast } from "react-toastify"
@@ -8,12 +8,15 @@ import { toast } from "react-toastify"
 const NameProductListOrderPending = ({ data, onCheck }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
     const [check, setCheck] = useState<any>()
+    const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
         try {
             const data: any = await getAllBillDetail()
             setBillDetail(data)
         } catch (error) {
             console.error("Error fetching bill details:", error)
+        } finally {
+            setloading(false)
         }
     }
     useEffect(() => {
@@ -52,7 +55,13 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
     }
     return (
         <>
-            <tr className="items-center justify-center p-2" key={data?.id}>
+            {loading ? <><tr className="mt-2">
+                <td colSpan={9}>
+                    <div className="flex h-24 items-center justify-center mt-5">
+                        <Skeleton active />
+                    </div>
+                </td>
+            </tr></> : <><tr className="items-center justify-center p-2" key={data?.id}>
                 <td className="p-2 text-center font-normal">{data?.id}</td>
                 <td className="p-2 text-center font-normal">
                     {billsProduct?.product_name}
@@ -94,7 +103,8 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
                         </button>
                     </Link>
                 </td>
-            </tr>
+            </tr></>}
+
         </>
     )
 }

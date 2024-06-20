@@ -1,9 +1,19 @@
 import formatNumber from "@/utilities/FormatTotal"
+import { LoadingOutlined } from "@ant-design/icons"
+import { Skeleton, Spin } from "antd"
 
-const ProductOrderDetailInAdmin = ({ data }: any) => {
+const ProductOrderDetailInAdmin = ({ data, loading }: any) => {
+    // console.log(loading);
+    
     return (
         <>
-            <tr>
+            {loading ? <> <tr>
+                <td colSpan={9}>
+                    <div className="flex h-24 items-center justify-center">
+                        <Skeleton active />
+                    </div>
+                </td>
+            </tr></> : <><tr>
                 <td className="w-1/4">
                     <div className="m-2 flex">
                         <img src={data?.image} className="w-24" />
@@ -28,7 +38,8 @@ const ProductOrderDetailInAdmin = ({ data }: any) => {
                         {formatNumber(data?.price * data?.quantity)} đ
                     </p>
                 </td>
-            </tr>
+            </tr></>}
+            
         </>
     )
 }

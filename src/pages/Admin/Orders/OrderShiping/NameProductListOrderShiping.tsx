@@ -1,23 +1,26 @@
-import { getAllBillDetail } from "@/api/services/Bill"
+import { getAllBillDetail, getBillsDetail } from "@/api/services/Bill"
 import formatNumber from "@/utilities/FormatTotal"
-import { Tag } from "antd"
+import { Skeleton, Tag } from "antd"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 const NameProductListOrderShiping = ({ data }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
+    const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
         try {
-            const data: any = await getAllBillDetail()
-            setBillDetail(data)
+            const data1: any = await getBillsDetail(data?.id)
+            setBillDetail(data1)
         } catch (error) {
             console.error("Error fetching bill details:", error)
+        } finally {
+            setloading(false)
         }
     }
     useEffect(() => {
         fetchBillDetail()
     }, [])
-    const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
+    // const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
     const [color, setcolor] = useState<any>()
     const [status, setstatus] = useState<any>()
     useEffect(() => {
@@ -28,13 +31,19 @@ const NameProductListOrderShiping = ({ data }: any) => {
     }, [data])
     return (
         <>
-            <tr className="items-center justify-center p-2" key={data?.id}>
+            {loading ? <><tr className="mt-2">
+                <td colSpan={9}>
+                    <div className="flex h-24 items-center justify-center mt-5">
+                        <Skeleton active />
+                    </div>
+                </td>
+            </tr></> : <><tr className="items-center justify-center p-2" key={data?.id}>
                 <td className="p-2 text-center font-normal">{data?.id}</td>
                 <td className="p-2 text-center font-normal">
-                    {billsProduct?.product_name}
+                    {billdetail?.bill_details[0] ? billdetail?.bill_details[0].product_name : ""}
                 </td>
                 <td className="w-1/9 flex items-center justify-center p-2">
-                    <img className="h-26 w-20" src={billsProduct?.image} alt="" />
+                    <img className="h-26 w-20" src={billdetail?.bill_details[0] ? billdetail?.bill_details[0].image : ""} alt="" />
                 </td>
                 <td className="p-2 text-center font-normal" style={{ width: "20%" }}>
                     <span className="font-bold">Đ/c</span>: {data?.Recipient_address}
@@ -67,7 +76,8 @@ const NameProductListOrderShiping = ({ data }: any) => {
                         </button>
                     </Link>
                 </td>
-            </tr>
+            </tr></>}
+
         </>
     )
 }
