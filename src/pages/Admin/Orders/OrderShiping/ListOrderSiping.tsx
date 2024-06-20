@@ -7,6 +7,7 @@ import { getBillShiping } from "@/api/services/Bill"
 const ListOrderSiping = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
+        const [check1, setcheck] = useState<boolean>()
     const fetchBills = async () => {
         try {
             const allBills: any = await getBillShiping()
@@ -19,7 +20,7 @@ const ListOrderSiping = () => {
 
     useEffect(() => {
         fetchBills()
-    }, [])
+    }, [check1])
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
     const indexOfLastItem = currentPage * itemsPerPage
@@ -32,6 +33,10 @@ const ListOrderSiping = () => {
     const onChange = (key: string) => {
         console.log(key)
     }
+    const check = (key: any) => {
+        setcheck(key)
+    }
+
     return (
         <>
             <table className="w-full border border-gray-300 bg-gray-100 text-sm text-black">
@@ -66,7 +71,7 @@ const ListOrderSiping = () => {
                         </tr>
                     ) : (
                         currentItems?.map((data: any) => (
-                            <NameProductListOrderShiping key={data.id} data={data} />
+                            <NameProductListOrderShiping key={data.id} data={data} onCheck={check}/>
                         ))
                     )}
                 </tbody>

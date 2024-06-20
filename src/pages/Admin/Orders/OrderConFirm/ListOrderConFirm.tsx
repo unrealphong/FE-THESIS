@@ -7,6 +7,7 @@ import NameProductInListOrderConfirm from "./NameListProductConfirm"
 const ListOrderConFirm = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
+    const [check1, setcheck] = useState<boolean>()
     const fetchBills = async () => {
         try {
             const allBills: any = await getBillconfirm()
@@ -19,8 +20,7 @@ const ListOrderConFirm = () => {
 
     useEffect(() => {
         fetchBills()
-    }, [])
-    console.log(bill)
+    }, [check1])
 
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
@@ -33,6 +33,9 @@ const ListOrderConFirm = () => {
     }
     const onChange = (key: string) => {
         console.log(key)
+    }
+    const check = (key: any) => {
+        setcheck(key)
     }
     return (
         <>
@@ -71,6 +74,7 @@ const ListOrderConFirm = () => {
                             <NameProductInListOrderConfirm
                                 key={data.id}
                                 data={data}
+                                onCheck={check}
                             />
                         ))
                     )}

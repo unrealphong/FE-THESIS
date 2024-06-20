@@ -1,10 +1,11 @@
-import { getAllBillDetail, getBillsDetail } from "@/api/services/Bill"
+import { getAllBillDetail, getBillsDetail, updateShiping } from "@/api/services/Bill"
 import { useEffect, useState } from "react"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
 import { Link } from "react-router-dom"
+import { toast } from "react-toastify"
 
-const NameProductInListOrderConfirm = ({ data }: any) => {
+const NameProductInListOrderConfirm = ({ data , onCheck}: any) => {
     const [billdetail, setBillDetail] = useState<any>()
     const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
@@ -29,6 +30,14 @@ const NameProductInListOrderConfirm = ({ data }: any) => {
             setstatus("Chờ giao hàng")
         }
     }, [data])
+    const HandleShiping = async (id: any) => {
+        await updateShiping(id).then(() => {
+            toast.success("Đơn hàng đã được chuyển sang đang vận chuyển")
+            setcolor("purple")
+            setstatus("Đang giao hàng")
+            onCheck(status)
+        })
+    }
     return (
         <>
             {loading ? (
@@ -86,6 +95,9 @@ const NameProductInListOrderConfirm = ({ data }: any) => {
                             <Tag color={color}>{status}</Tag>
                         </td>
                         <td className="p-2 font-normal" style={{ width: "10%" }}>
+                            <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white" onClick={() => HandleShiping(data?.id)}>
+                                Đẫ lấy
+                            </button>
                             <Link to={`/quan-ly-orders/${data?.id}`}>
                                 <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
                                     Chi tiết
