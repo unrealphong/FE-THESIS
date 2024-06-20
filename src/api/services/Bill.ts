@@ -122,7 +122,7 @@ const getBillPaid = async () => {
         return []
     }
 }
-const getBillsDetail = async (id:any) => {
+const getBillsDetail = async (id: any) => {
     try {
         const response: AxiosResponse<{ data: { data: any } }> =
             await httpRequest.get(`/bills-with-billDetail/${id}`)
@@ -155,5 +155,5 @@ export {
     getBillCancel,
     getBillPaid,
     updateCancel,
-    getBillsDetail
+    getBillsDetail,
 }

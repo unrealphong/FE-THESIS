@@ -15,7 +15,6 @@ const SizeInProductDetail = ({ data, product, idSize, onSize }: any) => {
         }
     })
 
-
     let sizeValue = undefined
     product.forEach((item) => {
         const foundObj = item.attribute_names[1]

@@ -8,14 +8,14 @@ import { toast } from "react-toastify"
 const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
     const [check, setcheck] = useState<any>(false)
-    const [loading , setloading] = useState<any>(true)
+    const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
         try {
             const data1: any = await getBillsDetail(data?.id)
             setBillDetail(data1)
         } catch (error) {
             console.error("Error fetching bill details:", error)
-        }finally{
+        } finally {
             setloading(false)
         }
     }
@@ -72,68 +72,97 @@ const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
     }
     return (
         <>
-            {loading ? <><tr>
-                <td colSpan={9}>
-                    <div className="flex h-24 items-center justify-center mt-5">
-                        <Skeleton active />
-                    </div>
-                </td>
-            </tr></> : <><tr className="items-center justify-center p-2" key={billdetail?.id}>
-                <td className="p-2 text-center font-normal">{billdetail?.id}</td>
-                <td className="p-2 text-center font-normal">
-                    {billdetail?.bill_details[0] ? billdetail?.bill_details[0].product_name : ""}
-                </td>
-                <td className="w-1/9 flex items-center justify-center p-2">
-                    <img className="h-26 w-20" src={billdetail?.bill_details[0] ? billdetail?.bill_details[0].image : ""} alt="" />
-                </td>
-                <td className="p-2 text-center font-normal" style={{ width: "20%" }}>
-                    <span className="font-bold">Đ/c</span>: {billdetail?.Recipient_address}
-                    <br />
-                    <span className="font-bold">Sđt</span>: {billdetail?.Recipient_phone}
-                </td>
-                <td
-                    className="p-2 text-center font-normal "
-                    style={{ width: "10%" }}
-                >
-                    {formatNumber(billdetail?.total_amount)} đ
-                </td>
-                <td className="p-2 text-center font-normal">
-                    {billdetail?.created_at.substring(0, 19)}
-                </td>
-                <td className="p-2 text-center font-normal">{billdetail?.pay}</td>
-                <td className="p-2 text-center font-normal">
-                    <Tag color={color}>{status}</Tag>
-                </td>
-                <td className="p-2 font-normal" style={{ width: "10%" }}>
-                    {check ? (
-                        <>
-                            <button
-                                className="mb-1 w-24 rounded bg-red-500 p-1 text-white"
-                                onClick={() => HandleCancel(billdetail?.id)}
-                            >
-                                Hủy
-                            </button>
-                            <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white">
-                                Xác nhận
-                            </button>
-                            <Link to={`/quan-ly-orders/${billdetail?.id}`}>
-                                <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
-                                    Chi tiết
-                                </button>
-                            </Link>
-                        </>
-                    ) : (
-                        <>
-                            <Link to={`/quan-ly-orders/${billdetail?.id}`}>
-                                <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
-                                    Chi tiết
-                                </button>
-                            </Link>
-                        </>
-                    )}
-                </td>
-            </tr></>}
-            
+            {loading ? (
+                <>
+                    <tr>
+                        <td colSpan={9}>
+                            <div className="mt-5 flex h-24 items-center justify-center">
+                                <Skeleton active />
+                            </div>
+                        </td>
+                    </tr>
+                </>
+            ) : (
+                <>
+                    <tr
+                        className="items-center justify-center p-2"
+                        key={billdetail?.id}
+                    >
+                        <td className="p-2 text-center font-normal">
+                            {billdetail?.id}
+                        </td>
+                        <td className="p-2 text-center font-normal">
+                            {billdetail?.bill_details[0]
+                                ? billdetail?.bill_details[0].product_name
+                                : ""}
+                        </td>
+                        <td className="w-1/9 flex items-center justify-center p-2">
+                            <img
+                                className="h-26 w-20"
+                                src={
+                                    billdetail?.bill_details[0]
+                                        ? billdetail?.bill_details[0].image
+                                        : ""
+                                }
+                                alt=""
+                            />
+                        </td>
+                        <td
+                            className="p-2 text-center font-normal"
+                            style={{ width: "20%" }}
+                        >
+                            <span className="font-bold">Đ/c</span>:{" "}
+                            {billdetail?.Recipient_address}
+                            <br />
+                            <span className="font-bold">Sđt</span>:{" "}
+                            {billdetail?.Recipient_phone}
+                        </td>
+                        <td
+                            className="p-2 text-center font-normal "
+                            style={{ width: "10%" }}
+                        >
+                            {formatNumber(billdetail?.total_amount)} đ
+                        </td>
+                        <td className="p-2 text-center font-normal">
+                            {billdetail?.created_at.substring(0, 19)}
+                        </td>
+                        <td className="p-2 text-center font-normal">
+                            {billdetail?.pay}
+                        </td>
+                        <td className="p-2 text-center font-normal">
+                            <Tag color={color}>{status}</Tag>
+                        </td>
+                        <td className="p-2 font-normal" style={{ width: "10%" }}>
+                            {check ? (
+                                <>
+                                    <button
+                                        className="mb-1 w-24 rounded bg-red-500 p-1 text-white"
+                                        onClick={() => HandleCancel(billdetail?.id)}
+                                    >
+                                        Hủy
+                                    </button>
+                                    <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white">
+                                        Xác nhận
+                                    </button>
+                                    <Link to={`/quan-ly-orders/${billdetail?.id}`}>
+                                        <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
+                                            Chi tiết
+                                        </button>
+                                    </Link>
+                                </>
+                            ) : (
+                                <>
+                                    <Link to={`/quan-ly-orders/${billdetail?.id}`}>
+                                        <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
+                                            Chi tiết
+                                        </button>
+                                    </Link>
+                                </>
+                            )}
+                        </td>
+                    </tr>
+                </>
+            )}
         </>
     )
 }
