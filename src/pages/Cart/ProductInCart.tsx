@@ -66,10 +66,7 @@ const ProductInCart = ({ data, index }: any) => {
             <tr ng-repeat="item in cart" className="relative pb-20">
                 <td className="pt-5 font-normal">{index + 1}</td>
                 <td className="pt-5 font-normal">
-                    <img
-                        src="https://res.cloudinary.com/doy3slx9i/image/upload/v1712158639/Ecommere/hf5jncz8d6pxelaxystr.webp"
-                        width="90px"
-                    />
+                    <img src={data?.image} width="90px" />
                 </td>
                 <td className="pl-8 pr-8 pt-0 font-normal">
                     <p

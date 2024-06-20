@@ -16,6 +16,7 @@ import CartInCheckOut from "./CartInCheckOut"
 import formatNumber from "@/utilities/FormatTotal"
 import { useNavigate } from "react-router-dom"
 import { addBill, addBillDetail } from "@/api/services/Bill"
+import { toast } from "react-toastify"
 const CheckOut = () => {
     const [form] = Form.useForm()
     const user = JSON.parse(localStorage.getItem("user") || "null")
@@ -29,6 +30,14 @@ const CheckOut = () => {
     const [wardName, setWardName] = useState<any>()
     const [adressdetail, setadressdetail] = useState<any>()
     const [phone, setPhone] = useState<any>()
+    const [paymentMethod, setPaymentMethod] = useState<any>()
+    const handlePaymentChange = (e: any) => {
+        if (e.target.value == "COD") {
+            setPaymentMethod("COD")
+        } else {
+            setPaymentMethod("ONLINE")
+        }
+    }
     const { Search } = Input
     const buttonStyle = {
         backgroundColor: "red",
@@ -83,6 +92,7 @@ const CheckOut = () => {
             recipient_phone: phone,
             total_amount: totalCartPrice,
             status: "pending",
+            pay: paymentMethod,
             bill_date: "2004-08-29",
         }
         const response: any = await addBill(data)
@@ -92,19 +102,19 @@ const CheckOut = () => {
                 carts.map(async (element: any) => {
                     const data1 = {
                         product_name: element?.name_product,
-                        attribute_name: "null",
+                        attribute: "null",
                         price: element?.price,
                         quantity: element?.quantity,
                         bill_id: response?.data?.id,
                         voucher: "null",
-                        image: "null",
+                        image: element?.image,
                     }
                     data2.data.push(data1)
                 }),
             )
 
-            console.log(data2)
             await addBillDetail(data2)
+            toast.success("Đặt hàng thành công")
             localStorage.removeItem("cart")
             navigate(`/order_done/${response?.data?.id}`)
         }
@@ -329,20 +339,45 @@ const CheckOut = () => {
                                     </h5>
                                 </div>
 
-                                <div className="col-12 col-md-6">
-                                    <Radio.Group className="mt-3">
-                                        <h5 className="fw-medium d-flex align-items-center mb-0 mb-2 gap-2 text-left">
-                                            <i className="fa-solid fa-truck"></i>
-                                            <Radio value={1}>
+                                <div className="w-full">
+                                    <Radio.Group className="mt-3 w-full">
+                                        <h5 className="w-full">
+                                            <Input
+                                                type="radio"
+                                                style={{
+                                                    width: "4%",
+                                                    height: "16px",
+                                                }}
+                                                id="paypal"
+                                                name="a"
+                                                value="COD"
+                                                onChange={handlePaymentChange}
+                                            />
+                                            <span className="w-full text-sm">
+                                                {" "}
                                                 Thanh toán khi nhận hàng (COD)
-                                            </Radio>
+                                            </span>
                                         </h5>
-                                        <h5 className="fw-medium d-flex align-items-center mb-0 mb-2 gap-2 text-left">
-                                            <i className="fa-solid fa-truck"></i>
-                                            <Radio value={2}>
-                                                Thẻ ATM/Visa/Master/JCB/QR Pay qua
-                                                VNPAY-QR
-                                            </Radio>
+                                    </Radio.Group>
+                                    <Radio.Group className="mt-3 w-full">
+                                        <h5 className="w-full">
+                                            <Input
+                                                className="text-xl"
+                                                type="radio"
+                                                style={{
+                                                    width: "4%",
+                                                    height: "16px",
+                                                    fontSize: "20px",
+                                                }}
+                                                id="paypal"
+                                                name="a"
+                                                value="COD"
+                                                onChange={handlePaymentChange}
+                                            />
+                                            <span className="w-full text-sm">
+                                                {" "}
+                                                Thanh toán online (VNPAY)
+                                            </span>
                                         </h5>
                                     </Radio.Group>
                                 </div>

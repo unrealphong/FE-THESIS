@@ -38,4 +38,19 @@ const getOrderDetail = async (id: any) => {
         return []
     }
 }
-export { addOrder, getAllOrder, getOrderDetail }
+const orderDetailWithVariant = async (data: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.post(
+            "/orderDetailWithVariant",
+            data,
+        )
+        const createdProduct = response.data?.data
+        toast.success("Product created successfully.")
+        return createdProduct
+    } catch (error) {
+        console.error("An error occurred while creating product")
+        toast.error("Failed to create product. Please try again later.")
+        return undefined
+    }
+}
+export { addOrder, getAllOrder, getOrderDetail, orderDetailWithVariant }
