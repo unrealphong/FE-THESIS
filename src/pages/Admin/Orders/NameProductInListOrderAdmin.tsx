@@ -1,4 +1,9 @@
-import { getAllBillDetail, getBillsDetail, updateCancel, updateConfirm } from "@/api/services/Bill"
+import {
+    getAllBillDetail,
+    getBillsDetail,
+    updateCancel,
+    updateConfirm,
+} from "@/api/services/Bill"
 import { useEffect, useState } from "react"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
@@ -77,7 +82,6 @@ const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
             setstatus("Chờ giao hàng")
             setcheck(false)
         })
-
     }
     return (
         <>
@@ -150,8 +154,10 @@ const NameProductInListOrderAdmin = ({ data, key1 }: any) => {
                                     >
                                         Hủy
                                     </button>
-                                    <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
-                                        onClick={() => HandleConfirm(billdetail?.id)}>
+                                    <button
+                                        className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
+                                        onClick={() => HandleConfirm(billdetail?.id)}
+                                    >
                                         Xác nhận
                                     </button>
                                     <Link to={`/quan-ly-orders/${billdetail?.id}`}>

@@ -168,5 +168,5 @@ export {
     getBillPaid,
     updateCancel,
     getBillsDetail,
-    updateConfirm
+    updateConfirm,
 }
