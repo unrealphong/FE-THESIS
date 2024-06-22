@@ -3,11 +3,13 @@ import { useState } from "react"
 import ProductInAllOrderInListOrder from "./ProductInAllOrderInListOrder"
 
 const AllOrderInListOrder = ({ data }: any) => {
+    console.log(data)
+
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem)
+    const currentItems = data?.data?.slice(indexOfFirstItem, indexOfLastItem)
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page)

@@ -54,7 +54,7 @@ const ListProduct = () => {
                     <a className="font-bold"> Danh sách sản phẩm</a>
                 </div>
                 <div className="flex">
-                    <div className="mr-10 w-1/4">
+                    <div className="mr-10 w-1/6">
                         <div className="space-y-3">
                             <a
                                 href="#!product"
@@ -153,7 +153,7 @@ const ListProduct = () => {
                             )}
                         </div>
                     </div>
-                    <div className="w-3/4 px-8">
+                    <div className="w-5/6 px-8">
                         <div className="">
                             <div className="">
                                 <h1 className="text-xl font-bold ">
@@ -194,10 +194,7 @@ const ListProduct = () => {
                             </div>
                         </div>
                         <div className="row row-gap-4 mt-3">
-                            <div
-                                className="grid w-full grid-cols-5 gap-4"
-                                ng-repeat="product in displayedProducts"
-                            >
+                            <div className="grid  grid-cols-5 ">
                                 {displayedProducts?.map((data: Product) => {
                                     return (
                                         <>

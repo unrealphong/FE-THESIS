@@ -176,6 +176,17 @@ const updateDone = async (id: any) => {
         return undefined
     }
 }
+const GetBillWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
 export {
     addBill,
     getAllBill,
@@ -193,4 +204,5 @@ export {
     updateConfirm,
     updateShiping,
     updateDone,
+    GetBillWithUser,
 }

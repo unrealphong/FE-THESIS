@@ -10,6 +10,10 @@ import { Link } from "react-router-dom"
 import { Autoplay, Navigation, Pagination } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import ProductNewInHomePage from "./ProductNewInHomePage"
+import ListProductBuy3 from "./ListProductBuy3"
+import ListProduct50Persion from "./ListProduct50Persion"
+import ListProductBuy1Free1 from "./ListProductBuy1Free1"
+import ListProductBuyMax from "./ListProductBuyMax"
 
 function HomePage() {
     const [category, setCategory] = useState<Category[]>([])
@@ -38,10 +42,42 @@ function HomePage() {
     const [activeTab, setActiveTab] = useState(1)
 
     const tabs = [
-        { id: 1, label: "MUA 3 GIẢM 10%", content: "Tab 1 Content" },
-        { id: 2, label: "SALE 50%", content: "Tab 2 Content" },
-        { id: 3, label: "MUA 1 TẶNG 1", content: "Tab 3 Content" },
-        { id: 4, label: "BÁN CHẠY NHẤT", content: "Tab 4 Content" },
+        {
+            id: 1,
+            label: "MUA 3 GIẢM 10%",
+            content: (
+                <>
+                    <ListProductBuy3 />
+                </>
+            ),
+        },
+        {
+            id: 2,
+            label: "SALE 50%",
+            content: (
+                <>
+                    <ListProduct50Persion />
+                </>
+            ),
+        },
+        {
+            id: 3,
+            label: "MUA 1 TẶNG 1",
+            content: (
+                <>
+                    <ListProductBuy1Free1 />
+                </>
+            ),
+        },
+        {
+            id: 4,
+            label: "BÁN CHẠY NHẤT",
+            content: (
+                <>
+                    <ListProductBuyMax />
+                </>
+            ),
+        },
     ]
 
     useEffect(() => {

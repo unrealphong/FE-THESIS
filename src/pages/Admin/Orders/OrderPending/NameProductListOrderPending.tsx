@@ -78,12 +78,18 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
                     <tr className="items-center justify-center p-2" key={data?.id}>
                         <td className="p-2 text-center font-normal">{data?.id}</td>
                         <td className="p-2 text-center font-normal">
-                            {billsProduct?.product_name}
+                            {billdetail?.bill_details[0]
+                                ? billdetail?.bill_details[0].product_name
+                                : ""}
                         </td>
                         <td className="w-1/9 flex items-center justify-center p-2">
                             <img
                                 className="h-26 w-20"
-                                src={billsProduct?.image}
+                                src={
+                                    billdetail?.bill_details[0]
+                                        ? billdetail?.bill_details[0].image
+                                        : ""
+                                }
                                 alt=""
                             />
                         </td>
