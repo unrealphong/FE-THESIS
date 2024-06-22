@@ -28,7 +28,11 @@ const getProductById = async (id: number): Promise<Product | undefined> => {
 
 const createProduct = async (product) => {
     try {
-        const response = await httpRequest.post("/products", product)
+        const response = await httpRequest.post("/products", product, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
         toast.success("Product created successfully.")
         return response.data
     } catch (error) {

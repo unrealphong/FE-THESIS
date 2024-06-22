@@ -44,7 +44,6 @@ const ProductManagement = () => {
         setSelectedProduct(product)
         setIsModalVisible(true)
     }
-
     const columns: (ColumnGroupType<Product> | ColumnType<Product>)[] = [
         {
             title: "STT",
@@ -57,6 +56,14 @@ const ProductManagement = () => {
             dataIndex: "name",
             key: "name",
             render: (text: string) => <p>{text}</p>,
+        },
+        {
+            title: "Image",
+            dataIndex: "image",
+            key: "image",
+            render: (text, record) => (
+                <img src={record.image} style={{ width: "50px", height: "auto" }} />
+            ),
         },
         {
             title: "Danh mục",
@@ -111,6 +118,11 @@ const ProductManagement = () => {
             key: "price",
         },
         {
+            title: "Giá khuyến mãi",
+            dataIndex: "price",
+            key: "price",
+        },
+        {
             title: "Số lượng",
             dataIndex: "quantity",
             key: "quantity",
@@ -119,7 +131,7 @@ const ProductManagement = () => {
             title: "Thuộc tính",
             key: "attribute_values",
             render: (record: any) =>
-                record.attribute_names.map((attribute: AttributeValue) => (
+                record.attribute_values.map((attribute: AttributeValue) => (
                     <p key={attribute.id}>{attribute.value}</p>
                 )),
         },

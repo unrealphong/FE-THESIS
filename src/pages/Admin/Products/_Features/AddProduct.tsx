@@ -1,5 +1,9 @@
 import { Category } from "@/@types/category"
-import type { Variant } from "@/@types/product"
+import type { Attribute, Variant } from "@/@types/product"
+import {
+    getAllAttribute,
+    getAllAttributeValue,
+} from "@/api/services/AttributeService"
 import { getAllCategory } from "@/api/services/CategoryService"
 import { createProduct } from "@/api/services/ProductService"
 import {
@@ -19,37 +23,60 @@ const { Option } = Select
 const AddProduct = () => {
     const [categories, setCategories] = useState<Category[]>([])
     const [variants, setVariants] = useState<Variant[]>([])
-    const [fileList, setFileList] = useState([])
+    const [attributes, setAttributes] = useState<Attribute[]>([])
+    const [attributeValues, setAttributeValues] = useState({})
     const navigate = useNavigate()
+
+    const { control, handleSubmit } = useForm()
+
     const handleGoBack = () => {
         navigate("/quan-ly-san-pham")
     }
-    const {
-        control,
-        handleSubmit,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        formState: { errors },
-    } = useForm()
 
+    // Fetch categories, attributes, and attribute values on component mount
     useEffect(() => {
         fetchCategories()
+        fetchAttributes()
+        fetchAttributeValues()
     }, [])
 
-    /**
-     * TODO call api
-     */
+    // Fetch all categories from API
     const fetchCategories = async () => {
         const allCategory = await getAllCategory()
         setCategories(allCategory)
     }
 
+    // Fetch all attributes from API
+    const fetchAttributes = async () => {
+        const allAttribute = await getAllAttribute()
+        setAttributes(allAttribute)
+    }
+
+    // Fetch all attribute values from API and organize them by attribute_id
+    const fetchAttributeValues = async () => {
+        const values = await getAllAttributeValue()
+        const organizedValues = values.reduce((acc, item) => {
+            if (!acc[item.attribute_id]) {
+                acc[item.attribute_id] = []
+            }
+            acc[item.attribute_id].push(item)
+            return acc
+        }, {})
+        setAttributeValues(organizedValues)
+    }
+
     const onSubmit = async (data: FieldValues) => {
+        console.log(data)
+        if (!data.image || data.image.length === 0) {
+            toast.error("Please upload an image.")
+            return // Exit early if image is not provided
+        }
         const formattedData: any = {
             name: data.name,
             category_id: data.category_id,
             brand: data.brand,
             description: data.description,
-            image: "https://via.placeholder.com/640x480.png/00eeee?text=est",
+            image: data.image[0].originFileObj,
             variants: variants.map((variant) => ({
                 price: variant.price,
                 price_promotional: variant.price_promotional,
@@ -60,6 +87,7 @@ const AddProduct = () => {
                 ],
             })),
         }
+        console.log(formattedData.image)
         try {
             const response = await createProduct(formattedData)
             console.log("Product created successfully:", response)
@@ -70,8 +98,8 @@ const AddProduct = () => {
             toast.error("Failed to create product. Please try again later.")
         }
     }
-    console.log(variants)
 
+    // Add a new variant to the list
     const handleAddVariant = () => {
         setVariants([
             ...variants,
@@ -86,12 +114,21 @@ const AddProduct = () => {
             },
         ])
     }
+
+    // Remove a variant from the list
     const handleRemoveVariant = (index: number) => {
         const newVariants = variants.filter((_, i) => i !== index)
         setVariants(newVariants)
     }
 
-    const handleFileChange = ({ fileList }) => setFileList(fileList)
+    // Handle attribute change for a variant
+    const handleAttributeChange = (attributeName, value, index) => {
+        const newVariants = [...variants]
+        newVariants[index].attributes[attributeName] = value
+        setVariants(newVariants)
+    }
+
+    // Form rendering
     return (
         <div className="container mx-auto mt-10 flex flex-col space-y-10 rounded-lg bg-white p-5 shadow-lg">
             <h2 className="my-10 text-2xl font-semibold text-gray-700">
@@ -102,6 +139,7 @@ const AddProduct = () => {
                 className="space-y-4"
                 onFinish={handleSubmit(onSubmit)}
             >
+                {/* Form items for product information */}
                 <div className="mb-5 flex space-x-4">
                     <div className="w-[1000px]">
                         <Form.Item label="Tên Sản Phẩm">
@@ -177,18 +215,29 @@ const AddProduct = () => {
                             />
                         </Form.Item>
                     </div>
-                    <Form.Item label="Hình ảnh">
-                        <Upload
-                            listType="picture"
-                            fileList={fileList}
-                            onChange={handleFileChange}
-                            beforeUpload={() => false}
-                        >
-                            <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
-                        </Upload>
+                    <Form.Item label="Image">
+                        <Controller
+                            name="image"
+                            control={control}
+                            defaultValue={[]}
+                            render={({ field }) => (
+                                <Upload
+                                    listType="picture"
+                                    beforeUpload={() => false}
+                                    onChange={({ fileList }) =>
+                                        field.onChange(fileList)
+                                    }
+                                >
+                                    <Button icon={<UploadOutlined />}>
+                                        Click to upload
+                                    </Button>
+                                </Upload>
+                            )}
+                        />
                     </Form.Item>
                 </div>
                 <h3 className="mt-4 text-lg font-semibold">Sản phẩm biến thể</h3>
+                {/* Form items for variants */}
                 {variants.map((variant, index) => (
                     <div key={index} className="flex flex-wrap space-x-4">
                         <Form.Item label="Giá gốc">
@@ -232,46 +281,32 @@ const AddProduct = () => {
                                 }}
                             />
                         </Form.Item>
-                        <Form.Item label="Màu sắc">
-                            <Select
-                                size="large"
-                                style={{ width: 240 }}
-                                placeholder="Color"
-                                value={variant.attributes.color}
-                                onChange={(value) => {
-                                    const newVariants = [...variants]
-                                    newVariants[index].attributes.color = value
-                                    setVariants(newVariants)
-                                }}
-                            >
-                                <Option value="">Chọn</Option>
-                                <Option value="red">Đỏ</Option>
-                                <Option value="green">Xanh Lá</Option>
-                                <Option value="blue">Xanh Dương</Option>
-                                <Option value="white">Trắng</Option>
-                                <Option value="black">Đen</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item label="Kích thước">
-                            <Select
-                                size="large"
-                                style={{ width: 240 }}
-                                placeholder="Kích thước"
-                                value={variant.attributes.size}
-                                onChange={(value) => {
-                                    const newVariants = [...variants]
-                                    newVariants[index].attributes.size = value
-                                    setVariants(newVariants)
-                                }}
-                            >
-                                <Option value="">Chọn</Option>
-                                <Option value="S">S</Option>
-                                <Option value="M">M</Option>
-                                <Option value="L">L</Option>
-                                <Option value="XL">XL</Option>
-                                <Option value="XXL">XXL</Option>
-                            </Select>
-                        </Form.Item>
+                        {/* Select dropdowns for attributes */}
+                        {attributes.map((attribute) => (
+                            <Form.Item key={attribute.id} label={attribute.name}>
+                                <Select
+                                    size="large"
+                                    style={{ width: 240 }}
+                                    placeholder={attribute.name}
+                                    value={variant.attributes[attribute.name] || ""}
+                                    onChange={
+                                        (value) =>
+                                            handleAttributeChange(
+                                                attribute.name,
+                                                value,
+                                                index,
+                                            ) // Pass index here
+                                    }
+                                >
+                                    <Option value="">Chọn</Option>
+                                    {attributeValues[attribute.id]?.map((value) => (
+                                        <Option key={value.id} value={value.value}>
+                                            {value.value}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        ))}
                         <Form.Item className="flex items-end">
                             <Button
                                 size="large"
@@ -283,6 +318,7 @@ const AddProduct = () => {
                         </Form.Item>
                     </div>
                 ))}
+                {/* Button to add new variant */}
                 <Form.Item style={{ marginBottom: 20 }}>
                     <Button
                         size="large"
@@ -293,6 +329,7 @@ const AddProduct = () => {
                         Thêm
                     </Button>
                 </Form.Item>
+                {/* Submit and go back buttons */}
                 <Form.Item>
                     <Space size="large">
                         <Button
