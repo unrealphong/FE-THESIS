@@ -1,5 +1,5 @@
 import { GetProduct50Persion } from "@/api/services/ProductService"
-import  { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import ProductInListProduct50Persion from "./ProductInListProduct50Persion"
 
 const ListProduct50Persion = () => {

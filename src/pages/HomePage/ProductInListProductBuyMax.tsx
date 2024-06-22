@@ -1,7 +1,7 @@
 import { getProductById } from "@/api/services/ProductService"
 import formatNumber from "@/utilities/FormatTotal"
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons"
-import  { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 const ProductInListProductBuyMax = ({ data }: any) => {

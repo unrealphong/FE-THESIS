@@ -1,5 +1,5 @@
 import { GetProductBuyMax } from "@/api/services/ProductService"
-import  { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import ProductInListProductBuyMax from "./ProductInListProductBuyMax"
 
 const ListProductBuyMax = () => {
