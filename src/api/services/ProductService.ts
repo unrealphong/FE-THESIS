@@ -26,7 +26,7 @@ const getProductById = async (id: number): Promise<Product | undefined> => {
     }
 }
 
-const createProduct = async (product) => {
+const createProduct = async (product: any) => {
     try {
         const response = await httpRequest.post("/products", product)
         toast.success("Product created successfully.")
@@ -71,5 +71,46 @@ const deleteProduct = async (id: number): Promise<boolean> => {
         return false
     }
 }
-
-export { createProduct, deleteProduct, getAllProduct, getProductById, updateProduct }
+const GetProductBuy3 = async () => {
+    try {
+        const response = await httpRequest.get(`/sale-product/1`)
+        return response?.data?.data?.sales
+    } catch (error) {
+        return undefined
+    }
+}
+const GetProduct50Persion = async () => {
+    try {
+        const response = await httpRequest.get(`/sale-product/2`)
+        return response?.data?.data?.sales
+    } catch (error) {
+        return undefined
+    }
+}
+const GetProductBuy1Free1 = async () => {
+    try {
+        const response = await httpRequest.get(`/sale-product/3`)
+        return response?.data?.data?.sales
+    } catch (error) {
+        return undefined
+    }
+}
+const GetProductBuyMax = async () => {
+    try {
+        const response = await httpRequest.get(`/sale-product/4`)
+        return response?.data?.data?.sales
+    } catch (error) {
+        return undefined
+    }
+}
+export {
+    createProduct,
+    deleteProduct,
+    getAllProduct,
+    getProductById,
+    updateProduct,
+    GetProductBuy3,
+    GetProduct50Persion,
+    GetProductBuy1Free1,
+    GetProductBuyMax,
+}

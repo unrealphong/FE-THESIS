@@ -1,4 +1,9 @@
-import { getAllBillDetail, getBillDetail } from "@/api/services/Bill"
+import {
+    getAllBillDetail,
+    getBillDetail,
+    updateCancel,
+    updateConfirm,
+} from "@/api/services/Bill"
 import { getOrderDetail } from "@/api/services/Order"
 import { CarOutlined, LeftOutlined } from "@ant-design/icons"
 import { Tag } from "antd"
@@ -6,19 +11,23 @@ import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import ProductInOrderDetail from "./ProductInOrderDetail"
 import formatNumber from "@/utilities/FormatTotal"
+import { toast } from "react-toastify"
 
 const OrderDetail = () => {
     const { id } = useParams()
     const [bill, setBill] = useState<any>()
     const [billdetail, setBillDetail] = useState<any>()
     const [totalPrice, setTotalPrice] = useState(0)
+    const [color, setcolor] = useState<any>()
+    const [status, setstatus] = useState<any>()
+    const [check, setcheck] = useState<any>(false)
     const fetchOrder = async () => {
         const data: any = await getBillDetail(id)
         setBill(data)
     }
     useEffect(() => {
         fetchOrder()
-    }, [])
+    }, [status])
     const fetchBillDetail = async () => {
         const data: any = await getAllBillDetail()
         setBillDetail(data)
@@ -46,9 +55,47 @@ const OrderDetail = () => {
         }
     }
 
+    useEffect(() => {
+        if (bill?.status == "Pending") {
+            setcolor("warning")
+            setstatus("Chờ xác nhận")
+            setcheck(true)
+        } else if (bill?.status == "Confirm") {
+            setcolor("processing")
+            setstatus("Chờ giao hàng")
+        } else if (bill?.status == "Paid") {
+            setcolor("brown")
+            setstatus("Chờ xác nhận")
+            setcheck(true)
+        } else if (bill?.status == "Shiping") {
+            setcolor("purple")
+            setstatus("Đang giao hàng")
+        } else if (bill?.status == "Done") {
+            setcolor("green")
+            setstatus("Hoàn thành")
+        } else if (bill?.status == "Cancel") {
+            setcolor("error")
+            setstatus("Hủy hàng")
+        }
+    }, [bill])
+    const HandleCancel = async (id: any) => {
+        await updateCancel(id).then(() => {
+            toast.success("Bạn đã hủy đơn hàng")
+            setcolor("error")
+            setstatus("Hủy hàng")
+        })
+    }
+    const HandleConfirm = async (id: any) => {
+        await updateConfirm(id).then(() => {
+            toast.success("Bạn đã xác nhận đơn hàng")
+            setcolor("processing")
+            setstatus("Chờ giao hàng")
+            setcheck(false)
+        })
+    }
     return (
         <>
-            <div className="w-full p-5 pl-60 pr-60">
+            <div className=" bg-White mb-10 ml-60 mr-60 mt-10 border border-gray-300 p-10">
                 <div className="w-full">
                     <div>
                         <Link to="/orders">
@@ -61,12 +108,12 @@ const OrderDetail = () => {
                         <span className="text-2xl font-bold">
                             CHI TIẾT ĐƠN HÀNG #{bill?.id}
                         </span>
-                        {/* <Tag
-                            color="success"
+                        <Tag
+                            color={color}
                             className="ml-auto mt-1 text-sm font-bold"
                         >
-                            success
-                        </Tag> */}
+                            {status}
+                        </Tag>
                     </div>
                     <div className="mt-5 flex w-full">
                         <div className="mr-2 w-1/3 ">
@@ -112,9 +159,9 @@ const OrderDetail = () => {
                         </div>
                     </div>
                     <div className="mb-4 mt-4">
-                        <span className="text-xl font-bold">GIỎ HÀNG</span>
+                        <span className="text-xl font-bold">THÔNG TIN ĐƠN HÀNG</span>
                         <span text-sm className="text-red-500">
-                            (1 sản phẩm)
+                            ({ProductInbill?.length} sản phẩm)
                         </span>
                     </div>
                     <div className="w-full">
@@ -145,6 +192,33 @@ const OrderDetail = () => {
                         </div>
                     </div>
                 </div>
+                {bill?.status == "Pending" ? (
+                    <button
+                        className="rounded bg-red-500 p-2 pl-5 pr-5 text-white"
+                        onClick={() => HandleCancel(bill?.id)}
+                    >
+                        Hủy đơn hàng{" "}
+                    </button>
+                ) : (
+                    <button
+                        className="rounded bg-gray-300 p-2 pl-5 pr-5 text-white"
+                        disabled
+                    >
+                        Hủy đơn hàng{" "}
+                    </button>
+                )}
+                {bill?.status == "Shiping" ? (
+                    <button
+                        className="ml-5 rounded bg-green-500 p-2 pl-5 pr-5 text-white"
+                        onClick={() => HandleConfirm(bill?.id)}
+                    >
+                        Đã nhận được hàng
+                    </button>
+                ) : (
+                    <button className="ml-5 rounded bg-gray-300 p-2 pl-5 pr-5 text-white">
+                        Đã nhận được hàng
+                    </button>
+                )}
             </div>
         </>
     )

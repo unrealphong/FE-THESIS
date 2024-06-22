@@ -3,15 +3,18 @@ import { Pagination, Spin, Tabs, TabsProps, Tag } from "antd"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import AllOrderInListOrder from "./AllOrderInListOrder"
-import { getAllBill } from "@/api/services/Bill"
+import { GetBillWithUser } from "@/api/services/Bill"
 import { LoadingOutlined } from "@ant-design/icons"
 
 const ListOrder = () => {
     const [bills, setBill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
+    const users = JSON.parse(localStorage.getItem("user")!)
+    console.log(users)
+
     const fetchOrders = async () => {
         try {
-            const data: any = await getAllBill()
+            const data: any = await GetBillWithUser(users?.data?.id || "")
             setBill(data)
         } catch {
         } finally {
@@ -21,6 +24,8 @@ const ListOrder = () => {
     useEffect(() => {
         fetchOrders()
     }, [])
+    console.log(bills)
+
     const items: TabsProps["items"] = [
         {
             key: "1",
