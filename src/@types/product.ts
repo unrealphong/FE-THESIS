@@ -4,12 +4,13 @@ interface Product {
     brand: string
     description?: string
     category_id: number
+    image: string
+    variants?: []
 }
 
 interface Attribute {
     id: number
     name: string
-    type: string
 }
 
 interface AttributeValue {

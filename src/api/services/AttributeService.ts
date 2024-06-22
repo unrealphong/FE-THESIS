@@ -1,4 +1,4 @@
-import { Attribute } from "@/@types/product"
+import { Attribute, AttributeValue } from "@/@types/product"
 import httpRequest from "@/api/axios-instance"
 import { AxiosResponse } from "axios"
 import { toast } from "react-toastify"
@@ -7,8 +7,7 @@ const getAllAttribute = async (): Promise<Attribute[]> => {
     try {
         const response: AxiosResponse<{ data: { attributes: Attribute[] } }> =
             await httpRequest.get("attributes")
-
-        return response.data?.data?.attributes
+        return response.data?.data?.attributes ?? []
     } catch (error) {
         console.error("An error occurred while fetching products")
         toast.error("Failed to fetch products. Please try again later.")
@@ -74,11 +73,23 @@ const deleteAttribute = async (id: number): Promise<boolean> => {
         return false
     }
 }
-
+const getAllAttributeValue = async (): Promise<AttributeValue[]> => {
+    try {
+        const response: AxiosResponse<{
+            data: { attributeValues: AttributeValue[] }
+        }> = await httpRequest.get("attribute-values")
+        return response.data?.data?.attributeValues ?? []
+    } catch (error) {
+        console.error("An error occurred while fetching attribute values")
+        toast.error("Failed to fetch attribute values. Please try again later.")
+        return []
+    }
+}
 export {
     createAttribute,
     deleteAttribute,
     getAllAttribute,
     getAttributeById,
     updateAttribute,
+    getAllAttributeValue,
 }
