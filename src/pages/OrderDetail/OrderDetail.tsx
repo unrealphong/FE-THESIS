@@ -1,8 +1,10 @@
 import {
+    addHistoryBills,
     getAllBillDetail,
     getBillDetail,
     updateCancel,
     updateConfirm,
+    updateDone,
 } from "@/api/services/Bill"
 import { getOrderDetail } from "@/api/services/Order"
 import { CarOutlined, LeftOutlined } from "@ant-design/icons"
@@ -79,20 +81,45 @@ const OrderDetail = () => {
         }
     }, [bill])
     const HandleCancel = async (id: any) => {
-        await updateCancel(id).then(() => {
-            toast.success("Bạn đã hủy đơn hàng")
-            setcolor("error")
-            setstatus("Hủy hàng")
-        })
+        const check = confirm("Bạn có chắc chắn hủy đơn hàng?")
+        if (check == true) {
+            const data = {
+                bill_id: bill?.id,
+                user_id: bill?.user_id,
+                description: "Khách hàng xác nhận hủy đơn hàng",
+            }
+            await updateCancel(id).then(async () => {
+                await addHistoryBills(data).then(() => {
+                    toast.success("Bạn đã hủy đơn hàng")
+                    setcolor("error")
+                    setstatus("Hủy hàng")
+                })
+            })
+        }
     }
     const HandleConfirm = async (id: any) => {
-        await updateConfirm(id).then(() => {
-            toast.success("Bạn đã xác nhận đơn hàng")
-            setcolor("processing")
-            setstatus("Chờ giao hàng")
-            setcheck(false)
-        })
+        const check = confirm("Bạn có chắc chắn đã nhận được hàng?")
+        if (check == true) {
+            const data = {
+                bill_id: bill?.id,
+                user_id: bill?.user_id,
+                description: "Khách hàng xác nhận đã nhận hàng",
+            }
+            await updateDone(id).then(async () => {
+                await addHistoryBills(data).then(() => {
+                    toast.success("Thành công")
+                    setcolor("processing")
+                    setstatus("Chờ giao hàng")
+                    setcheck(false)
+                })
+            })
+        }
     }
+    const parts = bill?.Recipient_address
+        ? bill?.Recipient_address?.split(";").map((part: any) => part.trim())
+        : ""
+    const [name, descbill, address] = parts
+
     return (
         <>
             <div className=" bg-White mb-10 ml-60 mr-60 mt-10 border border-gray-300 p-10">
@@ -124,8 +151,10 @@ const OrderDetail = () => {
                                 className="mt-2 bg-gray-100 p-5"
                                 style={{ minHeight: "200px" }}
                             >
-                                <span className="font-bold">nguyen van A</span>
-                                <p>Địa chỉ: {bill?.Recipient_address}</p>
+                                <span className="font-bold">
+                                    {name != "undefined" ? name : ""}
+                                </span>
+                                <p>Địa chỉ: {address}</p>
                                 <p>Điện thoại: {bill?.Recipient_phone}</p>
                             </div>
                         </div>
@@ -137,11 +166,16 @@ const OrderDetail = () => {
                                 className="mt-2 bg-gray-100 p-5"
                                 style={{ minHeight: "200px" }}
                             >
-                                <span className="font-bold">nguyen van A</span>
-                                <p>
+                                <span className="font-bold">
+                                    {name != "undefined" ? name : ""}
+                                </span>
+                                <p className="mb-2">
                                     <CarOutlined />
                                     Giao hàng tại nhà
                                 </p>
+                                <span className="">
+                                    Ghi chú đơn hàng: {descbill}
+                                </span>
                             </div>
                         </div>
                         <div className="mr-2 w-1/3 ">
@@ -153,7 +187,7 @@ const OrderDetail = () => {
                                 style={{ minHeight: "200px" }}
                             >
                                 <span className="">
-                                    Thanh toán tiền mặt khi nhận hàng (COD)
+                                    Thanh toán tiền mặt khi nhận hàng ({bill?.pay})
                                 </span>
                             </div>
                         </div>
@@ -187,7 +221,7 @@ const OrderDetail = () => {
                         <div className="flex">
                             <p className="text-xl">Tổng cộng</p>
                             <p className="mb-20 ml-auto text-3xl font-bold text-red-500">
-                                {formatNumber(totalPrice)} đ
+                                {formatNumber(totalPrice + 30000)} đ
                             </p>
                         </div>
                     </div>

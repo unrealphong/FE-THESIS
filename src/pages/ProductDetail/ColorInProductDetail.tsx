@@ -8,21 +8,21 @@ const ColorInProductDetail = ({
     onSize,
     selectedColor,
 }: any) => {
-    console.log(product)
     const [click, setclick] = useState(null)
     if (!Array.isArray(product) || product.length === 0) {
         return <div></div>
     }
 
     let foundValue = undefined
-    let idValue: any = undefined
+    let idvarians: any = undefined
+    let id_attribute_value: any = undefined
     product?.forEach((item) => {
         const foundObj = item.attribute_names[0]
-        console.log(foundObj)
 
         if (foundObj?.value == data?.value) {
             foundValue = foundObj.value
-            idValue = item.id
+            idvarians = item.id
+            id_attribute_value = foundObj.id
         }
     })
     const HandleClick = (id: any) => {
@@ -32,14 +32,14 @@ const ColorInProductDetail = ({
             setclick(id)
         }
         onColor(data?.value)
-        onSize(idValue)
+        onSize(idvarians, id_attribute_value)
     }
     return (
         <>
             {foundValue ? (
                 <>
                     <button
-                        className={` m-1 mx-1 h-8 w-8 rounded-full   ${selectedColor == idValue ? "border-4 border-gray-200" : "boder border-gray-200"}   `}
+                        className={` m-1 mx-1 h-8 w-8 rounded-full   ${selectedColor == idvarians ? "border-4 border-gray-200" : "boder border-gray-200"}   `}
                         onClick={() => HandleClick(data?.id)}
                         disabled={foundValue ? false : true}
                         key={data?.id}

@@ -17,6 +17,7 @@ import formatNumber from "@/utilities/FormatTotal"
 import { useNavigate } from "react-router-dom"
 import { addBill, addBillDetail } from "@/api/services/Bill"
 import { toast } from "react-toastify"
+import { getCartOrder } from "@/api/services/Order"
 const CheckOut = () => {
     const [form] = Form.useForm()
     const user = JSON.parse(localStorage.getItem("user") || "null")
@@ -31,6 +32,9 @@ const CheckOut = () => {
     const [adressdetail, setadressdetail] = useState<any>()
     const [phone, setPhone] = useState<any>()
     const [paymentMethod, setPaymentMethod] = useState<any>()
+    const [name, setname] = useState<any>()
+    const [descbill, setdescbill] = useState<any>()
+
     const handlePaymentChange = (e: any) => {
         if (e.target.value == "COD") {
             setPaymentMethod("COD")
@@ -59,9 +63,21 @@ const CheckOut = () => {
     const nameWard = (name: any) => {
         setWardName(name)
     }
+    const [cartt, setcart] = useState<any>()
+    const handleCartUpdate = async () => {
+        const storedCarts = JSON.parse(localStorage.getItem("cart")!) || []
+        setcart(storedCarts)
+        const data = { data: storedCarts }
+        const allCart: any = await getCartOrder(data)
+        setcart(allCart)
+    }
+    useEffect(() => {
+        handleCartUpdate()
+    }, [])
     const carts = JSON.parse(localStorage.getItem("cart") || "[]")
-    const totalCartPrice = carts.reduce(
-        (total: any, item: any) => total + item.price * item.quantity,
+    const totalCartPrice = cartt?.data?.reduce(
+        (total: any, item: any, index: any) =>
+            total + item.price * carts[index]?.quantity,
         0,
     )
 
@@ -88,7 +104,7 @@ const CheckOut = () => {
     const handleOrder = async () => {
         const data = {
             user_id: user?.data?.id,
-            recipient_address: `${adressdetail}, ${wardName}, ${districtName}, ${provinceName}`,
+            recipient_address: `${name ? name : form.getFieldValue("name")}; ${descbill};${adressdetail}, ${wardName}, ${districtName}, ${provinceName}`,
             recipient_phone: phone,
             total_amount: totalCartPrice,
             status: "Pending",
@@ -99,11 +115,11 @@ const CheckOut = () => {
         if (response) {
             const data2: any = { data: [] }
             await Promise.all(
-                carts.map(async (element: any) => {
+                carts.map(async (element: any, index: any) => {
                     const data1 = {
                         product_name: element?.name_product,
-                        attribute: "null",
-                        price: element?.price,
+                        attribute: `${cartt?.data[index]?.attributes[0].attribute_value}; ${cartt?.data[index]?.attributes[1].attribute_value}`,
+                        price: cartt?.data[index]?.price,
                         quantity: element?.quantity,
                         bill_id: response?.data?.id,
                         voucher: "null",
@@ -113,12 +129,16 @@ const CheckOut = () => {
                 }),
             )
 
-            await addBillDetail(data2)
-            toast.success("Đặt hàng thành công")
-            localStorage.removeItem("cart")
-
-            navigate(`/order_done/${response?.data?.id}`)
-            window.location.reload()
+            await addBillDetail(data2).then((data) => {
+                if (data?.status == true) {
+                    toast.success("Đặt hàng thành công")
+                    localStorage.removeItem("cart")
+                    window.location.href = `/order_done/ ${response?.data?.id} `
+                } else {
+                    toast.error("Đặt hàng thất bại")
+                }
+                console.log(data)
+            })
         }
     }
 
@@ -223,6 +243,9 @@ const CheckOut = () => {
                                             <Input
                                                 placeholder="Nhập họ tên của bạn"
                                                 className="mt-3 p-2"
+                                                onChange={(e) =>
+                                                    setname(e.target.value)
+                                                }
                                             />
                                         </Form.Item>
                                     </div>
@@ -327,6 +350,7 @@ const CheckOut = () => {
                                         className="mt-3"
                                         placeholder="Ghi chú đơn hàng"
                                         autoSize={{ minRows: 3, maxRows: 5 }}
+                                        onChange={(e) => setdescbill(e.target.value)}
                                     />
                                 </div>
                             </Form>
@@ -429,7 +453,7 @@ const CheckOut = () => {
                                     <div className="mt-3 flex">
                                         <p className="text-sm">Phí Vận Chuyển</p>
                                         <p className="fw-bold mb-0 ml-auto text-sm font-bold">
-                                            0đ
+                                            30.000 đ
                                         </p>
                                     </div>
                                 </div>
@@ -438,7 +462,7 @@ const CheckOut = () => {
                                     <div className="flex">
                                         <h5 className="">Tổng Tiền</h5>
                                         <h5 className="fw-bold mb-0 ml-auto font-bold text-red-500 ">
-                                            {formatNumber(totalCartPrice)} đ
+                                            {formatNumber(totalCartPrice + 30000)} đ
                                         </h5>
                                     </div>
                                 </div>

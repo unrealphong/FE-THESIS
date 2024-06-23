@@ -3,7 +3,7 @@ import { Select } from "antd"
 import { Option } from "antd/es/mentions"
 import { useEffect, useState } from "react"
 
-const DistrictInCheckOut = ({ id, onIDDistrict, onNameDistrict }) => {
+const DistrictInCheckOut = ({ id, onIDDistrict, onNameDistrict }: any) => {
     const [district, setdistrict] = useState([])
     useEffect(() => {
         const fetchDistrict = async () => {
@@ -34,7 +34,7 @@ const DistrictInCheckOut = ({ id, onIDDistrict, onNameDistrict }) => {
                     onChange={handleDistrict}
                 >
                     <Option value="">Chọn Huyện</Option>
-                    {district?.map((data) => {
+                    {district?.map((data: any) => {
                         return (
                             <>
                                 <Option

@@ -53,4 +53,22 @@ const orderDetailWithVariant = async (data: any) => {
         return undefined
     }
 }
-export { addOrder, getAllOrder, getOrderDetail, orderDetailWithVariant }
+const getCartOrder = async (data: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.post(
+            "/cart",
+            data,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
+export {
+    addOrder,
+    getAllOrder,
+    getOrderDetail,
+    orderDetailWithVariant,
+    getCartOrder,
+}

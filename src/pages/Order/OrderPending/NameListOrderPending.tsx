@@ -1,8 +1,8 @@
 import {
     addHistoryBills,
-    getAllBillDetail,
     getBillsDetail,
-    updateDone,
+    updateCancel,
+    updateConfirm,
 } from "@/api/services/Bill"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
@@ -10,8 +10,9 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 
-const NameProductListOrderShiping = ({ data, onCheck }: any) => {
+const NameListOrderPending = ({ data, onCheck }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
+    const [check, setCheck] = useState<any>()
     const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
         try {
@@ -28,26 +29,26 @@ const NameProductListOrderShiping = ({ data, onCheck }: any) => {
     }, [])
     // const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
     const [color, setcolor] = useState<any>()
-    const [status, setstatus] = useState<any>()
+    const [status, setstatus] = useState<any>(false)
     useEffect(() => {
-        if (data?.status == "Shiping") {
-            setcolor("purple")
-            setstatus("Đang giao hàng")
+        if (data?.status == "Pending") {
+            setcolor("warning")
+            setstatus("Chờ xác nhận")
         }
     }, [data])
-    const HandleDone = async (id: any) => {
-        const check = confirm("Bạn có chắc chắn đơn hàng này khách hàng đã nhận?")
+    const HandleCancel = async (id: any) => {
+        const check = confirm("Bạn có chắc chắn hủy đơn hàng?")
         if (check == true) {
             const data = {
                 bill_id: billdetail?.id,
                 user_id: billdetail?.user_id,
-                description: `Admin xác nhận khách hàng đã nhận được đơn hàng`,
+                description: "Khách hàng xác nhận hủy đơn hàng",
             }
-            await updateDone(id).then(async () => {
+            await updateCancel(id).then(async () => {
                 await addHistoryBills(data).then(() => {
-                    toast.success("Đơn hàng đã hoàn thành")
-                    setcolor("green")
-                    setstatus("Hoàn thành")
+                    toast.success("Bạn đã hủy đơn hàng")
+                    setcolor("error")
+                    setstatus("Hủy hàng")
                     onCheck(status)
                 })
             })
@@ -109,16 +110,13 @@ const NameProductListOrderShiping = ({ data, onCheck }: any) => {
                             <Tag color={color}>{status}</Tag>
                         </td>
                         <td className="p-2 font-normal" style={{ width: "10%" }}>
-                            {/* <button className="mb-1 w-24 rounded bg-red-500 p-1 text-white">
-                                Không nhận
-                            </button> */}
                             <button
-                                className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
-                                onClick={() => HandleDone(data?.id)}
+                                className="mb-1 w-20 rounded bg-red-500 p-1 text-white"
+                                onClick={() => HandleCancel(data?.id)}
                             >
-                                Đã nhận hàng
+                                Hủy
                             </button>
-                            <Link to={`/quan-ly-orders/${data?.id}`}>
+                            <Link to={`/orders/${data?.id}`}>
                                 <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
                                     Chi tiết
                                 </button>
@@ -130,4 +128,5 @@ const NameProductListOrderShiping = ({ data, onCheck }: any) => {
         </>
     )
 }
-export default NameProductListOrderShiping
+
+export default NameListOrderPending
