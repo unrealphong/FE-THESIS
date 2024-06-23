@@ -6,30 +6,48 @@ import { useEffect, useState } from "react"
 import ProductInCart from "./ProductInCart"
 import formatNumber from "@/utilities/FormatTotal"
 import { Link } from "react-router-dom"
+import { getCartOrder } from "@/api/services/Order"
 
 const Cart = () => {
     const [carts, setCarts] = useState([])
     const [totalPrice, setTotalPrice] = useState(0)
-    useEffect(() => {
+    const [cartt, setcart] = useState<any>()
+    const [check, setcheck] = useState<any>(0)
+    const handleCartUpdate = async () => {
         const storedCarts = JSON.parse(localStorage.getItem("cart")!) || []
         setCarts(storedCarts)
-    }, [carts])
-    useEffect(() => {
-        const totalPrice = calculateTotalClick()
-        setTotalPrice(totalPrice)
-    }, [carts])
-
+        const data = { data: storedCarts }
+        const allCart: any = await getCartOrder(data)
+        setcart(allCart)
+    }
+    const carttt = (cart: any) => {
+        setcheck(cart)
+    }
     const calculateTotalClick = () => {
         let total = 0
-        carts.forEach((product: any) => {
-            const price = parseFloat(product.price)
-            const quantity = parseInt(product.quantity, 10)
-            if (!isNaN(price) && !isNaN(quantity)) {
-                total += price * quantity
+
+        cartt?.data?.forEach((product: any) => {
+            const cartItem: any = carts.find(
+                (item: any) => item.variant_id === product.id,
+            )
+            if (cartItem) {
+                const price = parseFloat(product.price)
+                const quantity = parseInt(cartItem.quantity, 10)
+                if (!isNaN(price) && !isNaN(quantity)) {
+                    total += price * quantity
+                }
             }
         })
-        return total
+        setTotalPrice(total)
     }
+    useEffect(() => {
+        handleCartUpdate()
+    }, [check])
+    useEffect(() => {
+        if (cartt) {
+            calculateTotalClick()
+        }
+    }, [cartt])
     return (
         <>
             <main className="mb-28 flex flex-wrap justify-around pl-36 pr-36 ">
@@ -58,9 +76,9 @@ const Cart = () => {
                 </div>
                 <div className="cart-main container mt-5">
                     <div className="row flex p-0">
-                        <div className="col-xl-8 col-sm-12 table-responsive w-2/3">
+                        <div className="col-xl-8 col-sm-12 table-responsive w-3/4">
                             <div className="bg-gray-100 p-4">
-                                {carts?.length <= 0 ? (
+                                {cartt?.length <= 0 ? (
                                     <>
                                         <div>
                                             <h5 className="mt-5 flex items-center justify-center text-xl font-bold">
@@ -86,23 +104,29 @@ const Cart = () => {
                                             <th className="font-bold">Thành Tiền</th>
                                         </thead>
                                         <tbody className="pt-20">
-                                            {carts?.map((data: any, index) => {
-                                                return (
-                                                    <>
-                                                        <ProductInCart
-                                                            data={data}
-                                                            key={data?.id}
-                                                            index={index}
-                                                        />
-                                                    </>
-                                                )
-                                            })}
+                                            {cartt?.data?.map(
+                                                (data: any, index: any) => {
+                                                    return (
+                                                        <>
+                                                            <ProductInCart
+                                                                data={data}
+                                                                key={data?.id}
+                                                                index={index}
+                                                                quantity={
+                                                                    carts[index]
+                                                                }
+                                                                onCart={carttt}
+                                                            />
+                                                        </>
+                                                    )
+                                                },
+                                            )}
                                         </tbody>
                                     </table>
                                 )}
                             </div>
                         </div>
-                        <div className="ml-5 w-1/3 bg-gray-100 p-4">
+                        <div className="ml-5 w-1/4 bg-gray-100 p-4">
                             <div className="">
                                 <h5
                                     className="pb-6 font-bold"
@@ -120,7 +144,7 @@ const Cart = () => {
                                 <div className="custom-dash d-flex flex-column gap-2 pb-3">
                                     <div className="align-items-center justify-content-between flex">
                                         <h5 className="text-danger mb-0 font-bold">
-                                            Tổng giá trị đơn hàng{" "}
+                                            Tổng giá trị đơn hàng
                                         </h5>
                                         <h5
                                             className="text-danger fw-bold mb-0 ml-auto font-bold text-red-500"
@@ -136,9 +160,9 @@ const Cart = () => {
                                 <div className="flex items-center justify-center ">
                                     <Link to={"/checkout"}>
                                         <button
-                                            className={`btn w-full ${carts?.length <= 0 ? "bg-gray-500" : "bg-red-500"} flex items-center  justify-center rounded p-2 pl-10 pr-10 text-white`}
+                                            className={`btn w-full ${cartt?.length <= 0 ? "bg-gray-500" : "bg-red-500"} flex items-center  justify-center rounded p-2 pl-10 pr-10 text-white`}
                                             disabled={
-                                                carts?.length <= 0 ? true : false
+                                                cartt?.length <= 0 ? true : false
                                             }
                                         >
                                             Tiếp Tục Thanh Toán{" "}

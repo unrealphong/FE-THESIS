@@ -3,7 +3,7 @@ import { Select } from "antd"
 import { Option } from "antd/es/mentions"
 import { useEffect, useState } from "react"
 
-const ProvinceInCheckOut = ({ onIDProvince, onNameProvince }) => {
+const ProvinceInCheckOut = ({ onIDProvince, onNameProvince }: any) => {
     const [province, setprovince] = useState([])
     useEffect(() => {
         const fetchProvince = async () => {

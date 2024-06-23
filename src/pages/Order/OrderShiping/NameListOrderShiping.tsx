@@ -10,7 +10,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 
-const NameProductListOrderShiping = ({ data, onCheck }: any) => {
+const NameListOrderShiping = ({ data, onCheck }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
     const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
@@ -41,7 +41,7 @@ const NameProductListOrderShiping = ({ data, onCheck }: any) => {
             const data = {
                 bill_id: billdetail?.id,
                 user_id: billdetail?.user_id,
-                description: `Admin xác nhận khách hàng đã nhận được đơn hàng`,
+                description: `Khách hàng xác nhận khách hàng đã nhận được đơn hàng`,
             }
             await updateDone(id).then(async () => {
                 await addHistoryBills(data).then(() => {
@@ -109,16 +109,13 @@ const NameProductListOrderShiping = ({ data, onCheck }: any) => {
                             <Tag color={color}>{status}</Tag>
                         </td>
                         <td className="p-2 font-normal" style={{ width: "10%" }}>
-                            {/* <button className="mb-1 w-24 rounded bg-red-500 p-1 text-white">
-                                Không nhận
-                            </button> */}
                             <button
                                 className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
                                 onClick={() => HandleDone(data?.id)}
                             >
                                 Đã nhận hàng
                             </button>
-                            <Link to={`/quan-ly-orders/${data?.id}`}>
+                            <Link to={`/orders/${data?.id}`}>
                                 <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
                                     Chi tiết
                                 </button>
@@ -130,4 +127,4 @@ const NameProductListOrderShiping = ({ data, onCheck }: any) => {
         </>
     )
 }
-export default NameProductListOrderShiping
+export default NameListOrderShiping

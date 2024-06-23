@@ -187,6 +187,18 @@ const GetBillWithUser = async (id: any) => {
         return undefined
     }
 }
+const addHistoryBills = async (data: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.post(
+            `/bill-stores`,
+            data,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
 export {
     addBill,
     getAllBill,
@@ -205,4 +217,5 @@ export {
     updateShiping,
     updateDone,
     GetBillWithUser,
+    addHistoryBills,
 }

@@ -8,7 +8,6 @@ import {
 } from "@ant-design/icons"
 import { useParams } from "react-router-dom"
 import { getProductById } from "@/api/services/ProductService"
-import { Product } from "@/@types/product"
 import CategoryInProductDetail from "./CategoryInProductDetail"
 import PriceInProductDetail from "./PriceInProductDetail"
 import ColorInProductDetail from "./ColorInProductDetail"
@@ -60,25 +59,39 @@ const ProductDetail = () => {
         setIdcolor(value)
     }
     const [idsize, setIdsize] = useState()
-    const HandleSize = (value: any) => {
-        setIdsize(value)
-        setSelectedColor(value)
+    const [id_attribute_value, setid_attribute_value] = useState()
+    const [id_attribute_size, setid_attribute_size] = useState()
+
+    const HandleSize = (idvarian: any, idattributevalue: any) => {
+        setIdsize(idvarian)
+        setSelectedColor(idvarian)
+        setid_attribute_value(idattributevalue)
     }
-    const sizes = (value: any) => {
-        setSizevalue(value)
+    const [sizevalues, setsizevalue] = useState()
+    const sizes = (idvarian: any, idattributevalue: any, sizeValue: any) => {
+        setSizevalue(idvarian)
+        setid_attribute_size(idattributevalue)
+        setsizevalue(sizeValue)
     }
     const price = (value: any) => {
         setprices(value)
     }
     const HandleAddtoCart = async () => {
         const data = {
-            id: carts.length + 1,
-            name_product: product?.name,
-            price: prices,
-            quantity: quantity,
-            size: sizevalue,
-            color: idColor,
             image: product?.image,
+            variant_id: idsize,
+            quantity: quantity,
+            name_product: product?.name,
+            attributes: [
+                {
+                    attribute_name: 81,
+                    attribute_value: id_attribute_value,
+                },
+                {
+                    attribute_name: 82,
+                    attribute_value: id_attribute_size,
+                },
+            ],
         }
         if (idsize == undefined) {
             toast.error("Bạn cần chọn size!")
@@ -87,9 +100,9 @@ const ProductDetail = () => {
         } else {
             const existingProductIndex = carts?.findIndex(
                 (item: any) =>
-                    item.name_product == product?.product?.name &&
-                    item?.size == sizevalue &&
-                    item?.color == idColor,
+                    item.variant_id == idsize &&
+                    item?.attributes[0].attribute_value == id_attribute_value &&
+                    item?.attributes[1].attribute_value == id_attribute_size,
             )
             if (existingProductIndex !== -1) {
                 carts[existingProductIndex].quantity += Number(quantity)
@@ -97,11 +110,10 @@ const ProductDetail = () => {
                 await carts.push(data)
             }
             localStorage.setItem("cart", JSON.stringify(carts))
-
             toast.success("Bạn đã thêm thành công!")
-            setTimeout(() => {
-                window.location.reload()
-            }, 500)
+            // setTimeout(() => {
+            //     window.location.reload()
+            // }, 500)
         }
     }
     return (
@@ -129,7 +141,7 @@ const ProductDetail = () => {
                             </List.Item>
                         )}
                     /> */}
-                    <div className="thumbnails ml-10">
+                    <div className="thumbnails ml-10 mr-10">
                         <Image
                             className=""
                             src={product?.image}

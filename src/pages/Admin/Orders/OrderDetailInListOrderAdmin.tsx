@@ -77,6 +77,10 @@ const OrderDetailInListOrderAdmin = () => {
         }
     }, [bill])
     console.log(check)
+    const parts = bill?.Recipient_address
+        ? bill?.Recipient_address?.split(";").map((part: any) => part.trim())
+        : ""
+    const [name, descbill, address] = parts
     return (
         <>
             <div className="w-full bg-white p-5 pl-10 pr-10">
@@ -142,9 +146,9 @@ const OrderDetailInListOrderAdmin = () => {
                                         style={{ minHeight: "200px" }}
                                     >
                                         <span className="font-bold">
-                                            nguyen van A
+                                            {name != "undefined" ? name : ""}
                                         </span>
-                                        <p>Địa chỉ: {bill?.Recipient_address}</p>
+                                        <p>Địa chỉ: {address}</p>
                                         <p>Điện thoại: {bill?.Recipient_phone}</p>
                                     </div>
                                 </div>
@@ -157,12 +161,15 @@ const OrderDetailInListOrderAdmin = () => {
                                         style={{ minHeight: "200px" }}
                                     >
                                         <span className="font-bold">
-                                            nguyen van A
+                                            {name != "undefined" ? name : ""}
                                         </span>
-                                        <p>
+                                        <p className="mb-2">
                                             <CarOutlined />
                                             Giao hàng tại nhà
                                         </p>
+                                        <span className="">
+                                            Ghi chú đơn hàng: {descbill}
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="mr-2 w-1/3 ">
@@ -174,7 +181,8 @@ const OrderDetailInListOrderAdmin = () => {
                                         style={{ minHeight: "200px" }}
                                     >
                                         <span className="">
-                                            Thanh toán tiền mặt khi nhận hàng (COD)
+                                            Thanh toán tiền mặt khi nhận hàng (
+                                            {bill?.pay})
                                         </span>
                                     </div>
                                 </div>
@@ -234,7 +242,7 @@ const OrderDetailInListOrderAdmin = () => {
                                 <div className="flex">
                                     <p className="text-xl">Tổng cộng</p>
                                     <p className="mb-20 ml-auto text-3xl font-bold text-red-500">
-                                        {formatNumber(totalPrice)} đ
+                                        {formatNumber(totalPrice + 30000)} đ
                                     </p>
                                 </div>
                             </div>

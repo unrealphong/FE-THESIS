@@ -2,7 +2,13 @@ import { useEffect, useState } from "react"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
 import { Link } from "react-router-dom"
-import { getAllBillDetail, updateCancel, updateConfirm } from "@/api/services/Bill"
+import {
+    addHistoryBills,
+    getAllBillDetail,
+    getBillsDetail,
+    updateCancel,
+    updateConfirm,
+} from "@/api/services/Bill"
 import { toast } from "react-toastify"
 
 const NameProductListOrderPending = ({ data, onCheck }: any) => {
@@ -11,8 +17,8 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
     const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
         try {
-            const data: any = await getAllBillDetail()
-            setBillDetail(data)
+            const data1: any = await getBillsDetail(data?.id)
+            setBillDetail(data1)
         } catch (error) {
             console.error("Error fetching bill details:", error)
         } finally {
@@ -22,7 +28,7 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
     useEffect(() => {
         fetchBillDetail()
     }, [])
-    const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
+    // const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
     const [color, setcolor] = useState<any>()
     const [status, setstatus] = useState<any>(false)
     useEffect(() => {
@@ -39,13 +45,18 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
                 return
             }
             if (input.trim() !== "") {
-                console.log("Reason entered:", input)
-
-                await updateCancel(id).then(() => {
-                    toast.success("Banbạn đã hủy đơn hàng")
-                    setcolor("error")
-                    setstatus("Hủy hàng")
-                    onCheck(status)
+                const data = {
+                    bill_id: billdetail?.id,
+                    user_id: billdetail?.user_id,
+                    description: `Admin xác nhận hủy đơn hàng; Lý do: ${input}`,
+                }
+                await updateCancel(id).then(async () => {
+                    await addHistoryBills(data).then(() => {
+                        toast.success("Bạn đã hủy đơn hàng")
+                        setcolor("error")
+                        setstatus("Hủy hàng")
+                        onCheck(status)
+                    })
                 })
                 return
             } else {
@@ -54,12 +65,22 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
         }
     }
     const HandleConfirm = async (id: any) => {
-        await updateConfirm(id).then(() => {
-            toast.success("Bạn đã xác nhận đơn hàng")
-            setcolor("processing")
-            setstatus("Chờ giao hàng")
-            onCheck(status)
-        })
+        const check = confirm("Bạn chắc chắn muốn xác nhận đơn hàng này?")
+        if (check == true) {
+            const data = {
+                bill_id: billdetail?.id,
+                user_id: billdetail?.user_id,
+                description: `Admin xác nhận đơn hàng`,
+            }
+            await updateConfirm(id).then(async () => {
+                await addHistoryBills(data).then(() => {
+                    toast.success("Bạn đã xác nhận đơn hàng")
+                    setcolor("processing")
+                    setstatus("Chờ giao hàng")
+                    onCheck(status)
+                })
+            })
+        }
     }
     return (
         <>

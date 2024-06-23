@@ -1,22 +1,23 @@
-import { useEffect, useState } from "react"
-import NameProductListOrderPaid from "./NameProductListOrderPaid"
 import { Pagination, Spin } from "antd"
+import { useEffect, useState } from "react"
+import NameListOrderPending from "./NameListOrderPending"
 import { LoadingOutlined } from "@ant-design/icons"
-import { getBillPaid } from "@/api/services/Bill"
+import { getBillPending } from "@/api/services/Bill"
 
-const ListOrderPaid = () => {
+const ListOrderPending = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
     const [check1, setcheck] = useState<boolean>()
     const fetchBills = async () => {
         try {
-            const allBills: any = await getBillPaid()
+            const allBills: any = await getBillPending()
             setbill(allBills)
         } catch {
         } finally {
             setLoading(false)
         }
     }
+
     useEffect(() => {
         fetchBills()
     }, [check1])
@@ -25,11 +26,9 @@ const ListOrderPaid = () => {
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
     const currentItems = bill?.slice(indexOfFirstItem, indexOfLastItem)
+
     const handlePageChange = (page: any) => {
         setCurrentPage(page)
-    }
-    const onChange = (key: string) => {
-        console.log(key)
     }
     const check = (key: any) => {
         setcheck(key)
@@ -68,7 +67,7 @@ const ListOrderPaid = () => {
                         </tr>
                     ) : (
                         currentItems?.map((data: any) => (
-                            <NameProductListOrderPaid
+                            <NameListOrderPending
                                 key={data.id}
                                 data={data}
                                 onCheck={check}
@@ -89,4 +88,4 @@ const ListOrderPaid = () => {
     )
 }
 
-export default ListOrderPaid
+export default ListOrderPending
