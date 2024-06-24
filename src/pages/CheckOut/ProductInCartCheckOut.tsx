@@ -3,14 +3,6 @@ import formatNumber from "../../utilities/FormatTotal"
 import { getProductById } from "@/api/services/ProductService"
 
 const ProductInCartCheckOut = ({ data, index, quantity }: any) => {
-    // const [pro, setpro] = useState<any>()
-    // useEffect(() => {
-    //     const getOneProduct = async () => {
-    //         const product = await getProductById(data?.product_id)
-    //         setpro(product)
-    //     }
-    //     getOneProduct()
-    // }, [])
     return (
         <>
             <tr className="bg-gray-100">
@@ -21,7 +13,7 @@ const ProductInCartCheckOut = ({ data, index, quantity }: any) => {
                 <td className="ml-10 mr-10 mt-10 w-60 whitespace-normal text-center align-middle">
                     <h6>
                         <a href="#" className="text-sl font-bold">
-                            {data?.name_product}
+                            {quantity?.name_product}
                         </a>
                     </h6>
                     <p className="mt-2">

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import ProductInCartCheckOut from "./ProductInCartCheckOut"
 import { getCartOrder } from "@/api/services/Order"
 
-const CartInCheckOut = () => {
+const CartInCheckOut = ({ onPriceBuy3 }: any) => {
     const [carts, setCarts] = useState([])
     const [totalPrice, setTotalPrice] = useState(0)
     const [cartt, setcart] = useState<any>()
@@ -12,10 +12,34 @@ const CartInCheckOut = () => {
         const data = { data: storedCarts }
         const allCart: any = await getCartOrder(data)
         setcart(allCart)
+        let total = 0
+        let totalQuantity = 0
+        storedCarts.forEach((item: any) => {
+            totalQuantity += item.quantity
+        })
+        storedCarts.forEach((item: any, index: any) => {
+
+            if (item.sale_id === 1 && totalQuantity === 3) {
+                total += allCart?.data[index]?.price * item.quantity * 0.9 
+            } else if (item.sale_id === 2) {
+                total += allCart?.data[index]?.price * item.quantity * 0.5
+            } else {
+                total += allCart?.data[index]?.price * item.quantity
+            }
+        })
+        setTotalPrice(total)
     }
     useEffect(() => {
         handleCartUpdate()
+
     }, [])
+    console.log(totalPrice);
+    useEffect(() => {
+        if (totalPrice) {
+            onPriceBuy3(totalPrice)
+        }
+    }, [totalPrice])
+
     return (
         <>
             <div className="mt-5 bg-white p-5">

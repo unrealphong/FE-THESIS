@@ -4,6 +4,7 @@ import cart2 from "../../assets/images/icons/icon-bag-3.svg"
 import {
     CreditCardOutlined,
     EnvironmentOutlined,
+    QuestionCircleOutlined,
     UserOutlined,
 } from "@ant-design/icons"
 import { Button, Form, Input, Modal, Radio, Select } from "antd"
@@ -48,6 +49,11 @@ const CheckOut = () => {
         borderColor: "red",
         color: "white",
     }
+    const buttonStyles = {
+        backgroundColor: "gray",
+        borderColor: "gray",
+        color: "white",
+    }
     const nameprovince = (name: any) => {
         setprovinceName(name)
     }
@@ -63,6 +69,7 @@ const CheckOut = () => {
     const nameWard = (name: any) => {
         setWardName(name)
     }
+    const [totalPrice, setTotalPrice] = useState<number>(0);
     const [cartt, setcart] = useState<any>()
     const handleCartUpdate = async () => {
         const storedCarts = JSON.parse(localStorage.getItem("cart")!) || []
@@ -70,10 +77,22 @@ const CheckOut = () => {
         const data = { data: storedCarts }
         const allCart: any = await getCartOrder(data)
         setcart(allCart)
+        console.log(allCart);
+
+        if (allCart?.data?.every((item: any) => item.sale_id === 1) && allCart?.data?.reduce((sum: number, item: any) => sum + item.quantity, 0) === 3) {
+            const total = allCart?.data?.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
+            const discountedTotal = total * 0.9; // Apply 10% discount
+            setTotalPrice(discountedTotal);
+        } else {
+            const total = allCart?.data?.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
+            setTotalPrice(total);
+        }
     }
     useEffect(() => {
         handleCartUpdate()
     }, [])
+    console.log(totalPrice);
+
     const carts = JSON.parse(localStorage.getItem("cart") || "[]")
     const totalCartPrice = cartt?.data?.reduce(
         (total: any, item: any, index: any) =>
@@ -106,7 +125,7 @@ const CheckOut = () => {
             user_id: user?.data?.id,
             recipient_address: `${name ? name : form.getFieldValue("name")}; ${descbill};${adressdetail}, ${wardName}, ${districtName}, ${provinceName}`,
             recipient_phone: phone,
-            total_amount: totalCartPrice,
+            total_amount: price3 > 0 ? price3 : totalCartPrice,
             status: "Pending",
             pay: paymentMethod,
             bill_date: "2004-08-29",
@@ -158,7 +177,26 @@ const CheckOut = () => {
             </>
         )
     }
+    const [price3, setprice3] = useState<any>(0)
+    const buy3 = (price: any) => {
+        setprice3(price)
+        console.log(price);
 
+    }
+    console.log(price3);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOks = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancels = () => {
+        setIsModalOpen(false);
+    };
     return (
         <>
             <main className="body m-36 mt-10 bg-gray-100 p-5">
@@ -413,7 +451,7 @@ const CheckOut = () => {
                         <div className=" ml-4 w-1/4 bg-white p-4">
                             <div className="">
                                 <h5 className="text-xl font-bold">ĐƠN HÀNG</h5>
-                                <div className="mt-5">
+                                {price3 > 0 ? <> <div className="mt-5">
                                     <label
                                         htmlFor="name"
                                         className="pl-1 text-xs font-bold"
@@ -425,17 +463,42 @@ const CheckOut = () => {
                                         className="custom-search  mt-2"
                                         placeholder="Nhập mã giảm giá"
                                         enterButton={
-                                            <Button style={buttonStyle}>
+                                            <Button style={buttonStyles}>
                                                 Áp Dụng
                                             </Button>
                                         }
                                         size="large"
+
                                     />
                                 </div>
-                                <img
-                                    src="https://pm2ec.s3.ap-southeast-1.amazonaws.com/cms/17172282689428000.jpg"
-                                    className="mt-2"
-                                />
+                                    <img
+                                        src="https://pm2ec.s3.ap-southeast-1.amazonaws.com/cms/17172282689428000.jpg"
+                                        className="mt-2"
+                                    /></> : <><div className="mt-5">
+                                        <label
+                                            htmlFor="name"
+                                            className="pl-1 text-xs font-bold"
+                                        >
+                                            MÃ PHIẾU GIẢM GIÁ
+                                        </label>
+
+                                        <Search
+                                            className="custom-search  mt-2"
+                                            placeholder="Nhập mã giảm giá"
+                                            disabled={true}
+                                            enterButton={
+                                                <Button style={buttonStyle} disabled>
+                                                    Áp Dụng
+                                                </Button>
+                                            }
+                                            size="large"
+                                        />
+                                    </div>
+                                    <img
+                                        src="https://pm2ec.s3.ap-southeast-1.amazonaws.com/cms/17172282689428000.jpg"
+                                        className="mt-2"
+                                    /> </>}
+
                                 <hr className="my-4 w-full border-t border-dashed border-gray-500" />
                                 <div className="custom-dash d-flex flex-column gap-2 pb-3">
                                     <div className="mt-5 flex">
@@ -445,10 +508,17 @@ const CheckOut = () => {
                                         </p>
                                     </div>
                                     <div className="mt-3 flex">
-                                        <p className="text-sm">Giảm Giá</p>
+                                        <p className="text-sm mr-1">Giảm Giá </p>
+                                        <QuestionCircleOutlined onClick={showModal} />
+                                        <Modal title="Giảm giá" open={isModalOpen} onOk={handleOks} onCancel={handleCancels}>
+                                            <p>Để có được giảm giá bạn cần mua các sản phẩm có ưu đãi của chúng tôi!</p>
+                                            <p>Đồng thời bạn không thể nhập voucher áp dùng nữa!</p>
+                                        </Modal>
                                         <p className="fw-bold mb-0 ml-auto text-sm font-bold">
-                                            0đ
+                                            - {price3 > 0 ? formatNumber(totalCartPrice - price3) : 0}đ
+
                                         </p>
+
                                     </div>
                                     <div className="mt-3 flex">
                                         <p className="text-sm">Phí Vận Chuyển</p>
@@ -462,7 +532,8 @@ const CheckOut = () => {
                                     <div className="flex">
                                         <h5 className="">Tổng Tiền</h5>
                                         <h5 className="fw-bold mb-0 ml-auto font-bold text-red-500 ">
-                                            {formatNumber(totalCartPrice + 30000)} đ
+                                            {price3 > 0 ? formatNumber(price3 + 30000) : formatNumber(totalCartPrice + 30000)}
+                                            đ
                                         </h5>
                                     </div>
                                 </div>
@@ -478,7 +549,7 @@ const CheckOut = () => {
                     </div>
                 </div>
 
-                <CartInCheckOut />
+                <CartInCheckOut onPriceBuy3={buy3} />
             </main>
         </>
     )

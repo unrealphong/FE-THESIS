@@ -54,6 +54,8 @@ const ProductDetail = () => {
     useEffect(() => {
         fetchProducts()
     }, [])
+    console.log(product);
+
     const [idColor, setIdcolor] = useState()
     const HandlePrice = (value: any) => {
         setIdcolor(value)
@@ -82,6 +84,7 @@ const ProductDetail = () => {
             variant_id: idsize,
             quantity: quantity,
             name_product: product?.name,
+            sale_id: product?.sale_id,
             attributes: [
                 {
                     attribute_name: 81,
@@ -215,7 +218,7 @@ const ProductDetail = () => {
                             )
                         })}
                     </div>
-                    <div className="mt-6 flex">
+                    <div className="mt-6 flex mb-5">
                         <span className="text-sm font-bold ">CHỌN SỐ LƯỢNG</span>
                         <div className="ml-auto flex items-center">
                             <input
@@ -228,7 +231,10 @@ const ProductDetail = () => {
                             />
                         </div>
                     </div>
-                    <div className="mt-10 flex">
+                    {product?.sale_id == 1 ? <span className="mt-10 text-sm text-red-700">Sản phẩm này thuộc loại mua 3 giảm 10%</span> : ""}
+                    {product?.sale_id == 2 ? <span className="mt-10 text-sm text-red-700">Sản phẩm này thuộc loại giảm 50%</span> : ""}
+                    {product?.sale_id == 3 ? <span className="mt-10 text-sm text-red-700">Sản phẩm này thuộc loại mua 1 tặng 1</span> : ""}
+                    <div className=" flex">
                         <button
                             className="w-2/4 rounded border  border-red-400 p-2"
                             style={{ color: "red" }}
