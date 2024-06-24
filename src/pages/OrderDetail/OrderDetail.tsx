@@ -227,7 +227,11 @@ const OrderDetail = () => {
                         <div className="flex">
                             <p className="text-sm">Giảm giá</p>
                             <p className="mb-2 ml-auto text-xl font-bold text-red-500">
-                               -{formatNumber(totalPrice-Number(bill?.total_amount))} đ
+                                -
+                                {formatNumber(
+                                    totalPrice - Number(bill?.total_amount),
+                                )}{" "}
+                                đ
                             </p>
                         </div>
                         <div className="flex">
@@ -239,7 +243,7 @@ const OrderDetail = () => {
                         <div className="flex">
                             <p className="text-xl">Thành tiền</p>
                             <p className="mb-20 ml-auto text-3xl font-bold text-red-500">
-                                {formatNumber(Number(bill?.total_amount)+30000)} đ
+                                {formatNumber(Number(bill?.total_amount) + 30000)} đ
                             </p>
                         </div>
                     </div>

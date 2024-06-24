@@ -18,9 +18,8 @@ const CartInCheckOut = ({ onPriceBuy3 }: any) => {
             totalQuantity += item.quantity
         })
         storedCarts.forEach((item: any, index: any) => {
-
             if (item.sale_id === 1 && totalQuantity === 3) {
-                total += allCart?.data[index]?.price * item.quantity * 0.9 
+                total += allCart?.data[index]?.price * item.quantity * 0.9
             } else if (item.sale_id === 2) {
                 total += allCart?.data[index]?.price * item.quantity * 0.5
             } else {
@@ -31,9 +30,8 @@ const CartInCheckOut = ({ onPriceBuy3 }: any) => {
     }
     useEffect(() => {
         handleCartUpdate()
-
     }, [])
-    console.log(totalPrice);
+    console.log(totalPrice)
     useEffect(() => {
         if (totalPrice) {
             onPriceBuy3(totalPrice)
