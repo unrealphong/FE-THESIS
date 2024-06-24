@@ -26,7 +26,7 @@ const getProductById = async (id: number): Promise<Product | undefined> => {
     }
 }
 
-const createProduct = async (product) => {
+const createProduct = async (product: Product) => {
     try {
         const response = await httpRequest.post("/products", product, {
             headers: {

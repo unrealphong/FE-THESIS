@@ -21,6 +21,8 @@ export const pathName = {
     ADD_PRODUCT: "/quan-ly-san-pham/them",
     UPDATE_PRODUCT: "/quan-ly-san-pham/sua/:id",
     USER_MANAGEMENT: "/quan-ly-nguoi-dung",
+    ADD_USER: "/quan-ly-nguoi-dung/them",
+    UPDATE_USER: "/quan-ly-nguoi-dung/sua/:id",
     ORDER_MANAGEMENT: "/quan-ly-orders",
     ORDER_DETAIL_MANAGEMENT: "/quan-ly-orders/:id",
     ATTR_MANAGEMENT: "quan-ly-attr",
