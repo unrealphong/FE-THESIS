@@ -20,8 +20,6 @@ const getProductById = async (id: number): Promise<Product | undefined> => {
         const response = await httpRequest.get(`/products/${id}`)
         return response.data.data.product
     } catch (error) {
-        console.error(`An error occurred while fetching product with ID ${id}`)
-        toast.error(`Failed to fetch product with ID ${id}. Please try again later.`)
         return undefined
     }
 }
