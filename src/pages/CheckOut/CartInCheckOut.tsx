@@ -6,6 +6,7 @@ const CartInCheckOut = ({ onPriceBuy3 }: any) => {
     const [carts, setCarts] = useState([])
     const [totalPrice, setTotalPrice] = useState(0)
     const [cartt, setcart] = useState<any>()
+    const [check, setcheck] = useState<any>(false)
     const handleCartUpdate = async () => {
         const storedCarts = JSON.parse(localStorage.getItem("cart")!) || []
         setCarts(storedCarts)
@@ -14,16 +15,32 @@ const CartInCheckOut = ({ onPriceBuy3 }: any) => {
         setcart(allCart)
         let total = 0
         let totalQuantity = 0
+        let hasSaleId1 = false;
         storedCarts.forEach((item: any) => {
             totalQuantity += item.quantity
+            if (item.sale_id === 1) {
+                hasSaleId1 = true;
+            }
         })
+
         storedCarts.forEach((item: any, index: any) => {
             if (item.sale_id === 1 && totalQuantity === 3) {
                 total += allCart?.data[index]?.price * item.quantity * 0.9
-            } else if (item.sale_id === 2) {
-                total += allCart?.data[index]?.price * item.quantity * 0.5
+                setcheck(true)
+                console.log(total);
+                
+            } else if (item.sale_id === 2 ) {
+                if (hasSaleId1) {
+                    total += allCart?.data[index]?.price * item.quantity;
+                } else {
+                    total += allCart?.data[index]?.price * item.quantity * 0.5;
+                    setcheck(true);
+                    console.log(total);
+                }
+                
             } else {
                 total += allCart?.data[index]?.price * item.quantity
+                setcheck(false)
             }
         })
         setTotalPrice(total)
@@ -31,10 +48,9 @@ const CartInCheckOut = ({ onPriceBuy3 }: any) => {
     useEffect(() => {
         handleCartUpdate()
     }, [])
-    console.log(totalPrice)
     useEffect(() => {
         if (totalPrice) {
-            onPriceBuy3(totalPrice)
+            onPriceBuy3(totalPrice, check)
         }
     }, [totalPrice])
 

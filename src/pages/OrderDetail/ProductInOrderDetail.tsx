@@ -7,11 +7,11 @@ const ProductInOrderDetail = ({ data }: any) => {
     return (
         <>
             <tr>
-                <td className="w-1/4">
+                <td className="w-2/5">
                     <div className="m-2 flex">
                         <img src={data?.image} className="w-24" />
                         <div className="m-2">
-                            <p className="mb-2 text-sm">{data?.product_name}</p>
+                            <p className="mb-2 text-sm font-bold">{data?.product_name}</p>
                             <span className="text-sm ">
                                 Kích thước:
                                 <span className="font-bold">{size}</span>

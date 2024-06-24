@@ -17,7 +17,7 @@ const ColorInProductDetail = ({
     let idvarians: any = undefined
     let id_attribute_value: any = undefined
     product?.forEach((item) => {
-        const foundObj = item.attribute_names[0]
+        const foundObj = item.attribute_values[0]
 
         if (foundObj?.value == data?.value) {
             foundValue = foundObj.value
