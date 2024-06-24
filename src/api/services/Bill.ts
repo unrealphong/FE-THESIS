@@ -199,6 +199,28 @@ const addHistoryBills = async (data: any) => {
         return undefined
     }
 }
+const GetBillPendingWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user-pending/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
+const GetBillConfirmWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user-confirm/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
 export {
     addBill,
     getAllBill,
@@ -218,4 +240,6 @@ export {
     updateDone,
     GetBillWithUser,
     addHistoryBills,
+    GetBillPendingWithUser,
+    GetBillConfirmWithUser,
 }

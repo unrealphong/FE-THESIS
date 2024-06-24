@@ -78,7 +78,7 @@ const Cart = () => {
                     <div className="row flex p-0">
                         <div className="col-xl-8 col-sm-12 table-responsive w-3/4">
                             <div className="bg-gray-100 p-4">
-                                {cartt?.length <= 0 ? (
+                                {carts?.length <= 0 ? (
                                     <>
                                         <div>
                                             <h5 className="mt-5 flex items-center justify-center text-xl font-bold">

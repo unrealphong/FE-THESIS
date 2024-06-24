@@ -1,4 +1,4 @@
-import { getBillconfirm } from "@/api/services/Bill"
+import { GetBillConfirmWithUser, getBillconfirm } from "@/api/services/Bill"
 import { LoadingOutlined } from "@ant-design/icons"
 import { Pagination, Spin } from "antd"
 import { useEffect, useState } from "react"
@@ -8,9 +8,11 @@ const ListOrderConFirm = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
     const [check1, setcheck] = useState<boolean>()
+    const user: any = localStorage.getItem("user")
+    const users = JSON.parse(user) || []
     const fetchBills = async () => {
         try {
-            const allBills: any = await getBillconfirm()
+            const allBills: any = await GetBillConfirmWithUser(users?.data?.id)
             setbill(allBills)
         } catch {
         } finally {
@@ -26,7 +28,7 @@ const ListOrderConFirm = () => {
     const itemsPerPage = 10
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = bill?.slice(indexOfFirstItem, indexOfLastItem)
+    const currentItems = bill?.data?.slice(indexOfFirstItem, indexOfLastItem)
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page)
