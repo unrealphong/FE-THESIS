@@ -19,7 +19,7 @@ const ListOrderPending = () => {
             setLoading(false)
         }
     }
-    console.log(bill);
+    console.log(bill)
 
     useEffect(() => {
         fetchBills()

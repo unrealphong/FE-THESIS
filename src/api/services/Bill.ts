@@ -241,5 +241,5 @@ export {
     GetBillWithUser,
     addHistoryBills,
     GetBillPendingWithUser,
-    GetBillConfirmWithUser
+    GetBillConfirmWithUser,
 }

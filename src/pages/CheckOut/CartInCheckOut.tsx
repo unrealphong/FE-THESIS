@@ -15,11 +15,11 @@ const CartInCheckOut = ({ onPriceBuy3 }: any) => {
         setcart(allCart)
         let total = 0
         let totalQuantity = 0
-        let hasSaleId1 = false;
+        let hasSaleId1 = false
         storedCarts.forEach((item: any) => {
             totalQuantity += item.quantity
             if (item.sale_id === 1) {
-                hasSaleId1 = true;
+                hasSaleId1 = true
             }
         })
 
@@ -27,17 +27,15 @@ const CartInCheckOut = ({ onPriceBuy3 }: any) => {
             if (item.sale_id === 1 && totalQuantity === 3) {
                 total += allCart?.data[index]?.price * item.quantity * 0.9
                 setcheck(true)
-                console.log(total);
-                
-            } else if (item.sale_id === 2 ) {
+                console.log(total)
+            } else if (item.sale_id === 2) {
                 if (hasSaleId1) {
-                    total += allCart?.data[index]?.price * item.quantity;
+                    total += allCart?.data[index]?.price * item.quantity
                 } else {
-                    total += allCart?.data[index]?.price * item.quantity * 0.5;
-                    setcheck(true);
-                    console.log(total);
+                    total += allCart?.data[index]?.price * item.quantity * 0.5
+                    setcheck(true)
+                    console.log(total)
                 }
-                
             } else {
                 total += allCart?.data[index]?.price * item.quantity
                 setcheck(false)

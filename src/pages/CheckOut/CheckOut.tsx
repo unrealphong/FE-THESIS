@@ -191,7 +191,7 @@ const CheckOut = () => {
     }
     const [price3, setprice3] = useState<any>(0)
     const [check, setcheck] = useState<any>()
-    const buy3 = (price: any, check:any) => {
+    const buy3 = (price: any, check: any) => {
         setprice3(price)
         setcheck(check)
     }
@@ -551,11 +551,11 @@ const CheckOut = () => {
                                             </p>
                                         </Modal>
                                         <p className="fw-bold mb-0 ml-auto text-sm font-bold">
-                                            {check==true
+                                            {check == true
                                                 ? formatNumber(
-                                                    totalCartPrice - price3,
-                                                )
-                                                : 0 }
+                                                      totalCartPrice - price3,
+                                                  )
+                                                : 0}
                                             đ
                                         </p>
                                     </div>

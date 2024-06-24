@@ -11,7 +11,9 @@ const ProductInOrderDetail = ({ data }: any) => {
                     <div className="m-2 flex">
                         <img src={data?.image} className="w-24" />
                         <div className="m-2">
-                            <p className="mb-2 text-sm font-bold">{data?.product_name}</p>
+                            <p className="mb-2 text-sm font-bold">
+                                {data?.product_name}
+                            </p>
                             <span className="text-sm ">
                                 Kích thước:
                                 <span className="font-bold">{size}</span>
