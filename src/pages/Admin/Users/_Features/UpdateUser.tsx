@@ -4,12 +4,24 @@ import { ArrowLeftOutlined, UploadOutlined } from "@ant-design/icons"
 import { useNavigate, useParams } from "react-router-dom"
 import { getUser, updateUser } from "@/api/services/UserService"
 import { Controller, useForm } from "react-hook-form"
-import { getAllProvince, getAllDistrict, getAllWard } from "@/api/services/map" // Import location services
+import { getAllProvince, getAllDistrict, getAllWard } from "@/api/services/map"
 
 const { Option } = Select
 
 const UpdateUser: React.FC = () => {
-    const { control, handleSubmit, setValue } = useForm()
+    const { control, handleSubmit, setValue } = useForm({
+        defaultValues: {
+            address: "",
+            city: "",
+            district: "",
+            ward: "",
+            name: "",
+            email: "",
+            number: "",
+            role_id: null,
+            avatar: null,
+        },
+    })
     const navigate = useNavigate()
     const { id } = useParams<{ id: string }>()
     const [fileList, setFileList] = useState<any[]>([])
@@ -18,18 +30,44 @@ const UpdateUser: React.FC = () => {
     const [wards, setWards] = useState<any[]>([])
     const [selectedProvince, setSelectedProvince] = useState<any>(null)
     const [selectedDistrict, setSelectedDistrict] = useState<any>(null)
+
     useEffect(() => {
-        const fetchUserDetails = async () => {
+        const fetchData = async () => {
             try {
                 const user = await getUser(id)
-                console.log(user)
                 const { address } = user
                 if (address) {
                     const addressParts = address.split(",")
-                    setValue("address", addressParts[0]?.trim())
-                    setValue("city", addressParts[3]?.trim())
-                    setValue("district", addressParts[2]?.trim())
-                    setValue("ward", addressParts[1]?.trim())
+                    const [specificAddress, ward, district, city] = addressParts.map(
+                        (part) => part.trim(),
+                    )
+                    setValue("address", specificAddress)
+                    setValue("city", city)
+                    setValue("district", district)
+                    setValue("ward", ward)
+
+                    const provincesData = await getAllProvince()
+                    setProvinces(provincesData)
+                    const selectedProvince = provincesData.find(
+                        (province) => province.province_name === city,
+                    )
+                    if (selectedProvince) {
+                        setSelectedProvince(selectedProvince.province_id)
+                        const districtsData = await getAllDistrict(
+                            selectedProvince.province_id,
+                        )
+                        setDistricts(districtsData)
+                        const selectedDistrict = districtsData.find(
+                            (district) => district.district_name === district,
+                        )
+                        if (selectedDistrict) {
+                            setSelectedDistrict(selectedDistrict.district_id)
+                            const wardsData = await getAllWard(
+                                selectedDistrict.district_id,
+                            )
+                            setWards(wardsData)
+                        }
+                    }
                 }
                 setValue("name", user.name)
                 setValue("email", user.email)
@@ -41,22 +79,8 @@ const UpdateUser: React.FC = () => {
             }
         }
 
-        const fetchProvinces = async () => {
-            const data = await getAllProvince()
-            setProvinces(data)
-        }
-
-        fetchUserDetails()
-        fetchProvinces()
+        fetchData()
     }, [id, setValue])
-
-    useEffect(() => {
-        const fetchProvinces = async () => {
-            const provincesData = await getAllProvince()
-            setProvinces(provincesData)
-        }
-        fetchProvinces()
-    }, [])
 
     useEffect(() => {
         const fetchDistricts = async () => {
@@ -87,6 +111,7 @@ const UpdateUser: React.FC = () => {
     }
 
     const onSubmit = async (data: any) => {
+        console.log(data)
         try {
             const provinceName =
                 provinces.find((p) => p.province_id === data.city)?.province_name ||
@@ -97,7 +122,7 @@ const UpdateUser: React.FC = () => {
             const wardName =
                 wards.find((w) => w.ward_id === data.ward)?.ward_name || ""
             const fullAddress = `${data.address}, ${wardName}, ${districtName}, ${provinceName}`
-            console.log(data)
+            console.log("Full Address:", fullAddress)
             await updateUser(id, {
                 ...data,
                 avatar: fileList[0]?.originFileObj,

@@ -25,7 +25,7 @@ const getUser = async (id: string) => {
     }
 }
 
-const updateUser = async (id: string, data: any) => {
+const updateUser = async (id: number, data: User) => {
     try {
         const response = await httpRequest.put(`/users/${id}`, data)
         return response.data
@@ -34,4 +34,14 @@ const updateUser = async (id: string, data: any) => {
         throw error
     }
 }
-export { getAllUser, createUser, getUser, updateUser }
+const deleteUser = async (id: number) => {
+    try {
+        const response = await httpRequest.delete(`/users/${id}`)
+        toast.success("User deleted successfully.")
+        return response.data
+    } catch (error) {
+        toast.error("Failed to delete user.")
+        throw error
+    }
+}
+export { getAllUser, createUser, getUser, updateUser, deleteUser }

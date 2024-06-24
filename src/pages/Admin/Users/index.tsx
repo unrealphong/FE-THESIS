@@ -1,17 +1,16 @@
 import { User } from "@/@types/user"
-import { getAllUser } from "@/api/services/UserService"
-import { Button, Form, Input, Modal, Popconfirm, Table } from "antd"
+import { deleteUser, getAllUser } from "@/api/services/UserService"
+import { Button, Modal, Popconfirm, Table } from "antd"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom" // Import useNavigate
+import { toast } from "react-toastify"
 
 const UserManagement = () => {
     const [users, setUsers] = useState<User[]>([])
-    const [isModalVisible, setIsModalVisible] = useState(false)
     const [isViewModalVisible, setIsViewModalVisible] = useState(false)
     const [viewingUser, setViewingUser] = useState<User>()
 
-    const [form] = Form.useForm()
-    const navigate = useNavigate() // Initialize useNavigate
+    const navigate = useNavigate()
 
     const fetchUser = async () => {
         const response = await getAllUser()
@@ -32,8 +31,13 @@ const UserManagement = () => {
         setIsViewModalVisible(false)
     }
 
-    const handleDelete = (id: number) => {
-        setUsers(users.filter((user) => user.id !== id))
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteUser(id)
+            setUsers(users.filter((user) => user.id !== id))
+        } catch (error) {
+            console.error("Error deleting user:", error)
+        }
     }
 
     const columns = [

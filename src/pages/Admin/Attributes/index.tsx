@@ -69,7 +69,7 @@ const AttributeManagement = () => {
     const handleAddAttributeValue = async (values: AttributeValue) => {
         try {
             if (currentAttribute) {
-                await createAttributeValue(currentAttribute.id, values)
+                await createAttributeValue(values)
                 fetchAttributes()
                 setIsValueModalVisible(false)
                 form.resetFields()
@@ -82,11 +82,7 @@ const AttributeManagement = () => {
     const handleEditAttributeValue = async (values: AttributeValue) => {
         try {
             if (currentAttribute && currentAttributeValue) {
-                await updateAttributeValue(
-                    currentAttribute.id,
-                    currentAttributeValue.id,
-                    values,
-                )
+                await updateAttributeValue(currentAttributeValue.id, values)
                 fetchAttributes()
                 setIsValueModalVisible(false)
                 form.resetFields()
@@ -189,7 +185,11 @@ const AttributeManagement = () => {
             title: "Value",
             dataIndex: "value",
             key: "value",
+            render: (text: string, record: AttributeValue) => {
+                return record.value
+            },
         },
+
         {
             title: "Action",
             key: "action",
@@ -212,7 +212,6 @@ const AttributeManagement = () => {
             ),
         },
     ]
-
     return (
         <div className="content">
             <Button
