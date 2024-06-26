@@ -1,9 +1,12 @@
-import { Attribute } from "@/@types/product"
+import { Attribute, AttributeValue } from "@/@types/product"
 import {
     createAttribute,
     deleteAttribute,
     getAllAttribute,
     updateAttribute,
+    createAttributeValue,
+    deleteAttributeValue,
+    updateAttributeValue,
 } from "@/api/services/AttributeService"
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons"
 import { Button, Form, Input, Modal, Space, Table } from "antd"
@@ -13,7 +16,10 @@ const AttributeManagement = () => {
     const [attributes, setAttributes] = useState<Attribute[]>([])
     const [isAddModalVisible, setIsAddModalVisible] = useState(false)
     const [isEditModalVisible, setIsEditModalVisible] = useState(false)
+    const [isValueModalVisible, setIsValueModalVisible] = useState(false)
     const [currentAttribute, setCurrentAttribute] = useState<Attribute | null>(null)
+    const [currentAttributeValue, setCurrentAttributeValue] =
+        useState<AttributeValue | null>(null)
     const [form] = Form.useForm()
 
     useEffect(() => {
@@ -60,6 +66,44 @@ const AttributeManagement = () => {
         }
     }
 
+    const handleAddAttributeValue = async (values: AttributeValue) => {
+        try {
+            if (currentAttribute) {
+                await createAttributeValue(values)
+                fetchAttributes()
+                setIsValueModalVisible(false)
+                form.resetFields()
+            }
+        } catch (error) {
+            console.error("Failed to add attribute value:", error)
+        }
+    }
+
+    const handleEditAttributeValue = async (values: AttributeValue) => {
+        try {
+            if (currentAttribute && currentAttributeValue) {
+                await updateAttributeValue(currentAttributeValue.id, values)
+                fetchAttributes()
+                setIsValueModalVisible(false)
+                form.resetFields()
+            }
+        } catch (error) {
+            console.error("Failed to edit attribute value:", error)
+        }
+    }
+
+    const handleDeleteAttributeValue = async (
+        attributeId: number,
+        attributeValueId: number,
+    ) => {
+        try {
+            await deleteAttributeValue(attributeId, attributeValueId)
+            fetchAttributes()
+        } catch (error) {
+            console.error("Failed to delete attribute value:", error)
+        }
+    }
+
     const showDeleteConfirm = (attribute: Attribute) => {
         Modal.confirm({
             title: "Confirm Deletion",
@@ -71,7 +115,21 @@ const AttributeManagement = () => {
         })
     }
 
-    const columns = [
+    const showDeleteValueConfirm = (
+        attributeId: number,
+        attributeValue: AttributeValue,
+    ) => {
+        Modal.confirm({
+            title: "Confirm Deletion",
+            content: "Are you sure you want to delete this attribute value?",
+            okText: "Delete",
+            okType: "danger",
+            cancelText: "Cancel",
+            onOk: () => handleDeleteAttributeValue(attributeId, attributeValue.id),
+        })
+    }
+
+    const attributeColumns = [
         {
             title: "ID",
             dataIndex: "id",
@@ -82,11 +140,6 @@ const AttributeManagement = () => {
             title: "Attribute Name",
             dataIndex: "name",
             key: "name",
-        },
-        {
-            title: "Attribute Type",
-            dataIndex: "type",
-            key: "type",
         },
         {
             title: "Action",
@@ -106,11 +159,59 @@ const AttributeManagement = () => {
                         onClick={() => showDeleteConfirm(record)}
                         danger
                     />
+                    <Button
+                        icon={<PlusOutlined />}
+                        onClick={() => {
+                            setCurrentAttribute(record)
+                            setIsValueModalVisible(true)
+                        }}
+                    >
+                        Add Value
+                    </Button>
                 </Space>
             ),
         },
     ]
 
+    const valueColumns = (attribute: Attribute) => [
+        {
+            title: "ID",
+            dataIndex: "id",
+            key: "id",
+            render: (_text: string, _record: AttributeValue, index: number) =>
+                index + 1,
+        },
+        {
+            title: "Value",
+            dataIndex: "value",
+            key: "value",
+            render: (text: string, record: AttributeValue) => {
+                return record.value
+            },
+        },
+
+        {
+            title: "Action",
+            key: "action",
+            render: (record: AttributeValue) => (
+                <Space size="middle">
+                    <Button
+                        icon={<EditOutlined />}
+                        onClick={() => {
+                            setCurrentAttributeValue(record)
+                            form.setFieldsValue(record)
+                            setIsValueModalVisible(true)
+                        }}
+                    />
+                    <Button
+                        icon={<DeleteOutlined />}
+                        onClick={() => showDeleteValueConfirm(attribute.id, record)}
+                        danger
+                    />
+                </Space>
+            ),
+        },
+    ]
     return (
         <div className="content">
             <Button
@@ -122,7 +223,21 @@ const AttributeManagement = () => {
                 Add New Attribute
             </Button>
 
-            <Table columns={columns} dataSource={attributes} rowKey={"id"} />
+            <Table
+                columns={attributeColumns}
+                dataSource={attributes}
+                rowKey={"id"}
+                expandable={{
+                    expandedRowRender: (record) => (
+                        <Table
+                            columns={valueColumns(record)}
+                            dataSource={record.attribute_values}
+                            rowKey={"id"}
+                            pagination={false}
+                        />
+                    ),
+                }}
+            />
 
             <Modal
                 title="Add New Attribute"
@@ -138,18 +253,6 @@ const AttributeManagement = () => {
                             {
                                 required: true,
                                 message: "Please input the attribute name!",
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Attribute Type"
-                        name="type"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please input the attribute type!",
                             },
                         ]}
                     >
@@ -182,18 +285,6 @@ const AttributeManagement = () => {
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item
-                        label="Attribute Type"
-                        name="type"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please input the attribute type!",
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">
                             Save Changes
@@ -201,9 +292,46 @@ const AttributeManagement = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+
+            <Modal
+                title={
+                    currentAttributeValue
+                        ? "Edit Attribute Value"
+                        : "Add Attribute Value"
+                }
+                open={isValueModalVisible}
+                onCancel={() => setIsValueModalVisible(false)}
+                footer={null}
+            >
+                <Form
+                    form={form}
+                    onFinish={
+                        currentAttributeValue
+                            ? handleEditAttributeValue
+                            : handleAddAttributeValue
+                    }
+                >
+                    <Form.Item
+                        label="Value"
+                        name="value"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please input the attribute value!",
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            {currentAttributeValue ? "Save Changes" : "Add Value"}
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </div>
     )
-
 }
 
 export default AttributeManagement

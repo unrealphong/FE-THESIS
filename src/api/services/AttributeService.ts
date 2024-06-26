@@ -85,6 +85,57 @@ const getAllAttributeValue = async (): Promise<AttributeValue[]> => {
         return []
     }
 }
+const getAttributeValueById = async (id: string): Promise<AttributeValue | null> => {
+    try {
+        const response: AxiosResponse<{ data: AttributeValue }> =
+            await httpRequest.get(`attribute-values/${id}`)
+        return response.data.data
+    } catch (error) {
+        console.error(`Error fetching attribute value with ID ${id}:`, error)
+        toast.error("Failed to fetch attribute value. Please try again later.")
+        return null
+    }
+}
+
+const createAttributeValue = async (
+    newValue: AttributeValue,
+): Promise<AttributeValue | null> => {
+    try {
+        const response: AxiosResponse<{ data: AttributeValue }> =
+            await httpRequest.post("attribute-values", newValue)
+        return response.data.data
+    } catch (error) {
+        console.error("Error creating attribute value:", error)
+        toast.error("Failed to create attribute value. Please try again later.")
+        return null
+    }
+}
+const deleteAttributeValue = async (id: string): Promise<boolean> => {
+    try {
+        await httpRequest.delete(`attribute-values/${id}`)
+        return true // Return true if deletion is successful
+    } catch (error) {
+        console.error(`Error deleting attribute value with ID ${id}:`, error)
+        toast.error("Failed to delete attribute value. Please try again later.")
+        return false // Return false if deletion fails
+    }
+}
+const updateAttributeValue = async (
+    id: string,
+    updatedValue: AttributeValue,
+): Promise<AttributeValue | null> => {
+    try {
+        const response: AxiosResponse<{ data: AttributeValue }> =
+            await httpRequest.put(`attribute-values/${id}`, updatedValue)
+        return response.data.data
+    } catch (error) {
+        console.error(`Error updating attribute value with ID ${id}:`, error)
+        toast.error("Failed to update attribute value. Please try again later.")
+        return null
+    }
+}
+
+
 export {
     createAttribute,
     deleteAttribute,
@@ -92,4 +143,9 @@ export {
     getAttributeById,
     updateAttribute,
     getAllAttributeValue,
+
+    getAttributeValueById,
+    createAttributeValue,
+    deleteAttributeValue,
+    updateAttributeValue,
 }

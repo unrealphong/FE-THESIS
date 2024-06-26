@@ -1,9 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
 import { toast } from "react-toastify"
 
-const baseUrl = "https://vapi.vnappmob.com/api/province/"
+const baseUrl = "https://vapi.vnappmob.com/api/province"
 const requestConfig: AxiosRequestConfig = {
-    baseURL: import.meta.env.VITE_ENDPOINT_URL || `${baseUrl}`,
+    baseURL: `${baseUrl}`,
     timeout: import.meta.env.VITE_REQUEST_TIMEOUT || 90 * 1000,
     headers: {
         "Content-Type": "application/json",
@@ -14,6 +14,7 @@ const httpRequest = axios.create(requestConfig)
 const getAllProvince = async () => {
     try {
         const response: any = await httpRequest.get("/")
+        console.log(response)
         return response?.data?.results
     } catch (error) {
         toast.error("Lấy tỉnh thất bại.")

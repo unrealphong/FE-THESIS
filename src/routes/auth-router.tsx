@@ -8,7 +8,10 @@ import AddProduct from "@/pages/Admin/Products/_Features/AddProduct"
 import UpdateProduct from "@/pages/Admin/Products/_Features/UpdateProduct"
 import ProductManagement from "@/pages/Admin/Products/ProductList"
 import UserManagement from "@/pages/Admin/Users"
+import AddUser from "@/pages/Admin/Users/_Features/AddUser"
+import UpdateUser from "@/pages/Admin/Users/_Features/UpdateUser"
 import { pathName } from "@/routes/path-name"
+import { element } from "prop-types"
 export const AuthRouter = [
     {
         path: pathName.DASHBOARD,
@@ -22,10 +25,6 @@ export const AuthRouter = [
         path: pathName.PRODUCT_MANAGEMENT,
         element: <ProductManagement />,
     },
-    // {
-    //   path: pathName.VARIANT_MANAGEMENT,
-    //   element: <VariantManagement />,
-    // },
     {
         path: pathName.UPDATE_PRODUCT,
         element: <UpdateProduct />,
@@ -37,6 +36,14 @@ export const AuthRouter = [
     {
         path: pathName.USER_MANAGEMENT,
         element: <UserManagement />,
+    },
+    {
+        path: pathName.ADD_USER,
+        element: <AddUser />,
+    },
+    {
+        path: pathName.UPDATE_USER,
+        element: <UpdateUser />,
     },
     {
         path: pathName.ORDER_MANAGEMENT,
