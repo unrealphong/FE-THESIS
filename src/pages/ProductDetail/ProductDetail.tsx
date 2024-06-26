@@ -159,12 +159,10 @@ const ProductDetail = () => {
                 </div>
                 <div className="w-1.6/3 ">
                     <div className="flex">
-                        <button className="rounded bg-red-500 pl-2 pr-2 text-white">
-                            bán chạy
-                        </button>
-                        <button className="ml-2 rounded bg-green-500 pl-2 pr-2 text-white">
-                            free ship
-                        </button>
+                        {product?.sale_id ? <button className="rounded bg-red-500 pl-2 pr-2 text-white">
+                            Sale
+                        </button> : ""}
+
                     </div>
                     <div className="mt-3 text-xl font-bold">{product?.name}</div>
                     <span>SKU: F9UVC020M-015</span>
@@ -182,6 +180,7 @@ const ProductDetail = () => {
                         data={product?.variants}
                         idcolor={idColor}
                         onPrice={price}
+                        sale_id={product?.sale_id}
                     />
                     <hr className="my-4  w-full border-t border-dashed border-gray-400" />
                     <span className="text-sm font-bold">MÀU SẮC </span>
@@ -231,27 +230,6 @@ const ProductDetail = () => {
                             />
                         </div>
                     </div>
-                    {product?.sale_id == 1 ? (
-                        <span className="mt-10 text-sm text-red-700">
-                            Sản phẩm này thuộc loại mua 3 giảm 10%
-                        </span>
-                    ) : (
-                        ""
-                    )}
-                    {product?.sale_id == 2 ? (
-                        <span className="mt-10 text-sm text-red-700">
-                            Sản phẩm này thuộc loại giảm 50%
-                        </span>
-                    ) : (
-                        ""
-                    )}
-                    {product?.sale_id == 3 ? (
-                        <span className="mt-10 text-sm text-red-700">
-                            Sản phẩm này thuộc loại mua 1 tặng 1
-                        </span>
-                    ) : (
-                        ""
-                    )}
                     <div className=" flex">
                         <button
                             className="w-2/4 rounded border  border-red-400 p-2"

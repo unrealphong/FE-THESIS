@@ -1,15 +1,17 @@
 import cart from "../../assets/images/icons/icon-bag.svg"
 import cart1 from "../../assets/images/icons/icon-bag-2.svg"
 import cart2 from "../../assets/images/icons/icon-bag-3.svg"
-import { ArrowRightOutlined } from "@ant-design/icons"
+import { ArrowRightOutlined, LoadingOutlined } from "@ant-design/icons"
 import { useEffect, useState } from "react"
 import ProductInCart from "./ProductInCart"
 import formatNumber from "@/utilities/FormatTotal"
 import { Link } from "react-router-dom"
 import { getCartOrder } from "@/api/services/Order"
+import { getAllSale } from "@/api/services/Sale"
+import { Button, Spin } from "antd"
 
 const Cart = () => {
-    const [carts, setCarts] = useState([])
+    const [carts, setCarts] = useState<any>([])
     const [totalPrice, setTotalPrice] = useState(0)
     const [cartt, setcart] = useState<any>()
     const [check, setcheck] = useState<any>(0)
@@ -23,23 +25,35 @@ const Cart = () => {
     const carttt = (cart: any) => {
         setcheck(cart)
     }
-    const calculateTotalClick = () => {
+    const [loading, setloading] = useState(true)
+    const calculateTotalClick = async () => {
         let total = 0
 
-        cartt?.data?.forEach((product: any) => {
+        const promises = cartt?.data?.map(async (product: any, index: any) => {
             const cartItem: any = carts.find(
-                (item: any) => item.variant_id === product.id,
+                (item: any) => item.variant_id === product.variant_id,
             )
+            const cartSale_id: any = carts[index]?.sale_id
+
+            const allSale = await getAllSale()
+            const sale: any = allSale?.find((data1: any) => data1?.id == cartSale_id)?.name
+            const totalSale: any = (product.price * sale) / 100
             if (cartItem) {
-                const price = parseFloat(product.price)
+                const price = cartSale_id ? (product.price - totalSale) : (product.price)
                 const quantity = parseInt(cartItem.quantity, 10)
                 if (!isNaN(price) && !isNaN(quantity)) {
                     total += price * quantity
+                    console.log(total);
                 }
             }
+            setloading(false)
         })
+        await Promise.all(promises);
         setTotalPrice(total)
+
     }
+
+
     useEffect(() => {
         handleCartUpdate()
     }, [check])
@@ -158,17 +172,30 @@ const Cart = () => {
                                 </div>
 
                                 <div className="flex items-center justify-center ">
-                                    <Link to={"/checkout"}>
-                                        <button
-                                            className={`btn w-full ${cartt?.length <= 0 ? "bg-gray-500" : "bg-red-500"} flex items-center  justify-center rounded p-2 pl-10 pr-10 text-white`}
+                                    {loading ? <>
+                                      
+                                        <Button
+                                            className={`btn w-full ${cartt?.length <= 0 ? "bg-gray-500" : "bg-gray-400"} flex items-center  justify-center rounded p-2 pl-10 pr-10 text-white`}
                                             disabled={
                                                 cartt?.length <= 0 ? true : false
                                             }
                                         >
-                                            Tiếp Tục Thanh Toán{" "}
-                                            <ArrowRightOutlined />
-                                        </button>
-                                    </Link>
+                                            <Spin indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />} />
+                                        </Button></>
+                                        : <Link to={"/checkout"}>
+
+                                            <Button
+                                                className={`btn w-full ${cartt?.length <= 0 ? "bg-gray-500" : "bg-red-500"} flex items-center  justify-center rounded p-2 pl-10 pr-10 text-white`}
+                                                disabled={
+                                                    cartt?.length <= 0 ? true : false
+                                                }
+                                            >
+                                                Tiếp Tục Thanh Toán     <ArrowRightOutlined />
+
+
+                                            </Button>
+                                        </Link>}
+
                                 </div>
                             </div>
                         </div>

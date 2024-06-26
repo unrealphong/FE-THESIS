@@ -53,6 +53,7 @@ const NameListOrderShiping = ({ data, onCheck }: any) => {
             })
         }
     }
+    const total: any = Number(data?.total_amount)
     return (
         <>
             {loading ? (
@@ -99,7 +100,7 @@ const NameListOrderShiping = ({ data, onCheck }: any) => {
                             className="p-2 text-center font-normal "
                             style={{ width: "10%" }}
                         >
-                            {formatNumber(data?.total_amount)} đ
+                                {formatNumber(total + 30000)} đ
                         </td>
                         <td className="p-2 text-center font-normal">
                             {data?.created_at.substring(0, 19)}

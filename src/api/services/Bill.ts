@@ -221,6 +221,39 @@ const GetBillConfirmWithUser = async (id: any) => {
         return undefined
     }
 }
+const GetBillShipingWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user-shiping/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
+const GetBillDoneWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user-done/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
+const GetBillCancelWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user-cancel/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
 export {
     addBill,
     getAllBill,
@@ -242,4 +275,7 @@ export {
     addHistoryBills,
     GetBillPendingWithUser,
     GetBillConfirmWithUser,
+    GetBillShipingWithUser,
+    GetBillDoneWithUser,
+    GetBillCancelWithUser
 }

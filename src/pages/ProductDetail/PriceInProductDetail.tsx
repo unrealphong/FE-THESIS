@@ -1,14 +1,15 @@
 import { CheckCircleOutlined } from "@ant-design/icons"
 import formatNumber from "../../utilities/FormatTotal"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { getAllSale } from "@/api/services/Sale"
 
-const PriceInProductDetail = ({ data, idcolor, onPrice }: any) => {
+const PriceInProductDetail = ({ data, idcolor, onPrice, sale_id }: any) => {
     if (!Array.isArray(data) || data.length === 0) {
         return <div></div>
     }
     const data1 = data[0]
     const priceProduct = data?.find((data) =>
-        data?.attribute_names?.find((data3: any) => data3?.value === idcolor),
+        data?.attribute_values?.find((data3: any) => data3?.value === idcolor),
     )?.price
     console.log(priceProduct)
 
@@ -17,19 +18,34 @@ const PriceInProductDetail = ({ data, idcolor, onPrice }: any) => {
             onPrice(priceProduct)
         }
     }, [priceProduct, onPrice])
+    console.log(sale_id);
+    const [sales, setsale] = useState<any>([])
+    useEffect(() => {
+        const fetchSale = async () => {
+            const allsale: any = await getAllSale()
+            setsale(allsale)
+        }
+
+        fetchSale()
+    }, [])
+    const sale = sales?.find((data1: any) => data1?.id == sale_id)?.name
+    const totalPrice = (data1?.price * sale) / 100
+    const totalPrice1 = (priceProduct * sale) / 100
     return (
         <>
             <div className="mt-5 flex ">
                 <p className="text-xl font-bold  text-red-500">
                     {idcolor ? (
-                        <>{formatNumber(priceProduct)} đ</>
+                        <>{sale ? formatNumber(priceProduct - totalPrice1) : formatNumber(priceProduct)} đ</>
                     ) : (
-                        <>{formatNumber(data1?.price)} đ</>
+                            <>{sale ? formatNumber(data1?.price - totalPrice) : formatNumber(data1?.price)} đ</>
                     )}
                 </p>
-                {/* <p className="text-xm ml-2 mt-1 text-gray-400 line-through">
-                   {data1?.price} đ
-                </p> */}
+                {sale ? <> <p className="text-xm ml-2 mt-1 text-gray-400 line-through">
+                    {idcolor ? formatNumber(priceProduct) : formatNumber(data1?.price)} đ
+
+                </p></> : <></>}
+
                 <p className="ml-auto mt-1 font-bold">
                     Còn Hàng
                     <CheckCircleOutlined
