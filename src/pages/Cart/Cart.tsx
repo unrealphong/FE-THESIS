@@ -36,23 +36,23 @@ const Cart = () => {
             const cartSale_id: any = carts[index]?.sale_id
 
             const allSale = await getAllSale()
-            const sale: any = allSale?.find((data1: any) => data1?.id == cartSale_id)?.name
+            const sale: any = allSale?.find(
+                (data1: any) => data1?.id == cartSale_id,
+            )?.name
             const totalSale: any = (product.price * sale) / 100
             if (cartItem) {
-                const price = cartSale_id ? (product.price - totalSale) : (product.price)
+                const price = cartSale_id ? product.price - totalSale : product.price
                 const quantity = parseInt(cartItem.quantity, 10)
                 if (!isNaN(price) && !isNaN(quantity)) {
                     total += price * quantity
-                    console.log(total);
+                    console.log(total)
                 }
             }
             setloading(false)
         })
-        await Promise.all(promises);
+        await Promise.all(promises)
         setTotalPrice(total)
-
     }
-
 
     useEffect(() => {
         handleCartUpdate()
@@ -172,30 +172,37 @@ const Cart = () => {
                                 </div>
 
                                 <div className="flex items-center justify-center ">
-                                    {loading ? <>
-                                      
-                                        <Button
-                                            className={`btn w-full ${cartt?.length <= 0 ? "bg-gray-500" : "bg-gray-400"} flex items-center  justify-center rounded p-2 pl-10 pr-10 text-white`}
-                                            disabled={
-                                                cartt?.length <= 0 ? true : false
-                                            }
-                                        >
-                                            <Spin indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />} />
-                                        </Button></>
-                                        : <Link to={"/checkout"}>
-
+                                    {loading ? (
+                                        <>
+                                            <Button
+                                                className={`btn w-full ${cartt?.length <= 0 ? "bg-gray-500" : "bg-gray-400"} flex items-center  justify-center rounded p-2 pl-10 pr-10 text-white`}
+                                                disabled={
+                                                    cartt?.length <= 0 ? true : false
+                                                }
+                                            >
+                                                <Spin
+                                                    indicator={
+                                                        <LoadingOutlined
+                                                            style={{ fontSize: 16 }}
+                                                            spin
+                                                        />
+                                                    }
+                                                />
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <Link to={"/checkout"}>
                                             <Button
                                                 className={`btn w-full ${cartt?.length <= 0 ? "bg-gray-500" : "bg-red-500"} flex items-center  justify-center rounded p-2 pl-10 pr-10 text-white`}
                                                 disabled={
                                                     cartt?.length <= 0 ? true : false
                                                 }
                                             >
-                                                Tiếp Tục Thanh Toán     <ArrowRightOutlined />
-
-
+                                                Tiếp Tục Thanh Toán{" "}
+                                                <ArrowRightOutlined />
                                             </Button>
-                                        </Link>}
-
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
                         </div>

@@ -101,7 +101,7 @@ const NameProductInListOrderConfirm = ({ data, onCheck }: any) => {
                             className="p-2 text-center font-normal "
                             style={{ width: "10%" }}
                         >
-                                {formatNumber(total + 30000)} đ
+                            {formatNumber(total + 30000)} đ
                         </td>
                         <td className="p-2 text-center font-normal">
                             {data?.created_at.substring(0, 19)}

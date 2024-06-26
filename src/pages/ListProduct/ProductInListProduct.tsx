@@ -15,7 +15,7 @@ const ProductInListProduct = ({ data }: any) => {
     }, [])
     const sale = sales?.find((data1: any) => data1?.id == data?.sale_id)?.name
     const totalPrice = (data?.variants[0]?.price * sale) / 100
-    console.log(totalPrice);
+    console.log(totalPrice)
     return (
         <>
             <Link to={`/products/${data?.id}`}>
@@ -34,27 +34,55 @@ const ProductInListProduct = ({ data }: any) => {
                             className="nav-link fs-7"
                             style={{ fontSize: "14px", fontWeight: "500" }}
                         >
-                            {data?.name?.length > 20 ? <>{data?.name?.slice(0, 20)}...</> : <>{data?.name}</>}
+                            {data?.name?.length > 20 ? (
+                                <>{data?.name?.slice(0, 20)}...</>
+                            ) : (
+                                <>{data?.name}</>
+                            )}
                         </a>
                         <div
                             className=""
                             style={{ fontSize: "16px", fontWeight: "bold" }}
                         >
-                            <span className="font-normal text-sl line-through text-sm">{sale ? <> {formatNumber(data?.variants[0]?.price)} đ</> : <></>}</span>
-                            <p className="flex text-sl text-red-500">
-                                {sale ? <> {formatNumber(data?.variants[0]?.price - totalPrice)} đ</> : <> {formatNumber(data?.variants[0]?.price)} đ</>}
-                                {sale ? <> <span className="ml-auto mr-2 rounded bg-red-500 px-1 py-1 text-sm font-normal text-white">
-                                    -{Math.floor(sale)}%
-                                </span></> :<></>}
-                               
+                            <span className="text-sl text-sm font-normal line-through">
+                                {sale ? (
+                                    <> {formatNumber(data?.variants[0]?.price)} đ</>
+                                ) : (
+                                    <></>
+                                )}
+                            </span>
+                            <p className="text-sl flex text-red-500">
+                                {sale ? (
+                                    <>
+                                        {" "}
+                                        {formatNumber(
+                                            data?.variants[0]?.price - totalPrice,
+                                        )}{" "}
+                                        đ
+                                    </>
+                                ) : (
+                                    <> {formatNumber(data?.variants[0]?.price)} đ</>
+                                )}
+                                {sale ? (
+                                    <>
+                                        {" "}
+                                        <span className="ml-auto mr-2 rounded bg-red-500 px-1 py-1 text-sm font-normal text-white">
+                                            -{Math.floor(sale)}%
+                                        </span>
+                                    </>
+                                ) : (
+                                    <></>
+                                )}
                             </p>
-
-
                         </div>
                     </div>
 
                     <span className="mt-2 opacity-50" style={{ fontSize: "12px" }}>
-                        {data?.description?.length > 40 ? <>{data?.description?.slice(0, 40)}...</> : <>{data?.description}</>}
+                        {data?.description?.length > 40 ? (
+                            <>{data?.description?.slice(0, 40)}...</>
+                        ) : (
+                            <>{data?.description}</>
+                        )}
                     </span>
                 </div>
             </Link>

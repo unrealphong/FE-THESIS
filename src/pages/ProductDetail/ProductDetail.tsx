@@ -159,10 +159,13 @@ const ProductDetail = () => {
                 </div>
                 <div className="w-1.6/3 ">
                     <div className="flex">
-                        {product?.sale_id ? <button className="rounded bg-red-500 pl-2 pr-2 text-white">
-                            Sale
-                        </button> : ""}
-
+                        {product?.sale_id ? (
+                            <button className="rounded bg-red-500 pl-2 pr-2 text-white">
+                                Sale
+                            </button>
+                        ) : (
+                            ""
+                        )}
                     </div>
                     <div className="mt-3 text-xl font-bold">{product?.name}</div>
                     <span>SKU: F9UVC020M-015</span>

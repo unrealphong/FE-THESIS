@@ -39,8 +39,8 @@ const CheckOut = () => {
     const [descbill, setdescbill] = useState<any>()
     const [totalprice, setTotalprice] = useState<number>(0)
     const [loading, setloading] = useState(true)
-    const [discountCode, setDiscountCode] = useState('');
-    const [priceDiscount, setPriceDiscount] = useState<any>(0);
+    const [discountCode, setDiscountCode] = useState("")
+    const [priceDiscount, setPriceDiscount] = useState<any>(0)
     const handlePaymentChange = (e: any) => {
         if (e.target.value == "COD") {
             setPaymentMethod("COD")
@@ -130,7 +130,7 @@ const CheckOut = () => {
             user_id: user?.data?.id,
             recipient_address: `${name ? name : form.getFieldValue("name")}; ${descbill};${adressdetail}, ${wardName}, ${districtName}, ${provinceName}`,
             recipient_phone: phone,
-            total_amount: priceDiscount ? (totalprice - priceDiscount) : totalprice,
+            total_amount: priceDiscount ? totalprice - priceDiscount : totalprice,
             status: "Pending",
             pay: paymentMethod,
             bill_date: "2004-08-29",
@@ -141,15 +141,19 @@ const CheckOut = () => {
             await Promise.all(
                 carts.map(async (element: any, index: any) => {
                     const sales = await getAllSale()
-                    const sale :any= sales?.find((item:any)=>item?.id == element?.sale_id)?.name
-                    const totalPrice = (cartt?.data[index]?.price * sale) / 100 
+                    const sale: any = sales?.find(
+                        (item: any) => item?.id == element?.sale_id,
+                    )?.name
+                    const totalPrice = (cartt?.data[index]?.price * sale) / 100
                     const data1 = {
                         product_name: element?.name_product,
                         attribute: `${cartt?.data[index]?.atribute[0].value}; ${cartt?.data[index]?.atribute[1].value}`,
-                        price: sale ? (cartt?.data[index]?.price-totalPrice) : cartt?.data[index]?.price,
+                        price: sale
+                            ? cartt?.data[index]?.price - totalPrice
+                            : cartt?.data[index]?.price,
                         quantity: element?.quantity,
                         bill_id: response?.data?.id,
-                        voucher: priceDiscount ? `${priceDiscount}`:"null",
+                        voucher: priceDiscount ? `${priceDiscount}` : "null",
                         image: element?.image,
                     }
                     data2.data.push(data1)
@@ -209,10 +213,12 @@ const CheckOut = () => {
             const cartSale_id: any = carts[index]?.sale_id
 
             const allSale = await getAllSale()
-            const sale: any = allSale?.find((data1: any) => data1?.id == cartSale_id)?.name
+            const sale: any = allSale?.find(
+                (data1: any) => data1?.id == cartSale_id,
+            )?.name
             const totalSale: any = (product.price * sale) / 100
             if (cartItem) {
-                const price = cartSale_id ? (product.price - totalSale) : (product.price)
+                const price = cartSale_id ? product.price - totalSale : product.price
                 const quantity = parseInt(cartItem.quantity, 10)
                 if (!isNaN(price) && !isNaN(quantity)) {
                     total += price * quantity
@@ -220,9 +226,8 @@ const CheckOut = () => {
             }
             setloading(false)
         })
-        await Promise.all(promises);
+        await Promise.all(promises)
         setTotalprice(total)
-
     }
     useEffect(() => {
         if (cartt) {
@@ -231,29 +236,25 @@ const CheckOut = () => {
     }, [cartt])
     const [checkvoucher, setcheckvoucher] = useState<any>(false)
     const HandleVoucher = () => {
-        console.log("open");
+        console.log("open")
         if (discountCode.toLowerCase() == "xinchao") {
             if (checkvoucher == false) {
-
                 if (totalprice >= 499000 && totalprice < 670000) {
                     setPriceDiscount(70000)
                     toast.success("Bạn đã nhập đúng voucher của shop!")
                     setcheckvoucher(true)
                 } else if (totalprice >= 670000) {
                     setPriceDiscount(100000)
-                    console.log("okokok1");
+                    console.log("okokok1")
                     toast.success("Bạn đã nhập đúng voucher của shop!")
                     setcheckvoucher(true)
                 }
-
-
             } else {
                 toast.warning("Voucher của shop đã được áp dụng!")
             }
         } else {
             toast.error("Bạn đã nhập sai voucher của shop!")
         }
-
     }
     return (
         <>
@@ -521,9 +522,10 @@ const CheckOut = () => {
                                         <Input
                                             className="custom-search  mt-2"
                                             placeholder="Nhập mã giảm giá"
-                                            onChange={(e) => setDiscountCode(e.target.value)}
-                                        >
-                                        </Input>
+                                            onChange={(e) =>
+                                                setDiscountCode(e.target.value)
+                                            }
+                                        ></Input>
                                         <Button
                                             className="custom-search  mt-2"
                                             style={buttonStyle}
@@ -566,7 +568,11 @@ const CheckOut = () => {
                                             </p>
                                         </Modal>
                                         <p className="fw-bold mb-0 ml-auto text-sm font-bold">
-                                            - {priceDiscount ? formatNumber(priceDiscount) : 0} đ
+                                            -{" "}
+                                            {priceDiscount
+                                                ? formatNumber(priceDiscount)
+                                                : 0}{" "}
+                                            đ
                                         </p>
                                     </div>
                                     <div className="mt-3 flex">
@@ -581,22 +587,39 @@ const CheckOut = () => {
                                     <div className="flex">
                                         <h5 className="">Tổng Tiền</h5>
                                         <h5 className="fw-bold mb-0 ml-auto font-bold text-red-500 ">
-                                            {priceDiscount ? formatNumber((totalprice + 30000) - priceDiscount) : formatNumber(totalprice + 30000)} đ
+                                            {priceDiscount
+                                                ? formatNumber(
+                                                      totalprice +
+                                                          30000 -
+                                                          priceDiscount,
+                                                  )
+                                                : formatNumber(
+                                                      totalprice + 30000,
+                                                  )}{" "}
+                                            đ
                                         </h5>
                                     </div>
                                 </div>
                                 <hr className="w-full border-t border-dashed border-gray-500 " />
-                                {loading ? <Button
-                                    className="align-center mt-5 w-full rounded bg-red-600 p-2 text-white"
-                                >
-                                    <Spin indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />} />
-                                </Button> :
+                                {loading ? (
+                                    <Button className="align-center mt-5 w-full rounded bg-red-600 p-2 text-white">
+                                        <Spin
+                                            indicator={
+                                                <LoadingOutlined
+                                                    style={{ fontSize: 16 }}
+                                                    spin
+                                                />
+                                            }
+                                        />
+                                    </Button>
+                                ) : (
                                     <Button
                                         onClick={() => handleOrder()}
                                         className="align-center mt-5 w-full rounded bg-red-600 p-2 text-white"
                                     >
                                         Đặt Hàng
-                                    </Button>}
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </div>

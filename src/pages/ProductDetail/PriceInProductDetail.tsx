@@ -18,7 +18,7 @@ const PriceInProductDetail = ({ data, idcolor, onPrice, sale_id }: any) => {
             onPrice(priceProduct)
         }
     }, [priceProduct, onPrice])
-    console.log(sale_id);
+    console.log(sale_id)
     const [sales, setsale] = useState<any>([])
     useEffect(() => {
         const fetchSale = async () => {
@@ -36,15 +36,34 @@ const PriceInProductDetail = ({ data, idcolor, onPrice, sale_id }: any) => {
             <div className="mt-5 flex ">
                 <p className="text-xl font-bold  text-red-500">
                     {idcolor ? (
-                        <>{sale ? formatNumber(priceProduct - totalPrice1) : formatNumber(priceProduct)} đ</>
+                        <>
+                            {sale
+                                ? formatNumber(priceProduct - totalPrice1)
+                                : formatNumber(priceProduct)}{" "}
+                            đ
+                        </>
                     ) : (
-                            <>{sale ? formatNumber(data1?.price - totalPrice) : formatNumber(data1?.price)} đ</>
+                        <>
+                            {sale
+                                ? formatNumber(data1?.price - totalPrice)
+                                : formatNumber(data1?.price)}{" "}
+                            đ
+                        </>
                     )}
                 </p>
-                {sale ? <> <p className="text-xm ml-2 mt-1 text-gray-400 line-through">
-                    {idcolor ? formatNumber(priceProduct) : formatNumber(data1?.price)} đ
-
-                </p></> : <></>}
+                {sale ? (
+                    <>
+                        {" "}
+                        <p className="text-xm ml-2 mt-1 text-gray-400 line-through">
+                            {idcolor
+                                ? formatNumber(priceProduct)
+                                : formatNumber(data1?.price)}{" "}
+                            đ
+                        </p>
+                    </>
+                ) : (
+                    <></>
+                )}
 
                 <p className="ml-auto mt-1 font-bold">
                     Còn Hàng

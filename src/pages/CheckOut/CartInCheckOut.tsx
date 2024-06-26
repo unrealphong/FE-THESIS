@@ -24,10 +24,8 @@ const CartInCheckOut = () => {
         })
 
         storedCarts.forEach((item: any, index: any) => {
-          
-                total += allCart?.data[index]?.price * item.quantity
-                setcheck(false)
-            
+            total += allCart?.data[index]?.price * item.quantity
+            setcheck(false)
         })
         setTotalPrice(total)
     }

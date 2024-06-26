@@ -17,10 +17,10 @@ const ListProductBuy3 = () => {
     }, [])
 
     const filterProductsBySaleId = (products: any) => {
-        return products.filter((product: any) => product.sale_id >= 1);
-    };
+        return products.filter((product: any) => product.sale_id >= 1)
+    }
 
-    const filteredProducts = filterProductsBySaleId(products);
+    const filteredProducts = filterProductsBySaleId(products)
     return (
         <>
             <div className="block-new-product container mx-auto my-2 flex max-w-7xl flex-col">
@@ -31,9 +31,10 @@ const ListProductBuy3 = () => {
                                 <ProductInListProductBuy3 data={data} />
                             </>
                         )
-                    })}</div>
+                    })}
+                </div>
                 <div className="block-offer-button my-5 text-center">
-                    <button className="btn h-10 rounded border bg-red-500 px-2 text-white pr-5 pl-5">
+                    <button className="btn h-10 rounded border bg-red-500 px-2 pl-5 pr-5 text-white">
                         <Link to="/products">Xem tất cả sản phẩm</Link>
                     </button>
                 </div>

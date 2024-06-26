@@ -126,7 +126,7 @@ function HomePage() {
                 <div className="flex justify-center text-3xl font-semibold uppercase text-red-600">
                     Sản phẩm giảm giá
                 </div>
-                <ListProductBuy3/>
+                <ListProductBuy3 />
                 {/* <div className="block-offer-content">
                     <div className="mb-4 mt-8 flex justify-center border-b-4">
                         {tabs.map((tab) => (
@@ -161,7 +161,7 @@ function HomePage() {
                     ))}
                 </div>
                 <div className="block-offer-button my-5 text-center">
-                    <button className="btn h-10 rounded border bg-red-500 px-2 text-white pr-5 pl-5">
+                    <button className="btn h-10 rounded border bg-red-500 px-2 pl-5 pr-5 text-white">
                         <Link to="/products">Xem tất cả sản phẩm</Link>
                     </button>
                 </div>

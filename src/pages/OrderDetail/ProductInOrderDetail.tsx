@@ -1,4 +1,3 @@
-
 import formatNumber from "@/utilities/FormatTotal"
 const ProductInOrderDetail = ({ data }: any) => {
     const parts = data?.attribute

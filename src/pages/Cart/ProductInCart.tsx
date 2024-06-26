@@ -6,12 +6,12 @@ import { getProductById } from "@/api/services/ProductService"
 import { getAllSale } from "@/api/services/Sale"
 
 const ProductInCart = ({ data, index, quantity, onCart }: any) => {
-    console.log(quantity);
-    
+    console.log(quantity)
+
     const [carts, setCarts] = useState([])
     const [displayQuantity, setDisplayQuantity] = useState(quantity.quantity)
     const [check, setcheck] = useState(false)
- 
+
     useEffect(() => {
         const storedCarts = JSON.parse(localStorage.getItem("cart")!) || []
         setCarts(storedCarts)
@@ -85,8 +85,10 @@ const ProductInCart = ({ data, index, quantity, onCart }: any) => {
         fetchSale()
     }, [])
     const sale = sales?.find((data1: any) => data1?.id == quantity?.sale_id)?.name
-    const totalPrice = (data?.price * sale) / 100 
-    const sumtotal = sale ? (data?.price - totalPrice) * displayQuantity : data?.price * displayQuantity
+    const totalPrice = (data?.price * sale) / 100
+    const sumtotal = sale
+        ? (data?.price - totalPrice) * displayQuantity
+        : data?.price * displayQuantity
     return (
         <>
             <tr ng-repeat="item in cart" className="relative pb-20">
@@ -111,9 +113,20 @@ const ProductInCart = ({ data, index, quantity, onCart }: any) => {
                     </p>
                 </td>
                 <td className="pl-5 pr-5 font-normal">
-                    {sale ? <span className="text-sl line-through p-2">{formatNumber(data?.price)}đ</span> : ""}
-                    {sale ? <span className="text-red-500 font-500">{formatNumber(data?.price - totalPrice)}đ</span> : <>{formatNumber(data?.price)}đ</>}
-                   
+                    {sale ? (
+                        <span className="text-sl p-2 line-through">
+                            {formatNumber(data?.price)}đ
+                        </span>
+                    ) : (
+                        ""
+                    )}
+                    {sale ? (
+                        <span className="font-500 text-red-500">
+                            {formatNumber(data?.price - totalPrice)}đ
+                        </span>
+                    ) : (
+                        <>{formatNumber(data?.price)}đ</>
+                    )}
                 </td>
                 <td className="pl-4 pr-4 font-normal">
                     <div className="flex items-center">

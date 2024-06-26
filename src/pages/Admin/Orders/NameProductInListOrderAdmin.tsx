@@ -104,7 +104,7 @@ const NameProductInListOrderAdmin = ({ data }: any) => {
         ? billdetail?.Recipient_address?.split(";").map((part: any) => part.trim())
         : ""
     const [name, descbill, address] = parts
-    const total :any= Number(billdetail?.total_amount)
+    const total: any = Number(billdetail?.total_amount)
     return (
         <>
             {loading ? (
@@ -155,7 +155,7 @@ const NameProductInListOrderAdmin = ({ data }: any) => {
                             className="p-2 text-center font-normal "
                             style={{ width: "10%" }}
                         >
-                                {formatNumber(total +30000)} đ
+                            {formatNumber(total + 30000)} đ
                         </td>
                         <td className="p-2 text-center font-normal">
                             {billdetail?.created_at.substring(0, 19)}

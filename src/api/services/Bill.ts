@@ -277,5 +277,5 @@ export {
     GetBillConfirmWithUser,
     GetBillShipingWithUser,
     GetBillDoneWithUser,
-    GetBillCancelWithUser
+    GetBillCancelWithUser,
 }
