@@ -3,16 +3,19 @@ import { useEffect, useState } from "react"
 import formatNumber from "../../utilities/FormatTotal"
 import { toast } from "react-toastify"
 import { getProductById } from "@/api/services/ProductService"
+import { getAllSale } from "@/api/services/Sale"
 
 const ProductInCart = ({ data, index, quantity, onCart }: any) => {
+    console.log(quantity)
+
     const [carts, setCarts] = useState([])
     const [displayQuantity, setDisplayQuantity] = useState(quantity.quantity)
     const [check, setcheck] = useState(false)
-    const sumtotal = data?.price * displayQuantity
+
     useEffect(() => {
         const storedCarts = JSON.parse(localStorage.getItem("cart")!) || []
         setCarts(storedCarts)
-    }, [carts])
+    }, [])
     const handleDecrease = (id: any) => {
         let updatedCarts: any = [...carts]
         const index = updatedCarts.findIndex((item: any) => item.variant_id == id)
@@ -32,14 +35,15 @@ const ProductInCart = ({ data, index, quantity, onCart }: any) => {
             localStorage.setItem("cart", JSON.stringify(updatedCarts))
             setcheck(true)
             onCart(id)
+            setTimeout(() => {
+                window.location.reload()
+            }, 100)
         } else {
             return
         }
     }
 
     const handleIncrease = (id: any) => {
-        console.log(id)
-
         const updatedCarts: any = [...carts]
         const index = updatedCarts.findIndex((item: any) => item.variant_id === id)
         if (index !== -1) {
@@ -48,6 +52,9 @@ const ProductInCart = ({ data, index, quantity, onCart }: any) => {
             localStorage.setItem("cart", JSON.stringify(updatedCarts))
             setcheck(true)
             onCart(id)
+            setTimeout(() => {
+                window.location.reload()
+            }, 100)
         } else {
             return
         }
@@ -68,15 +75,20 @@ const ProductInCart = ({ data, index, quantity, onCart }: any) => {
             }, 1000)
         }
     }
-    // const [pro, setpro] = useState<any>()
-    // useEffect(() => {
-    //     const getOneProduct = async () => {
-    //         const product = await getProductById(data?.product_id)
-    //         setpro(product)
-    //     }
-    //     getOneProduct()
-    // }, [])
+    const [sales, setsale] = useState<any>([])
+    useEffect(() => {
+        const fetchSale = async () => {
+            const allsale: any = await getAllSale()
+            setsale(allsale)
+        }
 
+        fetchSale()
+    }, [])
+    const sale = sales?.find((data1: any) => data1?.id == quantity?.sale_id)?.name
+    const totalPrice = (data?.price * sale) / 100
+    const sumtotal = sale
+        ? (data?.price - totalPrice) * displayQuantity
+        : data?.price * displayQuantity
     return (
         <>
             <tr ng-repeat="item in cart" className="relative pb-20">
@@ -92,16 +104,29 @@ const ProductInCart = ({ data, index, quantity, onCart }: any) => {
                             fontSize: "16px",
                         }}
                     >
-                        {data?.name_product}
+                        {quantity?.name_product}
                     </p>
                     <p style={{ fontSize: "14px" }}>
-                        Kích thước: {data?.attributes[1].attribute_value}
+                        Kích thước: {data?.atribute[1].value}
                         <br />
-                        Màu sắc: {data?.attributes[0].attribute_value}
+                        Màu sắc: {data?.atribute[0].value}
                     </p>
                 </td>
                 <td className="pl-5 pr-5 font-normal">
-                    {formatNumber(data?.price)}đ
+                    {sale ? (
+                        <span className="text-sl p-2 line-through">
+                            {formatNumber(data?.price)}đ
+                        </span>
+                    ) : (
+                        ""
+                    )}
+                    {sale ? (
+                        <span className="font-500 text-red-500">
+                            {formatNumber(data?.price - totalPrice)}đ
+                        </span>
+                    ) : (
+                        <>{formatNumber(data?.price)}đ</>
+                    )}
                 </td>
                 <td className="pl-4 pr-4 font-normal">
                     <div className="flex items-center">

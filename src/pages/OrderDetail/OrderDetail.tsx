@@ -23,6 +23,8 @@ const OrderDetail = () => {
     const [color, setcolor] = useState<any>()
     const [status, setstatus] = useState<any>()
     const [check, setcheck] = useState<any>(false)
+    console.log(bill)
+
     const fetchOrder = async () => {
         const data: any = await getBillDetail(id)
         setBill(data)

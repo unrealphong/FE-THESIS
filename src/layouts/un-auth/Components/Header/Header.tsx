@@ -300,7 +300,7 @@ function Header() {
                                         href="#"
                                         className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
                                     >
-                                        Áo
+                                        Sản phẩm
                                     </a>
                                 </li>
                                 <li>
@@ -308,7 +308,7 @@ function Header() {
                                         href="#"
                                         className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
                                     >
-                                        Quần
+                                        Giảm giá
                                     </a>
                                 </li>
                                 <li>
@@ -316,23 +316,7 @@ function Header() {
                                         href="#"
                                         className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600 "
                                     >
-                                        Giày Dép
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
-                                    >
-                                        Phụ kiện
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
-                                    >
-                                        Giảm giá -40%
+                                        Giới thiệu
                                     </a>
                                 </li>
                                 <li>
@@ -341,6 +325,14 @@ function Header() {
                                         className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
                                     >
                                         Tin tức
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="block rounded py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-red-600"
+                                    >
+                                        Liên hệ
                                     </a>
                                 </li>
                             </ul>

@@ -1,4 +1,4 @@
-import { getAllBillDetail } from "@/api/services/Bill"
+import { getAllBillDetail, getBillsDetail } from "@/api/services/Bill"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
 import { useEffect, useState } from "react"
@@ -9,8 +9,8 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
     const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
         try {
-            const data: any = await getAllBillDetail()
-            setBillDetail(data)
+            const data1: any = await getBillsDetail(data?.id)
+            setBillDetail(data1)
         } catch (error) {
             console.error("Error fetching bill details:", error)
         } finally {
@@ -20,7 +20,7 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
     useEffect(() => {
         fetchBillDetail()
     }, [])
-    const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
+    // const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
     const [color, setcolor] = useState<any>()
     const [status, setstatus] = useState<any>()
     useEffect(() => {
@@ -29,9 +29,12 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
             setstatus("Hủy hàng")
         }
     }, [data])
+    const total: any = Number(billdetail?.total_amount)
+    console.log(billdetail)
+
     return (
         <>
-         {loading ? (
+            {loading ? (
                 <>
                     <tr className="mt-2">
                         <td colSpan={9}>
@@ -47,12 +50,19 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
                     <tr className="items-center justify-center p-2" key={data?.id}>
                         <td className="p-2 text-center font-normal">{data?.id}</td>
                         <td className="p-2 text-center font-normal">
-                            {billsProduct?.product_name}
+                            src=
+                            {billdetail?.bill_details[0]
+                                ? billdetail?.bill_details[0].product_name
+                                : ""}
                         </td>
                         <td className="w-1/9 flex items-center justify-center p-2">
                             <img
                                 className="h-26 w-20"
-                                src={billsProduct?.image}
+                                src={
+                                    billdetail?.bill_details[0]
+                                        ? billdetail?.bill_details[0].image
+                                        : ""
+                                }
                                 alt=""
                             />
                         </td>
@@ -70,7 +80,7 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
                             className="p-2 text-center font-normal "
                             style={{ width: "10%" }}
                         >
-                            {formatNumber(data?.total_amount)} đ
+                            {formatNumber(total + 30000)} đ
                         </td>
                         <td className="p-2 text-center font-normal">
                             {data?.created_at.substring(0, 19)}

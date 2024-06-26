@@ -29,8 +29,7 @@ const NameListOrderDone = ({ data }: any) => {
             setstatus("Hoàn thành")
         }
     }, [data])
-    console.log("okoko")
-
+    const total: any = Number(data?.total_amount)
     return (
         <>
             <tr className="items-center justify-center p-2" key={data?.id}>
@@ -60,7 +59,7 @@ const NameListOrderDone = ({ data }: any) => {
                     className="p-2 text-center font-normal "
                     style={{ width: "10%" }}
                 >
-                    {formatNumber(data?.total_amount)} đ
+                    {formatNumber(total + 30000)} đ
                 </td>
                 <td className="p-2 text-center font-normal">
                     {data?.created_at.substring(0, 19)}

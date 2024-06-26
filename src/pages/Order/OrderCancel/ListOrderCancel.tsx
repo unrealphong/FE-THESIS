@@ -2,15 +2,17 @@ import { Pagination, Spin } from "antd"
 import { useEffect, useState } from "react"
 
 import { LoadingOutlined } from "@ant-design/icons"
-import { getBillCancel } from "@/api/services/Bill"
+import { GetBillCancelWithUser, getBillCancel } from "@/api/services/Bill"
 import NameListOrderCancel from "./NameListOrderCancel"
 
 const ListOrderCancel = ({ data }: any) => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
+    const user: any = localStorage.getItem("user")
+    const users = JSON.parse(user) || []
     const fetchBills = async () => {
         try {
-            const allBills: any = await getBillCancel()
+            const allBills: any = await GetBillCancelWithUser(users?.data?.id)
             setbill(allBills)
         } catch {
         } finally {
@@ -27,7 +29,7 @@ const ListOrderCancel = ({ data }: any) => {
     const itemsPerPage = 10
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = bill?.slice(indexOfFirstItem, indexOfLastItem)
+    const currentItems = bill?.data?.slice(indexOfFirstItem, indexOfLastItem)
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page)

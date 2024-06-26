@@ -1,16 +1,18 @@
 import { Pagination, Spin } from "antd"
 import React, { useEffect, useState } from "react"
 import { LoadingOutlined } from "@ant-design/icons"
-import { getBillShiping } from "@/api/services/Bill"
+import { GetBillShipingWithUser, getBillShiping } from "@/api/services/Bill"
 import NameListOrderShiping from "./NameListOrderShiping"
 
 const ListOrderSiping = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
     const [check1, setcheck] = useState<boolean>()
+    const user: any = localStorage.getItem("user")
+    const users = JSON.parse(user) || []
     const fetchBills = async () => {
         try {
-            const allBills: any = await getBillShiping()
+            const allBills: any = await GetBillShipingWithUser(users?.data?.id)
             setbill(allBills)
         } catch {
         } finally {
@@ -25,7 +27,7 @@ const ListOrderSiping = () => {
     const itemsPerPage = 10
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = bill?.slice(indexOfFirstItem, indexOfLastItem)
+    const currentItems = bill?.data?.slice(indexOfFirstItem, indexOfLastItem)
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page)

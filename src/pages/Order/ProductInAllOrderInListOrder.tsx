@@ -49,6 +49,8 @@ const ProductInAllOrderInListOrder = ({ data }: any) => {
             setstatus("Hủy hàng")
         }
     }, [data])
+
+    const total: any = Number(data?.total_amount)
     return (
         <>
             {loading ? (
@@ -83,7 +85,7 @@ const ProductInAllOrderInListOrder = ({ data }: any) => {
                         </td>
                         <th className="font-normal">{data?.created_at}</th>
                         <th className="font-normal">
-                            {formatNumber(data?.total_amount)} đ
+                            {formatNumber(total + 30000)} đ
                         </th>
                         <th className="font-normal">
                             <Tag color={color}>{status}</Tag>

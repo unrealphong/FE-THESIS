@@ -4,10 +4,11 @@ import cart2 from "../../assets/images/icons/icon-bag-3.svg"
 import {
     CreditCardOutlined,
     EnvironmentOutlined,
+    LoadingOutlined,
     QuestionCircleOutlined,
     UserOutlined,
 } from "@ant-design/icons"
-import { Button, Form, Input, Modal, Radio, Select } from "antd"
+import { Button, Form, Input, Modal, Radio, Select, Spin } from "antd"
 import TextArea from "antd/es/input/TextArea"
 import ProvinceInCheckOut from "./ProvinceInCheckOut"
 import { useEffect, useState } from "react"
@@ -19,6 +20,7 @@ import { useNavigate } from "react-router-dom"
 import { addBill, addBillDetail } from "@/api/services/Bill"
 import { toast } from "react-toastify"
 import { getCartOrder } from "@/api/services/Order"
+import { getAllSale } from "@/api/services/Sale"
 const CheckOut = () => {
     const [form] = Form.useForm()
     const user = JSON.parse(localStorage.getItem("user") || "null")
@@ -35,7 +37,10 @@ const CheckOut = () => {
     const [paymentMethod, setPaymentMethod] = useState<any>()
     const [name, setname] = useState<any>()
     const [descbill, setdescbill] = useState<any>()
-
+    const [totalprice, setTotalprice] = useState<number>(0)
+    const [loading, setloading] = useState(true)
+    const [discountCode, setDiscountCode] = useState("")
+    const [priceDiscount, setPriceDiscount] = useState<any>(0)
     const handlePaymentChange = (e: any) => {
         if (e.target.value == "COD") {
             setPaymentMethod("COD")
@@ -77,8 +82,6 @@ const CheckOut = () => {
         const data = { data: storedCarts }
         const allCart: any = await getCartOrder(data)
         setcart(allCart)
-        console.log(allCart)
-
         if (
             allCart?.data?.every((item: any) => item.sale_id === 1) &&
             allCart?.data?.reduce(
@@ -103,7 +106,6 @@ const CheckOut = () => {
     useEffect(() => {
         handleCartUpdate()
     }, [])
-    console.log(totalPrice)
 
     const carts = JSON.parse(localStorage.getItem("cart") || "[]")
     const totalCartPrice = cartt?.data?.reduce(
@@ -122,22 +124,13 @@ const CheckOut = () => {
     const handleAdress = (e: any) => {
         setadressdetail(e.target.value)
     }
-    const [currentTime, setCurrentTime] = useState(new Date())
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentTime(new Date())
-        }, 1000)
-
-        return () => clearInterval(timer)
-    }, [])
 
     const handleOrder = async () => {
         const data = {
             user_id: user?.data?.id,
             recipient_address: `${name ? name : form.getFieldValue("name")}; ${descbill};${adressdetail}, ${wardName}, ${districtName}, ${provinceName}`,
             recipient_phone: phone,
-            total_amount: price3 > 0 ? price3 : totalCartPrice,
+            total_amount: priceDiscount ? totalprice - priceDiscount : totalprice,
             status: "Pending",
             pay: paymentMethod,
             bill_date: "2004-08-29",
@@ -147,13 +140,20 @@ const CheckOut = () => {
             const data2: any = { data: [] }
             await Promise.all(
                 carts.map(async (element: any, index: any) => {
+                    const sales = await getAllSale()
+                    const sale: any = sales?.find(
+                        (item: any) => item?.id == element?.sale_id,
+                    )?.name
+                    const totalPrice = (cartt?.data[index]?.price * sale) / 100
                     const data1 = {
                         product_name: element?.name_product,
-                        attribute: `${cartt?.data[index]?.attributes[0].attribute_value}; ${cartt?.data[index]?.attributes[1].attribute_value}`,
-                        price: cartt?.data[index]?.price,
+                        attribute: `${cartt?.data[index]?.atribute[0].value}; ${cartt?.data[index]?.atribute[1].value}`,
+                        price: sale
+                            ? cartt?.data[index]?.price - totalPrice
+                            : cartt?.data[index]?.price,
                         quantity: element?.quantity,
                         bill_id: response?.data?.id,
-                        voucher: "null",
+                        voucher: priceDiscount ? `${priceDiscount}` : "null",
                         image: element?.image,
                     }
                     data2.data.push(data1)
@@ -189,13 +189,6 @@ const CheckOut = () => {
             </>
         )
     }
-    const [price3, setprice3] = useState<any>(0)
-    const [check, setcheck] = useState<any>()
-    const buy3 = (price: any, check: any) => {
-        setprice3(price)
-        setcheck(check)
-    }
-    console.log(price3)
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     const showModal = () => {
@@ -208,6 +201,60 @@ const CheckOut = () => {
 
     const handleCancels = () => {
         setIsModalOpen(false)
+    }
+
+    const calculateTotalClick = async () => {
+        let total = 0
+
+        const promises = cartt?.data?.map(async (product: any, index: any) => {
+            const cartItem: any = carts.find(
+                (item: any) => item.variant_id === product.variant_id,
+            )
+            const cartSale_id: any = carts[index]?.sale_id
+
+            const allSale = await getAllSale()
+            const sale: any = allSale?.find(
+                (data1: any) => data1?.id == cartSale_id,
+            )?.name
+            const totalSale: any = (product.price * sale) / 100
+            if (cartItem) {
+                const price = cartSale_id ? product.price - totalSale : product.price
+                const quantity = parseInt(cartItem.quantity, 10)
+                if (!isNaN(price) && !isNaN(quantity)) {
+                    total += price * quantity
+                }
+            }
+            setloading(false)
+        })
+        await Promise.all(promises)
+        setTotalprice(total)
+    }
+    useEffect(() => {
+        if (cartt) {
+            calculateTotalClick()
+        }
+    }, [cartt])
+    const [checkvoucher, setcheckvoucher] = useState<any>(false)
+    const HandleVoucher = () => {
+        console.log("open")
+        if (discountCode.toLowerCase() == "xinchao") {
+            if (checkvoucher == false) {
+                if (totalprice >= 499000 && totalprice < 670000) {
+                    setPriceDiscount(70000)
+                    toast.success("Bạn đã nhập đúng voucher của shop!")
+                    setcheckvoucher(true)
+                } else if (totalprice >= 670000) {
+                    setPriceDiscount(100000)
+                    console.log("okokok1")
+                    toast.success("Bạn đã nhập đúng voucher của shop!")
+                    setcheckvoucher(true)
+                }
+            } else {
+                toast.warning("Voucher của shop đã được áp dụng!")
+            }
+        } else {
+            toast.error("Bạn đã nhập sai voucher của shop!")
+        }
     }
     return (
         <>
@@ -463,71 +510,41 @@ const CheckOut = () => {
                         <div className=" ml-4 w-1/4 bg-white p-4">
                             <div className="">
                                 <h5 className="text-xl font-bold">ĐƠN HÀNG</h5>
-                                {price3 > 0 ? (
-                                    <>
-                                        {" "}
-                                        <div className="mt-5">
-                                            <label
-                                                htmlFor="name"
-                                                className="pl-1 text-xs font-bold"
-                                            >
-                                                MÃ PHIẾU GIẢM GIÁ
-                                            </label>
 
-                                            <Search
-                                                className="custom-search  mt-2"
-                                                placeholder="Nhập mã giảm giá"
-                                                enterButton={
-                                                    <Button style={buttonStyles}>
-                                                        Áp Dụng
-                                                    </Button>
-                                                }
-                                                size="large"
-                                            />
-                                        </div>
-                                        <img
-                                            src="https://pm2ec.s3.ap-southeast-1.amazonaws.com/cms/17172282689428000.jpg"
-                                            className="mt-2"
-                                        />
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="mt-5">
-                                            <label
-                                                htmlFor="name"
-                                                className="pl-1 text-xs font-bold"
-                                            >
-                                                MÃ PHIẾU GIẢM GIÁ
-                                            </label>
-
-                                            <Search
-                                                className="custom-search  mt-2"
-                                                placeholder="Nhập mã giảm giá"
-                                                disabled={true}
-                                                enterButton={
-                                                    <Button
-                                                        style={buttonStyle}
-                                                        disabled
-                                                    >
-                                                        Áp Dụng
-                                                    </Button>
-                                                }
-                                                size="large"
-                                            />
-                                        </div>
-                                        <img
-                                            src="https://pm2ec.s3.ap-southeast-1.amazonaws.com/cms/17172282689428000.jpg"
-                                            className="mt-2"
-                                        />{" "}
-                                    </>
-                                )}
-
+                                <div className="mt-5">
+                                    <label
+                                        htmlFor="name"
+                                        className="pl-1 text-xs font-bold"
+                                    >
+                                        MÃ PHIẾU GIẢM GIÁ
+                                    </label>
+                                    <div className="flex">
+                                        <Input
+                                            className="custom-search  mt-2"
+                                            placeholder="Nhập mã giảm giá"
+                                            onChange={(e) =>
+                                                setDiscountCode(e.target.value)
+                                            }
+                                        ></Input>
+                                        <Button
+                                            className="custom-search  mt-2"
+                                            style={buttonStyle}
+                                            onClick={HandleVoucher}
+                                        >
+                                            Áp Dụng
+                                        </Button>
+                                    </div>
+                                </div>
+                                <img
+                                    src="https://pm2ec.s3.ap-southeast-1.amazonaws.com/cms/17172282689428000.jpg"
+                                    className="mt-2"
+                                />
                                 <hr className="my-4 w-full border-t border-dashed border-gray-500" />
                                 <div className="custom-dash d-flex flex-column gap-2 pb-3">
                                     <div className="mt-5 flex">
                                         <p className="text-sm">Tạm Tính</p>
                                         <p className="fw-bold mb-0 ml-auto text-sm font-bold">
-                                            {formatNumber(totalCartPrice)} đ
+                                            {formatNumber(totalprice)} đ
                                         </p>
                                     </div>
                                     <div className="mt-3 flex">
@@ -551,11 +568,10 @@ const CheckOut = () => {
                                             </p>
                                         </Modal>
                                         <p className="fw-bold mb-0 ml-auto text-sm font-bold">
-                                            {check == true
-                                                ? formatNumber(
-                                                      totalCartPrice - price3,
-                                                  )
-                                                : 0}
+                                            -{" "}
+                                            {priceDiscount
+                                                ? formatNumber(priceDiscount)
+                                                : 0}{" "}
                                             đ
                                         </p>
                                     </div>
@@ -571,28 +587,45 @@ const CheckOut = () => {
                                     <div className="flex">
                                         <h5 className="">Tổng Tiền</h5>
                                         <h5 className="fw-bold mb-0 ml-auto font-bold text-red-500 ">
-                                            {price3 > 0
-                                                ? formatNumber(price3 + 30000)
+                                            {priceDiscount
+                                                ? formatNumber(
+                                                      totalprice +
+                                                          30000 -
+                                                          priceDiscount,
+                                                  )
                                                 : formatNumber(
-                                                      totalCartPrice + 30000,
-                                                  )}
+                                                      totalprice + 30000,
+                                                  )}{" "}
                                             đ
                                         </h5>
                                     </div>
                                 </div>
                                 <hr className="w-full border-t border-dashed border-gray-500 " />
-                                <Button
-                                    onClick={() => handleOrder()}
-                                    className="align-center mt-5 w-full rounded bg-red-600 p-2 text-white"
-                                >
-                                    Đặt Hàng
-                                </Button>
+                                {loading ? (
+                                    <Button className="align-center mt-5 w-full rounded bg-red-600 p-2 text-white">
+                                        <Spin
+                                            indicator={
+                                                <LoadingOutlined
+                                                    style={{ fontSize: 16 }}
+                                                    spin
+                                                />
+                                            }
+                                        />
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        onClick={() => handleOrder()}
+                                        className="align-center mt-5 w-full rounded bg-red-600 p-2 text-white"
+                                    >
+                                        Đặt Hàng
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <CartInCheckOut onPriceBuy3={buy3} />
+                <CartInCheckOut />
             </main>
         </>
     )
