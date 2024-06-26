@@ -15,7 +15,6 @@ const ProductInListProduct = ({ data }: any) => {
     }, [])
     const sale = sales?.find((data1: any) => data1?.id == data?.sale_id)?.name
     const totalPrice = (data?.variants[0]?.price * sale) / 100
-    console.log(totalPrice)
     return (
         <>
             <Link to={`/products/${data?.id}`}>
