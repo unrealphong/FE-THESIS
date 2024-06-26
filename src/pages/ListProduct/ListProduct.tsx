@@ -47,45 +47,49 @@ const ListProduct = () => {
         setVisibleCount((prevCount: number) => prevCount + 10)
     }
     const displayedProducts = products?.slice(0, visibleCount)
-    const [lowPrice, setLowPrice] = useState<any>(0);
-    const [highPrice, setHighPrice] = useState<any>(0);
+    const [lowPrice, setLowPrice] = useState<any>(0)
+    const [highPrice, setHighPrice] = useState<any>(0)
     const [color, setcolor] = useState<any>("")
     const [checkcolor, setcheckcolor] = useState<any>(false)
-    const [filter, setfilter] = useState(false);
-    const [product, setproduct] = useState<any>([]);
-    const [selectedButton, setSelectedButton] = useState(null);
+    const [filter, setfilter] = useState(false)
+    const [product, setproduct] = useState<any>([])
+    const [selectedButton, setSelectedButton] = useState(null)
 
     const handleButtonClick = (index: any, color: any) => {
-        setSelectedButton(index);
+        setSelectedButton(index)
         setcolor(color)
-    };
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    }
+    const [selectedCategory, setSelectedCategory] = useState(null)
 
     const handleCheckboxChange = (categoryId: any) => {
-        setSelectedCategory(categoryId);
-    };
+        setSelectedCategory(categoryId)
+    }
 
     const callApi = async () => {
-        const product = await filterProduct({ minprice: lowPrice ? lowPrice : "", maxprice: highPrice ? highPrice : "", color: color ? color : "", category_id: selectedCategory ? selectedCategory : "" })
+        const product = await filterProduct({
+            minprice: lowPrice ? lowPrice : "",
+            maxprice: highPrice ? highPrice : "",
+            color: color ? color : "",
+            category_id: selectedCategory ? selectedCategory : "",
+        })
         setproduct(product)
         setfilter(true)
-    };
+    }
 
     useEffect(() => {
         callApi()
-       
     }, [highPrice, lowPrice, color, selectedCategory])
-    console.log(filter);
-    
+    console.log(filter)
+
     const buttonColors = [
-        { class: 'bg-black', color: 'black' },
-        { class: 'bg-red-500', color: 'red' },
-        { class: 'bg-green-400', color: 'green' },
-        { class: 'bg-blue-400', color: 'blue' },
-        { class: 'bg-yellow-400', color: 'yellow' },
-        { class: 'bg-gray-400', color: 'gray' },
-        { class: 'bg-violet-400', color: 'violet' },
-    ];
+        { class: "bg-black", color: "black" },
+        { class: "bg-red-500", color: "red" },
+        { class: "bg-green-400", color: "green" },
+        { class: "bg-blue-400", color: "blue" },
+        { class: "bg-yellow-400", color: "yellow" },
+        { class: "bg-gray-400", color: "gray" },
+        { class: "bg-violet-400", color: "violet" },
+    ]
 
     return (
         <>
@@ -104,11 +108,21 @@ const ListProduct = () => {
                                 <span>Sắp xếp theo khoảng giá</span>
                                 <div className="mt-2">
                                     <span className="font-normal">Giá thấp</span>
-                                    <Input type="text" onChange={(e: any) => setLowPrice(e.target.value)} />
+                                    <Input
+                                        type="text"
+                                        onChange={(e: any) =>
+                                            setLowPrice(e.target.value)
+                                        }
+                                    />
                                 </div>
                                 <div>
                                     <span className="font-normal">Giá cao</span>
-                                    <Input type="text" onChange={(e: any) => setHighPrice(e.target.value)} />
+                                    <Input
+                                        type="text"
+                                        onChange={(e: any) =>
+                                            setHighPrice(e.target.value)
+                                        }
+                                    />
                                 </div>
                             </a>
                             <hr className="border-gray-400 border-opacity-50" />
@@ -133,8 +147,10 @@ const ListProduct = () => {
                                     {buttonColors.map((btn: any, index: any) => (
                                         <button
                                             key={index}
-                                            className={`m-1 mx-1 h-8 w-8 rounded-full ${btn.class} ${selectedButton === index ? 'border-4 border-white' : ''}`}
-                                            onClick={() => handleButtonClick(index, btn.color)}
+                                            className={`m-1 mx-1 h-8 w-8 rounded-full ${btn.class} ${selectedButton === index ? "border-4 border-white" : ""}`}
+                                            onClick={() =>
+                                                handleButtonClick(index, btn.color)
+                                            }
                                         ></button>
                                     ))}
                                 </div>
@@ -161,8 +177,20 @@ const ListProduct = () => {
                                         return (
                                             <>
                                                 <div>
-                                                    <Checkbox value={data?.id} checked={selectedCategory === data.id}
-                                                        onChange={() => handleCheckboxChange(data.id)}>{data?.name}</Checkbox>
+                                                    <Checkbox
+                                                        value={data?.id}
+                                                        checked={
+                                                            selectedCategory ===
+                                                            data.id
+                                                        }
+                                                        onChange={() =>
+                                                            handleCheckboxChange(
+                                                                data.id,
+                                                            )
+                                                        }
+                                                    >
+                                                        {data?.name}
+                                                    </Checkbox>
                                                 </div>
                                             </>
                                         )
@@ -171,10 +199,10 @@ const ListProduct = () => {
                             ) : (
                                 ""
                             )}
-                        
-
                         </div>
-                        <a href="/products" className="mt-5" ><Button style={{ marginTop: "16px" }}>Bỏ lọc</Button></a>
+                        <a href="/products" className="mt-5">
+                            <Button style={{ marginTop: "16px" }}>Bỏ lọc</Button>
+                        </a>
                     </div>
                     <div className="w-5/6 px-8">
                         <div className="">
@@ -218,32 +246,45 @@ const ListProduct = () => {
                         </div>
                         <div className="row row-gap-4 mt-3">
                             <div className="grid  grid-cols-5 ">
-                                {filter ? <>{product?.length == 0 ? <div className="result-container m-auto p-auto" style={{ marginLeft: "150%" }}>
-                                    <Result
-                                        status="404"
-                                        title="Not Found"
-                                        subTitle="Không có sản phẩm phù hợp"
-                                    // extra={<Button type="primary">Back Home</Button>}
-                                    />
-                                </div> : product?.map((data: Product) => {
-                                    return (
-                                        <>
-                                            <ProductInListProduct
-                                                data={data}
-                                                key={data?.id}
-                                            />
-                                        </>
-                                    )
-                                })}</> : displayedProducts?.map((data: Product) => {
-                                    return (
-                                        <>
-                                            <ProductInListProduct
-                                                data={data}
-                                                key={data?.id}
-                                            />
-                                        </>
-                                    )
-                                })}
+                                {filter ? (
+                                    <>
+                                        {product?.length == 0 ? (
+                                            <div
+                                                className="result-container p-auto m-auto"
+                                                style={{ marginLeft: "150%" }}
+                                            >
+                                                <Result
+                                                    status="404"
+                                                    title="Not Found"
+                                                    subTitle="Không có sản phẩm phù hợp"
+                                                    // extra={<Button type="primary">Back Home</Button>}
+                                                />
+                                            </div>
+                                        ) : (
+                                            product?.map((data: Product) => {
+                                                return (
+                                                    <>
+                                                        <ProductInListProduct
+                                                            data={data}
+                                                            key={data?.id}
+                                                        />
+                                                    </>
+                                                )
+                                            })
+                                        )}
+                                    </>
+                                ) : (
+                                    displayedProducts?.map((data: Product) => {
+                                        return (
+                                            <>
+                                                <ProductInListProduct
+                                                    data={data}
+                                                    key={data?.id}
+                                                />
+                                            </>
+                                        )
+                                    })
+                                )}
                             </div>
                             <div className="mb-20 mt-10 flex justify-center">
                                 {visibleCount < products?.length && (

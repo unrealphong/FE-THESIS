@@ -105,9 +105,11 @@ const GetProductBuyMax = async () => {
         return undefined
     }
 }
-const filterProduct = async (data:any) => {
+const filterProduct = async (data: any) => {
     try {
-        const response = await httpRequest.get(`/filter?minPrice=${data?.minprice}&maxPrice=${data?.maxprice}&color=${data?.color}&category_id=${data?.category_id}`)
+        const response = await httpRequest.get(
+            `/filter?minPrice=${data?.minprice}&maxPrice=${data?.maxprice}&color=${data?.color}&category_id=${data?.category_id}`,
+        )
         return response?.data?.data?.original
     } catch (error) {
         return undefined
@@ -123,5 +125,5 @@ export {
     GetProduct50Persion,
     GetProductBuy1Free1,
     GetProductBuyMax,
-    filterProduct
+    filterProduct,
 }
