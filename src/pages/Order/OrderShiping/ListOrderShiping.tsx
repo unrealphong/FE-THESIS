@@ -1,22 +1,25 @@
-import { useEffect, useState } from "react"
-import NameProductListOrderPaid from "./NameProductListOrderPaid"
 import { Pagination, Spin } from "antd"
+import React, { useEffect, useState } from "react"
 import { LoadingOutlined } from "@ant-design/icons"
-import { getBillPaid } from "@/api/services/Bill"
+import { GetBillShipingWithUser, getBillShiping } from "@/api/services/Bill"
+import NameListOrderShiping from "./NameListOrderShiping"
 
-const ListOrderPaid = () => {
+const ListOrderSiping = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
     const [check1, setcheck] = useState<boolean>()
+    const user: any = localStorage.getItem("user")
+    const users = JSON.parse(user) || []
     const fetchBills = async () => {
         try {
-            const allBills: any = await getBillPaid()
+            const allBills: any = await GetBillShipingWithUser(users?.data?.id)
             setbill(allBills)
         } catch {
         } finally {
             setLoading(false)
         }
     }
+
     useEffect(() => {
         fetchBills()
     }, [check1])
@@ -24,7 +27,8 @@ const ListOrderPaid = () => {
     const itemsPerPage = 10
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = bill?.slice(indexOfFirstItem, indexOfLastItem)
+    const currentItems = bill?.data?.slice(indexOfFirstItem, indexOfLastItem)
+
     const handlePageChange = (page: any) => {
         setCurrentPage(page)
     }
@@ -34,6 +38,7 @@ const ListOrderPaid = () => {
     const check = (key: any) => {
         setcheck(key)
     }
+
     return (
         <>
             <table className="w-full border border-gray-300 bg-gray-100 text-sm text-black">
@@ -68,7 +73,7 @@ const ListOrderPaid = () => {
                         </tr>
                     ) : (
                         currentItems?.map((data: any) => (
-                            <NameProductListOrderPaid
+                            <NameListOrderShiping
                                 key={data.id}
                                 data={data}
                                 onCheck={check}
@@ -89,4 +94,4 @@ const ListOrderPaid = () => {
     )
 }
 
-export default ListOrderPaid
+export default ListOrderSiping

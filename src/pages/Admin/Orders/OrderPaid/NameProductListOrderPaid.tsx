@@ -1,11 +1,18 @@
-import { getAllBillDetail, getBillsDetail } from "@/api/services/Bill"
+import {
+    addHistoryBills,
+    getAllBillDetail,
+    getBillsDetail,
+    updateCancel,
+    updateConfirm,
+} from "@/api/services/Bill"
 import formatNumber from "@/utilities/FormatTotal"
 import { LoadingOutlined } from "@ant-design/icons"
 import { Skeleton, Spin, Tag } from "antd"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { toast } from "react-toastify"
 
-const NameProductListOrderPaid = ({ data }: any) => {
+const NameProductListOrderPaid = ({ data, onCheck }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
     const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
@@ -30,6 +37,52 @@ const NameProductListOrderPaid = ({ data }: any) => {
             setstatus("Chờ xác nhận")
         }
     }, [data])
+    const HandleCancel = async (id: any) => {
+        let input: any = ""
+        while (input.trim() === "") {
+            input = window.prompt("Lý do hủy đơn hàng:")
+            if (input === null) {
+                return
+            }
+            if (input.trim() !== "") {
+                const data = {
+                    bill_id: billdetail?.id,
+                    user_id: billdetail?.user_id,
+                    description: `Admin xác nhận hủy đơn hàng; Lý do: ${input}`,
+                }
+                await updateCancel(id).then(async () => {
+                    await addHistoryBills(data).then(() => {
+                        toast.success("Bạn đã hủy đơn hàng")
+                        setcolor("error")
+                        setstatus("Hủy hàng")
+                        onCheck(status)
+                    })
+                })
+                return
+            } else {
+                alert("Vui lòng nhập lý do hủy đơn hàng.")
+            }
+        }
+    }
+    const HandleConfirm = async (id: any) => {
+        const check = confirm("Bạn chắc chắn muốn xác nhận đơn hàng này?")
+        if (check == true) {
+            const data = {
+                bill_id: billdetail?.id,
+                user_id: billdetail?.user_id,
+                description: `Admin xác nhận đơn hàng`,
+            }
+            await updateConfirm(id).then(async () => {
+                await addHistoryBills(data).then(() => {
+                    toast.success("Bạn đã xác nhận đơn hàng")
+                    setcolor("processing")
+                    setstatus("Chờ giao hàng")
+                    onCheck(status)
+                })
+            })
+        }
+    }
+    const total: any = Number(billdetail?.total_amount)
     return (
         <>
             {loading ? (
@@ -76,7 +129,7 @@ const NameProductListOrderPaid = ({ data }: any) => {
                             className="p-2 text-center font-normal "
                             style={{ width: "10%" }}
                         >
-                            {formatNumber(data?.total_amount)} đ
+                            {formatNumber(total + 30000)} đ
                         </td>
                         <td className="p-2 text-center font-normal">
                             {data?.created_at.substring(0, 19)}
@@ -86,10 +139,16 @@ const NameProductListOrderPaid = ({ data }: any) => {
                             <Tag color={color}>{status}</Tag>
                         </td>
                         <td className="p-2 font-normal" style={{ width: "10%" }}>
-                            <button className="mb-1 w-24 rounded bg-red-500 p-1 text-white">
+                            <button
+                                className="mb-1 w-24 rounded bg-red-500 p-1 text-white"
+                                onClick={() => HandleCancel(data?.id)}
+                            >
                                 Hủy
                             </button>
-                            <button className="mb-1 w-24 rounded bg-blue-500 p-1 text-white">
+                            <button
+                                className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
+                                onClick={() => HandleConfirm(data?.id)}
+                            >
                                 Xác nhận
                             </button>
                             <Link to={`/quan-ly-orders/${data?.id}`}>

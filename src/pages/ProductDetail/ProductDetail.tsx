@@ -8,7 +8,6 @@ import {
 } from "@ant-design/icons"
 import { useParams } from "react-router-dom"
 import { getProductById } from "@/api/services/ProductService"
-import { Product } from "@/@types/product"
 import CategoryInProductDetail from "./CategoryInProductDetail"
 import PriceInProductDetail from "./PriceInProductDetail"
 import ColorInProductDetail from "./ColorInProductDetail"
@@ -55,30 +54,47 @@ const ProductDetail = () => {
     useEffect(() => {
         fetchProducts()
     }, [])
+    console.log(product)
+
     const [idColor, setIdcolor] = useState()
     const HandlePrice = (value: any) => {
         setIdcolor(value)
     }
     const [idsize, setIdsize] = useState()
-    const HandleSize = (value: any) => {
-        setIdsize(value)
-        setSelectedColor(value)
+    const [id_attribute_value, setid_attribute_value] = useState()
+    const [id_attribute_size, setid_attribute_size] = useState()
+
+    const HandleSize = (idvarian: any, idattributevalue: any) => {
+        setIdsize(idvarian)
+        setSelectedColor(idvarian)
+        setid_attribute_value(idattributevalue)
     }
-    const sizes = (value: any) => {
-        setSizevalue(value)
+    const [sizevalues, setsizevalue] = useState()
+    const sizes = (idvarian: any, idattributevalue: any, sizeValue: any) => {
+        setSizevalue(idvarian)
+        setid_attribute_size(idattributevalue)
+        setsizevalue(sizeValue)
     }
     const price = (value: any) => {
         setprices(value)
     }
     const HandleAddtoCart = async () => {
         const data = {
-            id: carts.length + 1,
-            name_product: product?.name,
-            price: prices,
-            quantity: quantity,
-            size: sizevalue,
-            color: idColor,
             image: product?.image,
+            variant_id: idsize,
+            quantity: quantity,
+            name_product: product?.name,
+            sale_id: product?.sale_id,
+            attributes: [
+                {
+                    attribute_name: 81,
+                    attribute_value: id_attribute_value,
+                },
+                {
+                    attribute_name: 82,
+                    attribute_value: id_attribute_size,
+                },
+            ],
         }
         if (idsize == undefined) {
             toast.error("Bạn cần chọn size!")
@@ -87,9 +103,9 @@ const ProductDetail = () => {
         } else {
             const existingProductIndex = carts?.findIndex(
                 (item: any) =>
-                    item.name_product == product?.product?.name &&
-                    item?.size == sizevalue &&
-                    item?.color == idColor,
+                    item.variant_id == idsize &&
+                    item?.attributes[0].attribute_value == id_attribute_value &&
+                    item?.attributes[1].attribute_value == id_attribute_size,
             )
             if (existingProductIndex !== -1) {
                 carts[existingProductIndex].quantity += Number(quantity)
@@ -97,11 +113,10 @@ const ProductDetail = () => {
                 await carts.push(data)
             }
             localStorage.setItem("cart", JSON.stringify(carts))
-
             toast.success("Bạn đã thêm thành công!")
-            setTimeout(() => {
-                window.location.reload()
-            }, 500)
+            // setTimeout(() => {
+            //     window.location.reload()
+            // }, 500)
         }
     }
     return (
@@ -129,7 +144,7 @@ const ProductDetail = () => {
                             </List.Item>
                         )}
                     /> */}
-                    <div className="thumbnails ml-10">
+                    <div className="thumbnails ml-10 mr-10">
                         <Image
                             className=""
                             src={product?.image}
@@ -144,12 +159,13 @@ const ProductDetail = () => {
                 </div>
                 <div className="w-1.6/3 ">
                     <div className="flex">
-                        <button className="rounded bg-red-500 pl-2 pr-2 text-white">
-                            bán chạy
-                        </button>
-                        <button className="ml-2 rounded bg-green-500 pl-2 pr-2 text-white">
-                            free ship
-                        </button>
+                        {product?.sale_id ? (
+                            <button className="rounded bg-red-500 pl-2 pr-2 text-white">
+                                Sale
+                            </button>
+                        ) : (
+                            ""
+                        )}
                     </div>
                     <div className="mt-3 text-xl font-bold">{product?.name}</div>
                     <span>SKU: F9UVC020M-015</span>
@@ -167,6 +183,7 @@ const ProductDetail = () => {
                         data={product?.variants}
                         idcolor={idColor}
                         onPrice={price}
+                        sale_id={product?.sale_id}
                     />
                     <hr className="my-4  w-full border-t border-dashed border-gray-400" />
                     <span className="text-sm font-bold">MÀU SẮC </span>
@@ -203,7 +220,7 @@ const ProductDetail = () => {
                             )
                         })}
                     </div>
-                    <div className="mt-6 flex">
+                    <div className="mb-5 mt-6 flex">
                         <span className="text-sm font-bold ">CHỌN SỐ LƯỢNG</span>
                         <div className="ml-auto flex items-center">
                             <input
@@ -216,7 +233,7 @@ const ProductDetail = () => {
                             />
                         </div>
                     </div>
-                    <div className="mt-10 flex">
+                    <div className=" flex">
                         <button
                             className="w-2/4 rounded border  border-red-400 p-2"
                             style={{ color: "red" }}

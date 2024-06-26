@@ -5,31 +5,30 @@ const SizeInProductDetail = ({ data, product, idSize, onSize }: any) => {
     if (!Array.isArray(product) || product.length === 0) {
         return <div></div>
     }
-    console.log(product)
     let foundValue = undefined
     product.forEach((item) => {
-        const foundObj = item.attribute_names[1]
-        console.log(foundObj)
+        const foundObj = item.attribute_values[1]
         if (foundObj.value == data?.value) {
             foundValue = foundObj.value
         }
     })
 
-    let sizeValue = undefined
+    let sizeValue: any = undefined
+    let idattributevalue: any = undefined
+    let idvarians: any = undefined
     product.forEach((item) => {
-        const foundObj = item.attribute_names[1]
+        const foundObj = item.attribute_values[1]
         if (item?.id == idSize) {
-            const sizeValue1 = item.attribute_names[1]
-            console.log(sizeValue1)
-
+            const sizeValue1 = item.attribute_values[1]
             sizeValue = sizeValue1.value
+            idvarians = item.id
+            idattributevalue = sizeValue1?.id
         }
     })
-    console.log(sizeValue)
 
     const HandleClick = () => {
         setclick(!click)
-        onSize(data?.value)
+        onSize(idvarians, idattributevalue, sizeValue)
     }
     return (
         <>

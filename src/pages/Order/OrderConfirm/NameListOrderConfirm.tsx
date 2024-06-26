@@ -1,19 +1,11 @@
-import { useEffect, useState } from "react"
+import { getBillsDetail } from "@/api/services/Bill"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import {
-    addHistoryBills,
-    getAllBillDetail,
-    getBillsDetail,
-    updateCancel,
-    updateConfirm,
-} from "@/api/services/Bill"
-import { toast } from "react-toastify"
 
-const NameProductListOrderPending = ({ data, onCheck }: any) => {
+const NameListOrderConfirm = ({ data, onCheck }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
-    const [check, setCheck] = useState<any>()
     const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
         try {
@@ -30,59 +22,14 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
     }, [])
     // const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
     const [color, setcolor] = useState<any>()
-    const [status, setstatus] = useState<any>(false)
+    const [status, setstatus] = useState<any>()
     useEffect(() => {
-        if (data?.status == "Pending") {
-            setcolor("warning")
-            setstatus("Chờ xác nhận")
+        if (data?.status == "Confirm") {
+            setcolor("processing")
+            setstatus("Chờ giao hàng")
         }
     }, [data])
-    const HandleCancel = async (id: any) => {
-        let input: any = ""
-        while (input.trim() === "") {
-            input = window.prompt("Lý do hủy đơn hàng:")
-            if (input === null) {
-                return
-            }
-            if (input.trim() !== "") {
-                const data = {
-                    bill_id: billdetail?.id,
-                    user_id: billdetail?.user_id,
-                    description: `Admin xác nhận hủy đơn hàng; Lý do: ${input}`,
-                }
-                await updateCancel(id).then(async () => {
-                    await addHistoryBills(data).then(() => {
-                        toast.success("Bạn đã hủy đơn hàng")
-                        setcolor("error")
-                        setstatus("Hủy hàng")
-                        onCheck(status)
-                    })
-                })
-                return
-            } else {
-                alert("Vui lòng nhập lý do hủy đơn hàng.")
-            }
-        }
-    }
-    const HandleConfirm = async (id: any) => {
-        const check = confirm("Bạn chắc chắn muốn xác nhận đơn hàng này?")
-        if (check == true) {
-            const data = {
-                bill_id: billdetail?.id,
-                user_id: billdetail?.user_id,
-                description: `Admin xác nhận đơn hàng`,
-            }
-            await updateConfirm(id).then(async () => {
-                await addHistoryBills(data).then(() => {
-                    toast.success("Bạn đã xác nhận đơn hàng")
-                    setcolor("processing")
-                    setstatus("Chờ giao hàng")
-                    onCheck(status)
-                })
-            })
-        }
-    }
-    const total: any = Number(billdetail?.total_amount)
+    const total: any = Number(data?.total_amount)
     return (
         <>
             {loading ? (
@@ -97,6 +44,7 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
                 </>
             ) : (
                 <>
+                    {" "}
                     <tr className="items-center justify-center p-2" key={data?.id}>
                         <td className="p-2 text-center font-normal">{data?.id}</td>
                         <td className="p-2 text-center font-normal">
@@ -139,19 +87,7 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
                             <Tag color={color}>{status}</Tag>
                         </td>
                         <td className="p-2 font-normal" style={{ width: "10%" }}>
-                            <button
-                                className="mb-1 w-24 rounded bg-red-500 p-1 text-white"
-                                onClick={() => HandleCancel(data?.id)}
-                            >
-                                Hủy
-                            </button>
-                            <button
-                                className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
-                                onClick={() => HandleConfirm(data?.id)}
-                            >
-                                Xác nhận
-                            </button>
-                            <Link to={`/quan-ly-orders/${data?.id}`}>
+                            <Link to={`/orders/${data?.id}`}>
                                 <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
                                     Chi tiết
                                 </button>
@@ -163,5 +99,4 @@ const NameProductListOrderPending = ({ data, onCheck }: any) => {
         </>
     )
 }
-
-export default NameProductListOrderPending
+export default NameListOrderConfirm

@@ -135,6 +135,7 @@ const updateAttributeValue = async (
     }
 }
 
+
 export {
     createAttribute,
     deleteAttribute,
@@ -142,6 +143,7 @@ export {
     getAttributeById,
     updateAttribute,
     getAllAttributeValue,
+
     getAttributeValueById,
     createAttributeValue,
     deleteAttributeValue,

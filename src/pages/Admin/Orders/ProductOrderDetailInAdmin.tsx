@@ -3,13 +3,14 @@ import { LoadingOutlined } from "@ant-design/icons"
 import { Skeleton, Spin } from "antd"
 
 const ProductOrderDetailInAdmin = ({ data, loading }: any) => {
-    // console.log(loading);
-
+    const parts = data?.attribute
+        ? data?.attribute?.split(";").map((part: any) => part.trim())
+        : ""
+    const [color, size] = parts
     return (
         <>
             {loading ? (
                 <>
-                    {" "}
                     <tr>
                         <td colSpan={9}>
                             <div className="flex h-24 items-center justify-center">
@@ -30,12 +31,12 @@ const ProductOrderDetailInAdmin = ({ data, loading }: any) => {
                                     </p>
                                     <span className="text-sm ">
                                         Kích thước:
-                                        <span className="font-bold">XL</span>
+                                        <span className="font-bold">{size}</span>
                                     </span>
                                     <br />
                                     <span className="text-sm">
                                         Màu sắc:
-                                        <span className="font-bold">red</span>
+                                        <span className="font-bold">{color}</span>
                                     </span>
                                 </div>
                             </div>

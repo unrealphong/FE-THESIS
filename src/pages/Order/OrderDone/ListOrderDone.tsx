@@ -1,38 +1,41 @@
 import { useEffect, useState } from "react"
-import NameProductListOrderPaid from "./NameProductListOrderPaid"
-import { Pagination, Spin } from "antd"
-import { LoadingOutlined } from "@ant-design/icons"
-import { getBillPaid } from "@/api/services/Bill"
 
-const ListOrderPaid = () => {
+import { Pagination, Spin } from "antd"
+import { GetBillDoneWithUser, getBillDone } from "@/api/services/Bill"
+import { LoadingOutlined } from "@ant-design/icons"
+import NameListOrderDone from "./NameListOrderDone"
+
+const ListOrderDones = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
-    const [check1, setcheck] = useState<boolean>()
+    const user: any = localStorage.getItem("user")
+    const users = JSON.parse(user) || []
     const fetchBills = async () => {
         try {
-            const allBills: any = await getBillPaid()
+            const allBills: any = await GetBillDoneWithUser(users?.data?.id)
             setbill(allBills)
         } catch {
         } finally {
             setLoading(false)
         }
     }
+
     useEffect(() => {
         fetchBills()
-    }, [check1])
+        console.log(bill)
+    }, [])
+
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = bill?.slice(indexOfFirstItem, indexOfLastItem)
+    const currentItems = bill?.data?.slice(indexOfFirstItem, indexOfLastItem)
+
     const handlePageChange = (page: any) => {
         setCurrentPage(page)
     }
     const onChange = (key: string) => {
         console.log(key)
-    }
-    const check = (key: any) => {
-        setcheck(key)
     }
     return (
         <>
@@ -68,11 +71,7 @@ const ListOrderPaid = () => {
                         </tr>
                     ) : (
                         currentItems?.map((data: any) => (
-                            <NameProductListOrderPaid
-                                key={data.id}
-                                data={data}
-                                onCheck={check}
-                            />
+                            <NameListOrderDone key={data.id} data={data} />
                         ))
                     )}
                 </tbody>
@@ -89,4 +88,4 @@ const ListOrderPaid = () => {
     )
 }
 
-export default ListOrderPaid
+export default ListOrderDones

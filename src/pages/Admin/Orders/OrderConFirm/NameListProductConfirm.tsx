@@ -1,4 +1,9 @@
-import { getAllBillDetail, getBillsDetail, updateShiping } from "@/api/services/Bill"
+import {
+    addHistoryBills,
+    getAllBillDetail,
+    getBillsDetail,
+    updateShiping,
+} from "@/api/services/Bill"
 import { useEffect, useState } from "react"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
@@ -31,13 +36,24 @@ const NameProductInListOrderConfirm = ({ data, onCheck }: any) => {
         }
     }, [data])
     const HandleShiping = async (id: any) => {
-        await updateShiping(id).then(() => {
-            toast.success("Đơn hàng đã được chuyển sang đang vận chuyển")
-            setcolor("purple")
-            setstatus("Đang giao hàng")
-            onCheck(status)
-        })
+        const check = confirm("Bạn có chắc chắn shiper đã lấy hàng?")
+        if (check == true) {
+            const data = {
+                bill_id: billdetail?.id,
+                user_id: billdetail?.user_id,
+                description: `Admin xác nhận đơn hàng đã được shiper lấy`,
+            }
+            await updateShiping(id).then(async () => {
+                await addHistoryBills(data).then(() => {
+                    toast.success("Đơn hàng đã được chuyển sang đang vận chuyển")
+                    setcolor("purple")
+                    setstatus("Đang giao hàng")
+                    onCheck(status)
+                })
+            })
+        }
     }
+    const total: any = Number(billdetail?.total_amount)
     return (
         <>
             {loading ? (
@@ -85,7 +101,7 @@ const NameProductInListOrderConfirm = ({ data, onCheck }: any) => {
                             className="p-2 text-center font-normal "
                             style={{ width: "10%" }}
                         >
-                            {formatNumber(data?.total_amount)} đ
+                            {formatNumber(total + 30000)} đ
                         </td>
                         <td className="p-2 text-center font-normal">
                             {data?.created_at.substring(0, 19)}
@@ -99,7 +115,7 @@ const NameProductInListOrderConfirm = ({ data, onCheck }: any) => {
                                 className="mb-1 w-24 rounded bg-blue-500 p-1 text-white"
                                 onClick={() => HandleShiping(data?.id)}
                             >
-                                Đẫ lấy
+                                Đã lấy
                             </button>
                             <Link to={`/quan-ly-orders/${data?.id}`}>
                                 <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">

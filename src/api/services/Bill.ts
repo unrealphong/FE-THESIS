@@ -176,6 +176,84 @@ const updateDone = async (id: any) => {
         return undefined
     }
 }
+const GetBillWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
+const addHistoryBills = async (data: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.post(
+            `/bill-stores`,
+            data,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
+const GetBillPendingWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user-pending/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
+const GetBillConfirmWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user-confirm/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
+const GetBillShipingWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user-shiping/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
+const GetBillDoneWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user-done/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
+const GetBillCancelWithUser = async (id: any) => {
+    try {
+        const response: AxiosResponse<{ data: any }> = await httpRequest.get(
+            `/bills-with-user-cancel/${id}`,
+        )
+        const createdProduct = response.data?.data
+        return createdProduct
+    } catch (error) {
+        return undefined
+    }
+}
 export {
     addBill,
     getAllBill,
@@ -193,4 +271,11 @@ export {
     updateConfirm,
     updateShiping,
     updateDone,
+    GetBillWithUser,
+    addHistoryBills,
+    GetBillPendingWithUser,
+    GetBillConfirmWithUser,
+    GetBillShipingWithUser,
+    GetBillDoneWithUser,
+    GetBillCancelWithUser,
 }

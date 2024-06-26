@@ -29,7 +29,7 @@ const NameProductListOrderDone = ({ data }: any) => {
             setstatus("Hoàn thành")
         }
     }, [data])
-    console.log("okoko")
+    const total: any = Number(billdetail?.total_amount)
 
     return (
         <>
@@ -60,7 +60,7 @@ const NameProductListOrderDone = ({ data }: any) => {
                     className="p-2 text-center font-normal "
                     style={{ width: "10%" }}
                 >
-                    {formatNumber(data?.total_amount)} đ
+                    {formatNumber(total + 30000)} đ
                 </td>
                 <td className="p-2 text-center font-normal">
                     {data?.created_at.substring(0, 19)}

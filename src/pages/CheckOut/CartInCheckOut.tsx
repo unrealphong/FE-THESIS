@@ -1,7 +1,38 @@
+import { useEffect, useState } from "react"
 import ProductInCartCheckOut from "./ProductInCartCheckOut"
+import { getCartOrder } from "@/api/services/Order"
 
 const CartInCheckOut = () => {
-    const carts = JSON.parse(localStorage.getItem("cart")!)
+    const [carts, setCarts] = useState([])
+    const [totalPrice, setTotalPrice] = useState(0)
+    const [cartt, setcart] = useState<any>()
+    const [check, setcheck] = useState<any>(false)
+    const handleCartUpdate = async () => {
+        const storedCarts = JSON.parse(localStorage.getItem("cart")!) || []
+        setCarts(storedCarts)
+        const data = { data: storedCarts }
+        const allCart: any = await getCartOrder(data)
+        setcart(allCart)
+        let total = 0
+        let totalQuantity = 0
+        let hasSaleId1 = false
+        storedCarts.forEach((item: any) => {
+            totalQuantity += item.quantity
+            if (item.sale_id === 1) {
+                hasSaleId1 = true
+            }
+        })
+
+        storedCarts.forEach((item: any, index: any) => {
+            total += allCart?.data[index]?.price * item.quantity
+            setcheck(false)
+        })
+        setTotalPrice(total)
+    }
+    useEffect(() => {
+        handleCartUpdate()
+    }, [])
+
     return (
         <>
             <div className="mt-5 bg-white p-5">
@@ -23,13 +54,14 @@ const CartInCheckOut = () => {
 
                     <tbody>
                         <hr className="my-1 w-full border-t border-dashed border-white " />
-                        {carts?.map((data: any, index: any) => {
+                        {cartt?.data?.map((data: any, index: any) => {
                             return (
                                 <>
                                     <ProductInCartCheckOut
                                         data={data}
                                         index={index}
                                         key={data?.id}
+                                        quantity={carts[index]}
                                     />
                                 </>
                             )

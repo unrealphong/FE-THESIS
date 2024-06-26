@@ -10,6 +10,10 @@ import { Link } from "react-router-dom"
 import { Autoplay, Navigation, Pagination } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import ProductNewInHomePage from "./ProductNewInHomePage"
+import ListProductBuy3 from "./ListProductBuy3"
+import ListProduct50Persion from "./ListProduct50Persion"
+import ListProductBuy1Free1 from "./ListProductBuy1Free1"
+import ListProductBuyMax from "./ListProductBuyMax"
 
 function HomePage() {
     const [category, setCategory] = useState<Category[]>([])
@@ -37,12 +41,44 @@ function HomePage() {
 
     const [activeTab, setActiveTab] = useState(1)
 
-    const tabs = [
-        { id: 1, label: "MUA 3 GIẢM 10%", content: "Tab 1 Content" },
-        { id: 2, label: "SALE 50%", content: "Tab 2 Content" },
-        { id: 3, label: "MUA 1 TẶNG 1", content: "Tab 3 Content" },
-        { id: 4, label: "BÁN CHẠY NHẤT", content: "Tab 4 Content" },
-    ]
+    // const tabs = [
+    //     {
+    //         id: 1,
+    //         label: "MUA 3 GIẢM 10%",
+    //         content: (
+    //             <>
+    //                 <ListProductBuy3 />
+    //             </>
+    //         ),
+    //     },
+    //     {
+    //         id: 2,
+    //         label: "SALE 50%",
+    //         content: (
+    //             <>
+    //                 <ListProduct50Persion />
+    //             </>
+    //         ),
+    //     },
+    //     {
+    //         id: 3,
+    //         label: "MUA 1 TẶNG 1",
+    //         content: (
+    //             <>
+    //                 <ListProductBuy1Free1 />
+    //             </>
+    //         ),
+    //     },
+    //     {
+    //         id: 4,
+    //         label: "BÁN CHẠY NHẤT",
+    //         content: (
+    //             <>
+    //                 <ListProductBuyMax />
+    //             </>
+    //         ),
+    //     },
+    // ]
 
     useEffect(() => {
         document.title =
@@ -88,9 +124,10 @@ function HomePage() {
             </div>
             <div className="block-offer-online container mx-auto my-10 flex max-w-7xl flex-col justify-center">
                 <div className="flex justify-center text-3xl font-semibold uppercase text-red-600">
-                    Ưu đãi độc quyền online
+                    Sản phẩm giảm giá
                 </div>
-                <div className="block-offer-content">
+                <ListProductBuy3 />
+                {/* <div className="block-offer-content">
                     <div className="mb-4 mt-8 flex justify-center border-b-4">
                         {tabs.map((tab) => (
                             <button
@@ -112,7 +149,7 @@ function HomePage() {
                             </div>
                         ))}
                     </div>
-                </div>
+                </div> */}
             </div>
             <div className="block-new-product container mx-auto my-2 flex max-w-7xl flex-col">
                 <div className="block-new-product-title my-4 text-center text-3xl font-semibold uppercase text-red-600">
@@ -124,7 +161,7 @@ function HomePage() {
                     ))}
                 </div>
                 <div className="block-offer-button my-5 text-center">
-                    <button className="btn h-10 rounded border bg-red-500 px-2 text-white">
+                    <button className="btn h-10 rounded border bg-red-500 px-2 pl-5 pr-5 text-white">
                         <Link to="/products">Xem tất cả sản phẩm</Link>
                     </button>
                 </div>

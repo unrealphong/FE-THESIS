@@ -1,4 +1,9 @@
-import { getAllBillDetail, getBillsDetail, updateDone } from "@/api/services/Bill"
+import {
+    addHistoryBills,
+    getAllBillDetail,
+    getBillsDetail,
+    updateDone,
+} from "@/api/services/Bill"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
 import { useEffect, useState } from "react"
@@ -31,13 +36,24 @@ const NameProductListOrderShiping = ({ data, onCheck }: any) => {
         }
     }, [data])
     const HandleDone = async (id: any) => {
-        await updateDone(id).then(() => {
-            toast.success("Đơn hàng đã hoàn thành")
-            setcolor("green")
-            setstatus("Hoàn thành")
-            onCheck(status)
-        })
+        const check = confirm("Bạn có chắc chắn đơn hàng này khách hàng đã nhận?")
+        if (check == true) {
+            const data = {
+                bill_id: billdetail?.id,
+                user_id: billdetail?.user_id,
+                description: `Admin xác nhận khách hàng đã nhận được đơn hàng`,
+            }
+            await updateDone(id).then(async () => {
+                await addHistoryBills(data).then(() => {
+                    toast.success("Đơn hàng đã hoàn thành")
+                    setcolor("green")
+                    setstatus("Hoàn thành")
+                    onCheck(status)
+                })
+            })
+        }
     }
+    const total: any = Number(billdetail?.total_amount)
     return (
         <>
             {loading ? (
@@ -84,7 +100,7 @@ const NameProductListOrderShiping = ({ data, onCheck }: any) => {
                             className="p-2 text-center font-normal "
                             style={{ width: "10%" }}
                         >
-                            {formatNumber(data?.total_amount)} đ
+                            {formatNumber(total + 30000)} đ
                         </td>
                         <td className="p-2 text-center font-normal">
                             {data?.created_at.substring(0, 19)}

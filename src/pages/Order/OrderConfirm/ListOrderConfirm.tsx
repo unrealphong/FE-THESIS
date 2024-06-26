@@ -1,30 +1,35 @@
-import { useEffect, useState } from "react"
-import NameProductListOrderPaid from "./NameProductListOrderPaid"
-import { Pagination, Spin } from "antd"
+import { GetBillConfirmWithUser, getBillconfirm } from "@/api/services/Bill"
 import { LoadingOutlined } from "@ant-design/icons"
-import { getBillPaid } from "@/api/services/Bill"
+import { Pagination, Spin } from "antd"
+import { useEffect, useState } from "react"
+import NameListOrderConfirm from "./NameListOrderConfirm"
 
-const ListOrderPaid = () => {
+const ListOrderConFirm = () => {
     const [bill, setbill] = useState<any>()
     const [loading, setLoading] = useState<boolean>(true)
     const [check1, setcheck] = useState<boolean>()
+    const user: any = localStorage.getItem("user")
+    const users = JSON.parse(user) || []
     const fetchBills = async () => {
         try {
-            const allBills: any = await getBillPaid()
+            const allBills: any = await GetBillConfirmWithUser(users?.data?.id)
             setbill(allBills)
         } catch {
         } finally {
             setLoading(false)
         }
     }
+
     useEffect(() => {
         fetchBills()
     }, [check1])
+
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = bill?.slice(indexOfFirstItem, indexOfLastItem)
+    const currentItems = bill?.data?.slice(indexOfFirstItem, indexOfLastItem)
+
     const handlePageChange = (page: any) => {
         setCurrentPage(page)
     }
@@ -68,7 +73,7 @@ const ListOrderPaid = () => {
                         </tr>
                     ) : (
                         currentItems?.map((data: any) => (
-                            <NameProductListOrderPaid
+                            <NameListOrderConfirm
                                 key={data.id}
                                 data={data}
                                 onCheck={check}
@@ -89,4 +94,4 @@ const ListOrderPaid = () => {
     )
 }
 
-export default ListOrderPaid
+export default ListOrderConFirm

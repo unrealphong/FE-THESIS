@@ -1,4 +1,5 @@
 import {
+    addHistoryBills,
     getAllBillDetail,
     getBillsDetail,
     updateCancel,
@@ -62,12 +63,18 @@ const NameProductInListOrderAdmin = ({ data }: any) => {
                 return
             }
             if (input.trim() !== "") {
-                console.log("Reason entered:", input)
-                await updateCancel(id).then(() => {
-                    toast.success("Bạn đã hủy đơn hàng")
-                    setcolor("error")
-                    setstatus("Hủy hàng")
-                    setcheck(false)
+                const data = {
+                    bill_id: billdetail?.id,
+                    user_id: billdetail?.user_id,
+                    description: `Admin xác nhận hủy đơn hàng; Lý do: ${input}`,
+                }
+                await updateCancel(id).then(async () => {
+                    await addHistoryBills(data).then(() => {
+                        toast.success("Bạn đã hủy đơn hàng")
+                        setcolor("error")
+                        setstatus("Hủy hàng")
+                        setcheck(false)
+                    })
                 })
                 return
             } else {
@@ -76,13 +83,28 @@ const NameProductInListOrderAdmin = ({ data }: any) => {
         }
     }
     const HandleConfirm = async (id: any) => {
-        await updateConfirm(id).then(() => {
-            toast.success("Bạn đã xác nhận đơn hàng")
-            setcolor("processing")
-            setstatus("Chờ giao hàng")
-            setcheck(false)
-        })
+        const check = confirm("Bạn chắc chắn muốn xác nhận đơn hàng này?")
+        if (check == true) {
+            const data = {
+                bill_id: billdetail?.id,
+                user_id: billdetail?.user_id,
+                description: `Admin xác nhận đơn hàng`,
+            }
+            await updateConfirm(id).then(async () => {
+                await addHistoryBills(data).then(() => {
+                    toast.success("Bạn đã xác nhận đơn hàng")
+                    setcolor("processing")
+                    setstatus("Chờ giao hàng")
+                    setcheck(false)
+                })
+            })
+        }
     }
+    const parts = billdetail?.Recipient_address
+        ? billdetail?.Recipient_address?.split(";").map((part: any) => part.trim())
+        : ""
+    const [name, descbill, address] = parts
+    const total: any = Number(billdetail?.total_amount)
     return (
         <>
             {loading ? (
@@ -124,8 +146,7 @@ const NameProductInListOrderAdmin = ({ data }: any) => {
                             className="p-2 text-center font-normal"
                             style={{ width: "20%" }}
                         >
-                            <span className="font-bold">Đ/c</span>:{" "}
-                            {billdetail?.Recipient_address}
+                            <span className="font-bold">Đ/c</span>: {address}
                             <br />
                             <span className="font-bold">Sđt</span>:{" "}
                             {billdetail?.Recipient_phone}
@@ -134,7 +155,7 @@ const NameProductInListOrderAdmin = ({ data }: any) => {
                             className="p-2 text-center font-normal "
                             style={{ width: "10%" }}
                         >
-                            {formatNumber(billdetail?.total_amount)} đ
+                            {formatNumber(total + 30000)} đ
                         </td>
                         <td className="p-2 text-center font-normal">
                             {billdetail?.created_at.substring(0, 19)}

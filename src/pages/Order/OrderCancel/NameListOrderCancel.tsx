@@ -1,16 +1,16 @@
-import { getAllBillDetail, getBillsDetail } from "@/api/services/Bill"
+import { getAllBillDetail } from "@/api/services/Bill"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
-const NameProductListOrderCancel = ({ data, data1 }: any) => {
+const NameListOrderCancel = ({ data, data1 }: any) => {
     const [billdetail, setBillDetail] = useState<any>()
     const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
         try {
-            const data1: any = await getBillsDetail(data?.id)
-            setBillDetail(data1)
+            const data: any = await getAllBillDetail()
+            setBillDetail(data)
         } catch (error) {
             console.error("Error fetching bill details:", error)
         } finally {
@@ -20,7 +20,7 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
     useEffect(() => {
         fetchBillDetail()
     }, [])
-    // const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
+    const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
     const [color, setcolor] = useState<any>()
     const [status, setstatus] = useState<any>()
     useEffect(() => {
@@ -29,9 +29,7 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
             setstatus("Hủy hàng")
         }
     }, [data])
-    const total: any = Number(billdetail?.total_amount)
-    console.log(billdetail)
-
+    const total: any = Number(data?.total_amount)
     return (
         <>
             {loading ? (
@@ -50,19 +48,12 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
                     <tr className="items-center justify-center p-2" key={data?.id}>
                         <td className="p-2 text-center font-normal">{data?.id}</td>
                         <td className="p-2 text-center font-normal">
-                            src=
-                            {billdetail?.bill_details[0]
-                                ? billdetail?.bill_details[0].product_name
-                                : ""}
+                            {billsProduct?.product_name}
                         </td>
                         <td className="w-1/9 flex items-center justify-center p-2">
                             <img
                                 className="h-26 w-20"
-                                src={
-                                    billdetail?.bill_details[0]
-                                        ? billdetail?.bill_details[0].image
-                                        : ""
-                                }
+                                src={billsProduct?.image}
                                 alt=""
                             />
                         </td>
@@ -90,7 +81,7 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
                             <Tag color={color}>{status}</Tag>
                         </td>
                         <td className="p-2 font-normal" style={{ width: "10%" }}>
-                            <Link to={`/quan-ly-orders/${data?.id}`}>
+                            <Link to={`/orders/${data?.id}`}>
                                 <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
                                     Chi tiết
                                 </button>
@@ -103,4 +94,4 @@ const NameProductListOrderCancel = ({ data, data1 }: any) => {
     )
 }
 
-export default NameProductListOrderCancel
+export default NameListOrderCancel
