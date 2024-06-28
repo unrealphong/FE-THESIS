@@ -5,22 +5,16 @@ import { filterProduct, getAllProduct } from "@/api/services/ProductService"
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons"
 import { Button, Checkbox, Input, Result } from "antd"
 import { useEffect, useState } from "react"
-import CategoryInListProduct from "./CategoryInListProduct"
 import ProductInListProduct from "./ProductInListProduct"
-import { Link } from "react-router-dom"
 
 const ListProduct = () => {
     const [isDivVisible, setIsDivVisible] = useState(false)
     const [isCategory, setIsCategory] = useState(false)
-    const [isSubject, setIsSubject] = useState(false)
     const handleIconClick = () => {
         setIsDivVisible(!isDivVisible)
     }
     const handleIcon1Click = () => {
         setIsCategory(!isCategory)
-    }
-    const handleIcon2Click = () => {
-        setIsSubject(!isSubject)
     }
     const [category, setCategory] = useState<Category[]>([])
 
@@ -50,7 +44,6 @@ const ListProduct = () => {
     const [lowPrice, setLowPrice] = useState<any>(0)
     const [highPrice, setHighPrice] = useState<any>(0)
     const [color, setcolor] = useState<any>("")
-    const [checkcolor, setcheckcolor] = useState<any>(false)
     const [filter, setfilter] = useState(false)
     const [product, setproduct] = useState<any>([])
     const [selectedButton, setSelectedButton] = useState(null)

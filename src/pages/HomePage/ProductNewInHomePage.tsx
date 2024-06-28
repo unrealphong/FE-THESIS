@@ -28,7 +28,7 @@ const ProductNewInHomePage = ({ data }: any) => {
                                 <img src={data?.image} alt="" />
                                 {sale ? (
                                     <>
-                                        <button className="absolute top-5  flex flex-col gap-2 bg-red-500 p-1 pl-3 pr-3 text-sm text-white opacity-0 opacity-100 transition-opacity duration-300">
+                                        <button className="absolute top-5  flex flex-col gap-2 bg-red-500 p-1 pl-3 pr-3 text-sm text-white opacity-0 transition-opacity duration-300">
                                             -{sale}%
                                         </button>{" "}
                                     </>

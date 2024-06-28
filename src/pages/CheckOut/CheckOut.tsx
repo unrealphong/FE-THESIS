@@ -8,7 +8,7 @@ import {
     QuestionCircleOutlined,
     UserOutlined,
 } from "@ant-design/icons"
-import { Button, Form, Input, Modal, Radio, Select, Spin } from "antd"
+import { Button, Form, Input, Modal, Radio, Spin } from "antd"
 import TextArea from "antd/es/input/TextArea"
 import ProvinceInCheckOut from "./ProvinceInCheckOut"
 import { useEffect, useState } from "react"
@@ -288,7 +288,7 @@ const CheckOut = () => {
                     <div className="row flex ">
                         <form
                             ng-submit="completeOrder()"
-                            className="w-3/4 bg-white bg-white p-5"
+                            className="w-3/4 bg-white p-5"
                         >
                             <div className="flex">
                                 <div className="flex">

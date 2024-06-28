@@ -1,20 +1,16 @@
-import { GetProductBuy3, getAllProduct } from "@/api/services/ProductService"
-import { useEffect, useState } from "react"
+import { getAllProduct } from "@/api/services/ProductService"
+import { useEffect } from "react"
 import ProductInListProductBuy3 from "./ProductInListProductBuy3"
-import { getAllSale } from "@/api/services/Sale"
 import { Link } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "@/redux/store/store"
 
 const ListProductBuy3 = () => {
-    const [products, setProducts] = useState<any>([])
+    const dispatch = useDispatch()
+    const products = useSelector((state: RootState) => state.products.products)
     useEffect(() => {
-        const fetchProducts = async () => {
-            const allProducts: any = await getAllProduct()
-            const limitedProducts = allProducts?.slice(0, 10)
-            setProducts(limitedProducts)
-        }
-
-        fetchProducts()
-    }, [])
+        dispatch(getAllProduct() as any)
+    }, [dispatch])
 
     const filterProductsBySaleId = (products: any) => {
         return products.filter((product: any) => product.sale_id >= 1)

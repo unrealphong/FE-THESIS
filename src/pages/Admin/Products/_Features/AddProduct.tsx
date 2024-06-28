@@ -1,5 +1,5 @@
 import { Category } from "@/@types/category"
-import type { Attribute, Variant } from "@/@types/product"
+import type { Attribute, AttributeValue, Variant } from "@/@types/product"
 import {
     getAllAttribute,
     getAllAttributeValue,
@@ -16,15 +16,19 @@ import {
 import { Button, Form, Input, Select, Space, Upload } from "antd"
 import { useEffect, useState } from "react"
 import { Controller, FieldValues, useForm } from "react-hook-form"
+import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 const { Option } = Select
 
 const AddProduct = () => {
+    const dispatch = useDispatch()
     const [categories, setCategories] = useState<Category[]>([])
     const [variants, setVariants] = useState<Variant[]>([])
     const [attributes, setAttributes] = useState<Attribute[]>([])
-    const [attributeValues, setAttributeValues] = useState({})
+    const [attributeValues, setAttributeValues] = useState<{
+        [key: string]: AttributeValue[]
+    }>({})
     const navigate = useNavigate()
 
     const { control, handleSubmit } = useForm()
@@ -33,43 +37,41 @@ const AddProduct = () => {
         navigate("/quan-ly-san-pham")
     }
 
-    // Fetch categories, attributes, and attribute values on component mount
     useEffect(() => {
         fetchCategories()
         fetchAttributes()
         fetchAttributeValues()
     }, [])
 
-    // Fetch all categories from API
     const fetchCategories = async () => {
         const allCategory = await getAllCategory()
         setCategories(allCategory)
     }
 
-    // Fetch all attributes from API
     const fetchAttributes = async () => {
         const allAttribute = await getAllAttribute()
         setAttributes(allAttribute)
     }
 
-    // Fetch all attribute values from API and organize them by attribute_id
     const fetchAttributeValues = async () => {
         const values = await getAllAttributeValue()
-        const organizedValues = values.reduce((acc, item) => {
-            if (!acc[item.attribute_id]) {
-                acc[item.attribute_id] = []
-            }
-            acc[item.attribute_id].push(item)
-            return acc
-        }, {})
+        const organizedValues = values.reduce(
+            (acc: { [key: string]: AttributeValue[] }, item) => {
+                if (!acc[item.attribute_id]) {
+                    acc[item.attribute_id] = []
+                }
+                acc[item.attribute_id].push(item)
+                return acc
+            },
+            {},
+        )
         setAttributeValues(organizedValues)
     }
 
     const onSubmit = async (data: FieldValues) => {
-        console.log(data)
         if (!data.image || data.image.length === 0) {
             toast.error("Please upload an image.")
-            return // Exit early if image is not provided
+            return
         }
         const formattedData: any = {
             name: data.name,
@@ -87,15 +89,15 @@ const AddProduct = () => {
                 ],
             })),
         }
-        console.log(formattedData.image)
         try {
-            const response = await createProduct(formattedData)
-            console.log("Product created successfully:", response)
-            toast.success("Product created successfully.")
-            navigate("/quan-ly-san-pham")
+            const newProduct = await dispatch(createProduct(formattedData) as any)
+            if (newProduct) {
+                navigate("/quan-ly-san-pham")
+            } else {
+                toast.error("Thêm sản phẩm mới thất bại.")
+            }
         } catch (error) {
             console.error("Failed to create product:", error)
-            toast.error("Failed to create product. Please try again later.")
         }
     }
 
@@ -122,7 +124,11 @@ const AddProduct = () => {
     }
 
     // Handle attribute change for a variant
-    const handleAttributeChange = (attributeName, value, index) => {
+    const handleAttributeChange = (
+        attributeName: string,
+        value: any,
+        index: number,
+    ) => {
         const newVariants = [...variants]
         newVariants[index].attributes[attributeName] = value
         setVariants(newVariants)
@@ -132,7 +138,7 @@ const AddProduct = () => {
     return (
         <div className="container mx-auto mt-10 flex flex-col space-y-10 rounded-lg bg-white p-5 shadow-lg">
             <h2 className="my-10 text-2xl font-semibold text-gray-700">
-                Cập nhập thông tin sản phẩm
+                Thêm sản phẩm mới
             </h2>
             <Form
                 layout="vertical"
@@ -289,17 +295,18 @@ const AddProduct = () => {
                                     style={{ width: 240 }}
                                     placeholder={attribute.name}
                                     value={variant.attributes[attribute.name] || ""}
-                                    onChange={
-                                        (value) =>
-                                            handleAttributeChange(
-                                                attribute.name,
-                                                value,
-                                                index,
-                                            ) // Pass index here
+                                    onChange={(value) =>
+                                        handleAttributeChange(
+                                            attribute.name,
+                                            value,
+                                            index,
+                                        )
                                     }
                                 >
                                     <Option value="">Chọn</Option>
-                                    {attributeValues[attribute.id]?.map((value) => (
+                                    {attributeValues[
+                                        attribute.id as keyof typeof attributeValues
+                                    ]?.map((value: AttributeValue) => (
                                         <Option key={value.id} value={value.value}>
                                             {value.value}
                                         </Option>

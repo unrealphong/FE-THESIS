@@ -42,7 +42,7 @@ const UserManagement = () => {
 
     const columns = [
         {
-            title: "Name",
+            title: "Họ tên",
             dataIndex: "name",
             key: "name",
         },
@@ -52,43 +52,42 @@ const UserManagement = () => {
             key: "email",
         },
         {
-            title: "Phone",
+            title: "Số điện thoại",
             dataIndex: "number",
             key: "phone",
         },
         {
-            title: "Address",
+            title: "Địa chỉ",
             dataIndex: "address",
             key: "address",
         },
         {
-            title: "Role",
+            title: "Vai trò",
             dataIndex: "role_id",
             key: "role",
-            render: (role_id: number) => (role_id === 1 ? "Customer" : "Admin"),
+            render: (role_id: number) =>
+                role_id === 1 ? "Khách hàng" : "Quản trị viên",
         },
         {
-            title: "Actions",
+            title: "Thao tác",
             key: "actions",
             render: (_text: string, record: User) => (
                 <div className="space-x-2">
-                    <Button type="primary" onClick={() => showViewModal(record)}>
-                        View
-                    </Button>
+                    <Button onClick={() => showViewModal(record)}>Chi tiết</Button>
                     <Button
                         type="primary"
                         onClick={() =>
                             navigate(`/quan-ly-nguoi-dung/sua/${record.id}`)
                         }
                     >
-                        Edit
+                        Sửa
                     </Button>
                     <Popconfirm
                         title="Sure to delete?"
                         onConfirm={() => handleDelete(record.id)}
                     >
                         <Button type="primary" danger>
-                            Delete
+                            Xóa
                         </Button>
                     </Popconfirm>
                 </div>
@@ -99,12 +98,11 @@ const UserManagement = () => {
     return (
         <div className="p-4">
             <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl">User Management</h2>
                 <Button
                     type="primary"
                     onClick={() => navigate("/quan-ly-nguoi-dung/them")}
                 >
-                    Add User
+                    Thêm người dùng
                 </Button>
             </div>
             <Table dataSource={users} columns={columns} rowKey="id" />

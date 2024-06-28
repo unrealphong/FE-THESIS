@@ -1,5 +1,10 @@
 import { Category } from "@/@types/category"
-import { Attribute, Variant } from "@/@types/product"
+import {
+    Attribute,
+    AttributeValue,
+    AttributeValues,
+    Variant,
+} from "@/@types/product"
 import { getAllCategory } from "@/api/services/CategoryService"
 import { getProductById, updateProduct } from "@/api/services/ProductService"
 import {
@@ -18,9 +23,11 @@ import { useCallback, useEffect, useState } from "react"
 import { Controller, FieldValues, useForm } from "react-hook-form"
 import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
+import { useDispatch } from "react-redux"
 const { Option } = Select
 
 const UpdateProduct = () => {
+    const dispatch = useDispatch()
     const [categories, setCategories] = useState<Category[]>([])
     const [variants, setVariants] = useState<Variant[]>([])
     const [fileList, setFileList] = useState<UploadFile[]>([])
@@ -53,7 +60,9 @@ const UpdateProduct = () => {
     const fetchProductDetails = useCallback(async () => {
         if (id) {
             try {
-                const product = await getProductById(id)
+                const product = await dispatch(
+                    getProductById(parseInt(id, 10)) as any,
+                )
                 setValue("name", product?.name)
                 setValue("category_id", product?.category_id)
                 setValue("brand", product?.brand)
@@ -99,12 +108,12 @@ const UpdateProduct = () => {
 
                     setVariants(formattedVariants)
                 } else {
-                    console.log(
+                    toast.error(
                         "Product has no variants or variants data is missing",
                     )
                 }
             } catch (error) {
-                console.error("Failed to fetch product details:", error)
+                toast.error("Failed to fetch product details:", error)
             }
         }
     }, [id, setValue])
@@ -128,13 +137,16 @@ const UpdateProduct = () => {
     // Fetch all attribute values from API and organize them by attribute_id
     const fetchAttributeValues = async () => {
         const values = await getAllAttributeValue()
-        const organizedValues = values.reduce((acc, item) => {
-            if (!acc[item.attribute_id]) {
-                acc[item.attribute_id] = []
-            }
-            acc[item.attribute_id].push(item)
-            return acc
-        }, {})
+        const organizedValues = values.reduce(
+            (acc: Record<number, AttributeValue[]>, item) => {
+                if (!acc[item.attribute_id]) {
+                    acc[item.attribute_id] = []
+                }
+                acc[item.attribute_id].push(item)
+                return acc
+            },
+            {},
+        )
         setAttributeValues(organizedValues)
     }
     const onSubmit = async (data: FieldValues) => {
@@ -154,12 +166,8 @@ const UpdateProduct = () => {
                 ],
             })),
         }
-        console.log(formattedData)
         try {
-            const jsonData = JSON.stringify(formattedData)
-            const response = await updateProduct(id, jsonData)
-            console.log("Product updated successfully:", response)
-            toast.success("Product updated successfully.")
+            await dispatch(updateProduct(id, formattedData) as any)
             navigate("/quan-ly-san-pham")
         } catch (error) {
             console.error("Failed to updated product:", error)
@@ -365,7 +373,9 @@ const UpdateProduct = () => {
                                     }
                                 >
                                     <Option value="">Chọn</Option>
-                                    {attributeValues[attribute.id]?.map((value) => (
+                                    {attributeValues[
+                                        attribute.id as keyof typeof attributeValues
+                                    ]?.map((value: AttributeValue) => (
                                         <Option key={value.id} value={value.value}>
                                             {value.value}
                                         </Option>

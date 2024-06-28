@@ -1,9 +1,7 @@
-import { AuthState } from "@/@types/auth"
 import { createSlice } from "@reduxjs/toolkit"
 
-const initialState: AuthState = {
+const initialState = {
     loading: false,
-    userInfo: null,
     accessToken: null,
     error: null,
     success: false,
@@ -27,9 +25,6 @@ const authSlice = createSlice({
         },
         removeAccessToken(state) {
             state.accessToken = null
-        },
-        setUserInfo(state, action) {
-            state.userInfo = action.payload
         },
         clear: () => initialState,
     },

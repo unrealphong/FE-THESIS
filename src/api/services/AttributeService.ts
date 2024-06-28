@@ -98,11 +98,16 @@ const getAttributeValueById = async (id: string): Promise<AttributeValue | null>
 }
 
 const createAttributeValue = async (
+    attributeId: number,
     newValue: AttributeValue,
 ): Promise<AttributeValue | null> => {
     try {
         const response: AxiosResponse<{ data: AttributeValue }> =
-            await httpRequest.post("attribute-values", newValue)
+            await httpRequest.post(`attribute-values`, {
+                attribute_id: attributeId,
+                value: newValue.value,
+            })
+        toast.success("Attribute value created successfully.")
         return response.data.data
     } catch (error) {
         console.error("Error creating attribute value:", error)
@@ -110,31 +115,37 @@ const createAttributeValue = async (
         return null
     }
 }
-const deleteAttributeValue = async (id: string): Promise<boolean> => {
-    try {
-        await httpRequest.delete(`attribute-values/${id}`)
-        return true // Return true if deletion is successful
-    } catch (error) {
-        console.error(`Error deleting attribute value with ID ${id}:`, error)
-        toast.error("Failed to delete attribute value. Please try again later.")
-        return false // Return false if deletion fails
-    }
-}
+
 const updateAttributeValue = async (
-    id: string,
+    id: number,
     updatedValue: AttributeValue,
 ): Promise<AttributeValue | null> => {
     try {
         const response: AxiosResponse<{ data: AttributeValue }> =
-            await httpRequest.put(`attribute-values/${id}`, updatedValue)
+            await httpRequest.put(`attribute-values/${id}`, {
+                value: updatedValue.value,
+            })
+        toast.success("Attribute value updated successfully.")
         return response.data.data
     } catch (error) {
-        console.error(`Error updating attribute value with ID ${id}:`, error)
+        console.error("Error updating attribute value:", error)
         toast.error("Failed to update attribute value. Please try again later.")
         return null
     }
 }
 
+const deleteAttributeValue = async (attributeValueId: number) => {
+    try {
+        const response = await httpRequest.delete(
+            `attribute-values/${attributeValueId}`,
+        )
+        return response
+    } catch (error) {
+        throw new Error(
+            `Error deleting attribute value with ID ${attributeValueId}: ${error.message}`,
+        )
+    }
+}
 
 export {
     createAttribute,
@@ -143,7 +154,6 @@ export {
     getAttributeById,
     updateAttribute,
     getAllAttributeValue,
-
     getAttributeValueById,
     createAttributeValue,
     deleteAttributeValue,

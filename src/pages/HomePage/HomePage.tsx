@@ -4,81 +4,31 @@ import { getAllCategory } from "@/api/services/CategoryService"
 import { getAllProduct } from "@/api/services/ProductService"
 import banner from "@/assets/images/banner/banner.webp"
 import storebg from "@/assets/images/store-bg.jpg"
-import CategoryInHomePage from "@/pages/HomePage/CategoryInHomePage"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { Autoplay, Navigation, Pagination } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 import ProductNewInHomePage from "./ProductNewInHomePage"
 import ListProductBuy3 from "./ListProductBuy3"
-import ListProduct50Persion from "./ListProduct50Persion"
-import ListProductBuy1Free1 from "./ListProductBuy1Free1"
-import ListProductBuyMax from "./ListProductBuyMax"
-
+import thumbnail1 from "@/assets/images/block-item-1.webp"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "@/redux/store/store"
 function HomePage() {
-    const [category, setCategory] = useState<Category[]>([])
-
+    const [categories, setCategories] = useState<Category[]>([])
+    const dispatch = useDispatch()
+    const products = useSelector((state: RootState) => state.products.products)
     useEffect(() => {
         const fetchCategory = async () => {
             const allCategory: Category[] = await getAllCategory()
-            setCategory(allCategory)
+            setCategories(allCategory)
         }
 
         fetchCategory()
     }, [])
 
-    const [products, setProducts] = useState<Product[]>([])
-    const product = products.slice(0, 10)
-
     useEffect(() => {
-        const fetchProducts = async () => {
-            const allProducts: Product[] = await getAllProduct()
-            setProducts(allProducts)
-        }
-
-        fetchProducts()
-    }, [])
-
-    const [activeTab, setActiveTab] = useState(1)
-
-    // const tabs = [
-    //     {
-    //         id: 1,
-    //         label: "MUA 3 GIẢM 10%",
-    //         content: (
-    //             <>
-    //                 <ListProductBuy3 />
-    //             </>
-    //         ),
-    //     },
-    //     {
-    //         id: 2,
-    //         label: "SALE 50%",
-    //         content: (
-    //             <>
-    //                 <ListProduct50Persion />
-    //             </>
-    //         ),
-    //     },
-    //     {
-    //         id: 3,
-    //         label: "MUA 1 TẶNG 1",
-    //         content: (
-    //             <>
-    //                 <ListProductBuy1Free1 />
-    //             </>
-    //         ),
-    //     },
-    //     {
-    //         id: 4,
-    //         label: "BÁN CHẠY NHẤT",
-    //         content: (
-    //             <>
-    //                 <ListProductBuyMax />
-    //             </>
-    //         ),
-    //     },
-    // ]
+        dispatch(getAllProduct() as any)
+    }, [dispatch])
 
     useEffect(() => {
         document.title =
@@ -116,48 +66,40 @@ function HomePage() {
                 <div className="block-product-name-inner-home flex justify-center text-3xl font-semibold uppercase text-red-600">
                     Mua gì hôm nay?
                 </div>
-                <main className="flex w-full space-x-4 overflow-x-auto p-5">
-                    {category?.map((data: Category) => (
-                        <CategoryInHomePage data={data} key={data.id} />
+                <div className="block-product-image-home flex w-full space-x-4 overflow-x-auto p-5">
+                    {categories.map((category) => (
+                        <div key={category.id} className="w-1/6">
+                            <a href="#">
+                                <div className="thumbnail m-4">
+                                    <img
+                                        src={thumbnail1}
+                                        alt=""
+                                        className="h-auto w-full rounded-full"
+                                    />
+                                </div>
+                                <div className="thumbnail-name my-2">
+                                    <p className="text-center text-2xl font-medium">
+                                        {category.name}
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
                     ))}
-                </main>
+                </div>
             </div>
             <div className="block-offer-online container mx-auto my-10 flex max-w-7xl flex-col justify-center">
                 <div className="flex justify-center text-3xl font-semibold uppercase text-red-600">
                     Sản phẩm giảm giá
                 </div>
                 <ListProductBuy3 />
-                {/* <div className="block-offer-content">
-                    <div className="mb-4 mt-8 flex justify-center border-b-4">
-                        {tabs.map((tab) => (
-                            <button
-                                key={tab.id}
-                                className={`text-md mx-4 cursor-pointer py-2 font-medium ${activeTab === tab.id ? "border-b-4 border-red-500 text-red-500" : ""}`}
-                                onClick={() => setActiveTab(tab.id)}
-                            >
-                                {tab.label}
-                            </button>
-                        ))}
-                    </div>
-                    <div className="tab-content">
-                        {tabs.map((tab) => (
-                            <div
-                                key={tab.id}
-                                className={`${activeTab === tab.id ? "block" : "hidden"}`}
-                            >
-                                {tab.content}
-                            </div>
-                        ))}
-                    </div>
-                </div> */}
             </div>
             <div className="block-new-product container mx-auto my-2 flex max-w-7xl flex-col">
                 <div className="block-new-product-title my-4 text-center text-3xl font-semibold uppercase text-red-600">
                     Sản phẩm mới ra mắt
                 </div>
                 <div className="block-new-product-item grid grid-cols-1 gap-4 md:grid-cols-5">
-                    {product?.map((data: Product) => (
-                        <ProductNewInHomePage data={data} key={data.id} />
+                    {products?.map((product: Product) => (
+                        <ProductNewInHomePage data={product} key={product.id} />
                     ))}
                 </div>
                 <div className="block-offer-button my-5 text-center">

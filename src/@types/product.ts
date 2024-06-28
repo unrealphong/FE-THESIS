@@ -11,6 +11,7 @@ interface Product {
 interface Attribute {
     id: number
     name: string
+    attribute_values?: AttributeValue[]
 }
 
 interface AttributeValue {
@@ -19,16 +20,17 @@ interface AttributeValue {
     attribute_id: number
 }
 
+interface AttributeValues {
+    [key: number]: AttributeValue[]
+}
+
 interface Variant {
-    id?: number
-    product_id?: number
     price: number
     price_promotional: number
     quantity: number
     attributes: {
-        color?: string
-        size?: string
+        [key: string]: string | undefined
     }
 }
 
-export type { Attribute, AttributeValue, Product, Variant }
+export type { Attribute, AttributeValue, Product, Variant, AttributeValues }

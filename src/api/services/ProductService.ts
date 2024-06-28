@@ -2,78 +2,136 @@ import { Product } from "@/@types/product"
 import httpRequest from "@/api/axios-instance"
 import { AxiosResponse } from "axios"
 import { toast } from "react-toastify"
+import {
+    setLoading,
+    setError,
+    setProducts,
+    addProduct,
+    removeProduct,
+    editProduct,
+    clearLoading,
+} from "@/redux/slice/product"
+import { AppDispatch } from "@/redux/store/store"
 
-const getAllProduct = async (): Promise<Product[]> => {
-    try {
-        const response: AxiosResponse<{ data: { product: Product[] } }> =
-            await httpRequest.get("/products")
-        return response.data?.data?.product ?? []
-    } catch (error) {
-        console.error("An error occurred while fetching products")
-        toast.error("Failed to fetch products. Please try again later.")
-        return []
+const getAllProduct =
+    () =>
+    async (dispatch: AppDispatch): Promise<Product[]> => {
+        try {
+            dispatch(setLoading())
+            const response: AxiosResponse<{ data: { product: Product[] } }> =
+                await httpRequest.get("/products")
+            const products = response.data?.data?.product ?? []
+            dispatch(setProducts(products))
+            dispatch(clearLoading())
+            return products
+        } catch (error) {
+            console.error("An error occurred while fetching products")
+            toast.error("Failed to fetch products. Please try again later.")
+            dispatch(setError("Failed to fetch products. Please try again later."))
+            dispatch(clearLoading())
+            return []
+        }
     }
-}
 
-const getProductById = async (id: number): Promise<Product | undefined> => {
-    try {
-        const response = await httpRequest.get(`/products/${id}`)
-        return response.data.data.product
-    } catch (error) {
-        return undefined
+const getProductById =
+    (id: number) =>
+    async (dispatch: AppDispatch): Promise<Product | undefined> => {
+        try {
+            dispatch(setLoading())
+            const response = await httpRequest.get(`/products/${id}`)
+            dispatch(clearLoading())
+            return response.data.data.product
+        } catch (error) {
+            console.error(`Failed to fetch product with ID ${id}`)
+            toast.error(
+                `Failed to fetch product with ID ${id}. Please try again later.`,
+            )
+            dispatch(
+                setError(
+                    `Failed to fetch product with ID ${id}. Please try again later.`,
+                ),
+            )
+            dispatch(clearLoading())
+            return undefined
+        }
     }
-}
 
-const createProduct = async (product: Product) => {
-
+const createProduct = (product: Product) => async (dispatch: AppDispatch) => {
     try {
+        dispatch(setLoading())
         const response = await httpRequest.post("/products", product, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
         })
+        const newProduct = response.data
+        dispatch(addProduct(newProduct))
+        dispatch(clearLoading())
         toast.success("Product created successfully.")
-        return response.data
+        return newProduct
     } catch (error) {
         console.error("An error occurred while creating product:", error)
         toast.error("Failed to create product. Please try again later.")
-        throw error // Throwing error để component gọi hàm này có thể xử lý tiếp
+        dispatch(setError("Failed to create product. Please try again later."))
+        dispatch(clearLoading())
+        return undefined
     }
 }
 
-const updateProduct = async (
-    id: number,
-    product: Product,
-): Promise<Product | undefined> => {
-    try {
-        const response: AxiosResponse<{ data: Product }> = await httpRequest.put(
-            `/products/${id}`,
-            product,
-        )
-        const updatedProduct = response.data?.data
-        toast.success("Product updated successfully.")
-        return updatedProduct
-    } catch (error) {
-        console.error(`An error occurred while updating product with ID ${id}`)
-        toast.error(
-            `Failed to update product with ID ${id}. Please try again later.`,
-        )
-        throw error
+const updateProduct =
+    (id: number, product: Product) =>
+    async (dispatch: AppDispatch): Promise<Product | undefined> => {
+        try {
+            dispatch(setLoading())
+            const response: AxiosResponse<{ data: Product }> = await httpRequest.put(
+                `/products/${id}`,
+                product,
+            )
+            const updatedProduct = response.data?.data
+            dispatch(editProduct(updatedProduct))
+            dispatch(clearLoading())
+            toast.success("Product updated successfully.")
+            return updatedProduct
+        } catch (error) {
+            console.error(`An error occurred while updating product with ID ${id}`)
+            toast.error(
+                `Failed to update product with ID ${id}. Please try again later.`,
+            )
+            dispatch(
+                setError(
+                    `Failed to update product with ID ${id}. Please try again later.`,
+                ),
+            )
+            dispatch(clearLoading())
+            return undefined
+        }
     }
-}
 
-const deleteProduct = async (id: number): Promise<boolean> => {
-    try {
-        await httpRequest.delete(`/products/${id}`)
-        toast.success("Product deleted successfully.")
-        return true
-    } catch (error) {
-        toast.error(
-            `Failed to delete product with ID ${id}. Please try again later.`,
-        )
-        return false
+const deleteProduct =
+    (id: number) =>
+    async (dispatch: AppDispatch): Promise<boolean> => {
+        try {
+            dispatch(setLoading())
+            await httpRequest.delete(`/products/${id}`)
+            dispatch(removeProduct(id))
+            dispatch(clearLoading())
+            toast.success("Product deleted successfully.")
+            return true
+        } catch (error) {
+            console.error(`Failed to delete product with ID ${id}`)
+            toast.error(
+                `Failed to delete product with ID ${id}. Please try again later.`,
+            )
+            dispatch(
+                setError(
+                    `Failed to delete product with ID ${id}. Please try again later.`,
+                ),
+            )
+            dispatch(clearLoading())
+            return false
+        }
     }
-}
+
 const GetProductBuy3 = async () => {
     try {
         const response = await httpRequest.get(`/sale-product/1`)

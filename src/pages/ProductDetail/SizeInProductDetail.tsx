@@ -34,7 +34,7 @@ const SizeInProductDetail = ({ data, product, idSize, onSize }: any) => {
         <>
             {idSize ? (
                 <button
-                    className={`m-1 mx-1 h-7 w-16 rounded-full rounded-lg ${sizeValue == data?.value ? `border border-black  ${click ? "color bg-black text-white" : "text-black"}` : " border border-gray-200 text-gray-200"}`}
+                    className={`m-1 mx-1 h-7 w-16 rounded-full ${sizeValue == data?.value ? `border border-black  ${click ? "color bg-black text-white" : "text-black"}` : " border border-gray-200 text-gray-200"}`}
                     disabled={sizeValue == data?.value ? false : true}
                     onClick={() => HandleClick()}
                 >
@@ -42,7 +42,7 @@ const SizeInProductDetail = ({ data, product, idSize, onSize }: any) => {
                 </button>
             ) : (
                 <button
-                    className={`m-1 mx-1 h-7 w-16 rounded-full rounded-lg ${foundValue ? `border border-black ${click ? "color bg-black text-white" : "text-black"}` : " border border-gray-200 text-gray-200"}`}
+                    className={`m-1 mx-1 h-7 w-16 rounded-full ${foundValue ? `border border-black ${click ? "color bg-black text-white" : "text-black"}` : " border border-gray-200 text-gray-200"}`}
                     disabled={foundValue ? false : true}
                     onClick={() => HandleClick()}
                 >
