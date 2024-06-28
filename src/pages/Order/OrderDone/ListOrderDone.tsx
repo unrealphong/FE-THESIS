@@ -39,11 +39,9 @@ const ListOrderDones = () => {
     }
     return (
         <>
-            {
-                currentItems?.map((data: any) => (
-                    <NameListOrderDone key={data.id} data={data} />
-                ))
-            }
+            {currentItems?.map((data: any) => (
+                <NameListOrderDone key={data.id} data={data} />
+            ))}
 
             <div className="mt-5 flex items-center justify-center">
                 <Pagination

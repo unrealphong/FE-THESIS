@@ -42,13 +42,8 @@ const ListOrderSiping = () => {
     return (
         <>
             {currentItems?.map((data: any) => (
-                <NameListOrderShiping
-                    key={data.id}
-                    data={data}
-                    onCheck={check}
-                />
+                <NameListOrderShiping key={data.id} data={data} onCheck={check} />
             ))}
-
 
             <div className="mt-5 flex items-center justify-center">
                 <Pagination

@@ -38,16 +38,9 @@ const ListOrderPending = () => {
     }
     return (
         <>
-
-            {
-                currentItems?.map((data: any) => (
-                    <NameListOrderPending
-                        key={data.id}
-                        data={data}
-                        onCheck={check}
-                    />
-                ))
-            }
+            {currentItems?.map((data: any) => (
+                <NameListOrderPending key={data.id} data={data} onCheck={check} />
+            ))}
 
             <div className="mt-5 flex items-center justify-center">
                 <Pagination

@@ -3,7 +3,6 @@ import { useState } from "react"
 import ProductInAllOrderInListOrder from "./ProductInAllOrderInListOrder"
 
 const AllOrderInListOrder = ({ data }: any) => {
-
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
     const indexOfLastItem = currentPage * itemsPerPage
@@ -17,7 +16,6 @@ const AllOrderInListOrder = ({ data }: any) => {
 
     return (
         <>
-
             {currentItems?.map((data: any) => {
                 return (
                     <>
@@ -25,7 +23,6 @@ const AllOrderInListOrder = ({ data }: any) => {
                     </>
                 )
             })}
-
 
             <div className="mt-5 flex items-center justify-center">
                 <Pagination

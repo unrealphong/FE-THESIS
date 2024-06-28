@@ -107,7 +107,6 @@ const NameProductInListOrderAdmin = ({ data }: any) => {
     const total: any = Number(billdetail?.total_amount)
     return (
         <>
-        
             {loading ? (
                 <>
                     <tr>

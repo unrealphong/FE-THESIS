@@ -39,11 +39,9 @@ const ListOrderCancel = ({ data }: any) => {
     }
     return (
         <>
-            {
-                currentItems?.map((data: any) => (
-                    <NameListOrderCancel key={data.id} data={data} />
-                ))
-            }
+            {currentItems?.map((data: any) => (
+                <NameListOrderCancel key={data.id} data={data} />
+            ))}
 
             <div className="mt-5 flex items-center justify-center">
                 <Pagination
