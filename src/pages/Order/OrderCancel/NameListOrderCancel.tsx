@@ -1,4 +1,4 @@
-import { getAllBillDetail } from "@/api/services/Bill"
+import { getAllBillDetail, getBillsDetail } from "@/api/services/Bill"
 import formatNumber from "@/utilities/FormatTotal"
 import { Skeleton, Tag } from "antd"
 import { useEffect, useState } from "react"
@@ -9,8 +9,8 @@ const NameListOrderCancel = ({ data, data1 }: any) => {
     const [loading, setloading] = useState<any>(true)
     const fetchBillDetail = async () => {
         try {
-            const data: any = await getAllBillDetail()
-            setBillDetail(data)
+            const data1: any = await getBillsDetail(data?.id)
+            setBillDetail(data1)
         } catch (error) {
             console.error("Error fetching bill details:", error)
         } finally {
@@ -20,7 +20,7 @@ const NameListOrderCancel = ({ data, data1 }: any) => {
     useEffect(() => {
         fetchBillDetail()
     }, [])
-    const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
+    // const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
     const [color, setcolor] = useState<any>()
     const [status, setstatus] = useState<any>()
     useEffect(() => {
@@ -34,62 +34,40 @@ const NameListOrderCancel = ({ data, data1 }: any) => {
         <>
             {loading ? (
                 <>
-                    <tr className="mt-2">
-                        <td colSpan={9}>
-                            <div className="mt-5 flex h-24 items-center justify-center">
-                                <Skeleton active />
-                            </div>
-                        </td>
-                    </tr>
+                    <div className="mt-5 flex h-24 items-center justify-center">
+                        <Skeleton active />
+                    </div>
                 </>
-            ) : (
-                <>
-                    {" "}
-                    <tr className="items-center justify-center p-2" key={data?.id}>
-                        <td className="p-2 text-center font-normal">{data?.id}</td>
-                        <td className="p-2 text-center font-normal">
-                            {billsProduct?.product_name}
-                        </td>
-                        <td className="w-1/9 flex items-center justify-center p-2">
-                            <img
-                                className="h-26 w-20"
-                                src={billsProduct?.image}
-                                alt=""
-                            />
-                        </td>
-                        <td
-                            className="p-2 text-center font-normal"
-                            style={{ width: "20%" }}
-                        >
-                            <span className="font-bold">Đ/c</span>:{" "}
-                            {data?.Recipient_address}
+            ) :
+                <div key={data?.id} className="border border-black mb-5">
+                    <div className=" flex p-2">
+                        <img src={
+                            billdetail?.bill_details[0]
+                                ? billdetail?.bill_details[0]?.image
+                                : ""
+                        } alt="" className="w-1/5 mr-5" />
+                        <div className=" d-flex flex-column">
+                            <span className="text-black"> {billdetail?.bill_details[0]
+                                ? billdetail?.bill_details[0]?.product_name
+                                : ""} <p> <Tag color={color}>{status}</Tag></p></span>
                             <br />
-                            <span className="font-bold">Sđt</span>:{" "}
-                            {data?.Recipient_phone}
-                        </td>
-                        <td
-                            className="p-2 text-center font-normal "
-                            style={{ width: "10%" }}
-                        >
-                            {formatNumber(total + 30000)} đ
-                        </td>
-                        <td className="p-2 text-center font-normal">
-                            {data?.created_at.substring(0, 19)}
-                        </td>
-                        <td className="p-2 text-center font-normal">COD</td>
-                        <td className="p-2 text-center font-normal">
-                            <Tag color={color}>{status}</Tag>
-                        </td>
-                        <td className="p-2 font-normal" style={{ width: "10%" }}>
+                            <span className="text-xl text-black font-normal">{billdetail?.bill_details?.length} sản phẩm</span>
+                            <br />
+                            <span className="text-xl text-black font-normal">Ngày đặt hàng: {data?.created_at}</span>
+                            <br />
+                            <span className="text-xl text-red-600 font-normal">Thành tiền: {formatNumber(total + 30000)} đ</span>
+                        </div>
+                        <div className="mt-4 lg:mt-0 lg:ml-auto lg:mr-0 lg:mb-0 lg:mt-auto">
+
                             <Link to={`/orders/${data?.id}`}>
-                                <button className="w-24 rounded border border-gray-300 bg-white p-1 text-black ">
-                                    Chi tiết
+                                <button className="rounded border border-gray-200 p-1 pl-4 pr-4 text-sm text-black bg-red-500 text-white font-normal">
+                                    Xem chi tiết
                                 </button>
                             </Link>
-                        </td>
-                    </tr>
-                </>
-            )}
+                        </div>
+                    </div>
+                </div>
+            }
         </>
     )
 }
