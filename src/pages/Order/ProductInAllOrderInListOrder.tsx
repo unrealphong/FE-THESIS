@@ -25,7 +25,7 @@ const ProductInAllOrderInListOrder = ({ data }: any) => {
     }, [])
 
     // const billsProduct = billdetail?.find((item: any) => item?.bill_id == data?.id)
-    const [color, setcolor] = useState<any>()
+    const [colors, setcolor] = useState<any>()
     const [status, setstatus] = useState<any>()
 
     useEffect(() => {
@@ -49,56 +49,61 @@ const ProductInAllOrderInListOrder = ({ data }: any) => {
             setstatus("Hủy hàng")
         }
     }, [data])
-
     const total: any = Number(data?.total_amount)
+
     return (
         <>
             {loading ? (
                 <>
-                    <tr className="mt-2">
-                        <td colSpan={9}>
-                            <div className="mt-5 flex h-24 items-center justify-center">
-                                <Skeleton active />
-                            </div>
-                        </td>
-                    </tr>
+                    <div className="mt-5 flex h-24 items-center justify-center">
+                        <Skeleton active />
+                    </div>
                 </>
             ) : (
-                <>
-                    <tr>
-                        <th className="font-normal">{data?.id}</th>
-                        <th className="font-normal">
-                            {" "}
-                            {billdetail?.bill_details[0]
-                                ? billdetail?.bill_details[0].product_name
-                                : ""}
-                        </th>
-                        <td className="mt-5 flex items-center justify-center pb-5">
-                            <img
-                                src={
-                                    billdetail?.bill_details[0]
-                                        ? billdetail?.bill_details[0].image
-                                        : ""
-                                }
-                                className="w-20 "
-                            />
-                        </td>
-                        <th className="font-normal">{data?.created_at}</th>
-                        <th className="font-normal">
-                            {formatNumber(total + 30000)} đ
-                        </th>
-                        <th className="font-normal">
-                            <Tag color={color}>{status}</Tag>
-                        </th>
-                        <th className="font-normal">
+                <div key={data?.id} className="mb-5 border border-black">
+                    <div className=" flex p-2">
+                        <img
+                            src={
+                                billdetail?.bill_details[0]
+                                    ? billdetail?.bill_details[0]?.image
+                                    : ""
+                            }
+                            alt=""
+                            className="mr-5 w-1/5"
+                        />
+                        <div className=" d-flex flex-column">
+                            <span className="text-black">
+                                {" "}
+                                {billdetail?.bill_details[0]
+                                    ? billdetail?.bill_details[0]?.product_name
+                                    : ""}{" "}
+                                <p>
+                                    {" "}
+                                    <Tag color={colors}>{status}</Tag>
+                                </p>
+                            </span>
+                            <br />
+                            <span className="text-xl font-normal text-black">
+                                {billdetail?.bill_details?.length} sản phẩm
+                            </span>
+                            <br />
+                            <span className="text-xl font-normal text-black">
+                                Ngày đặt hàng: {data?.created_at}
+                            </span>
+                            <br />
+                            <span className="text-xl font-normal text-red-600">
+                                Thành tiền: {formatNumber(total + 30000)} đ
+                            </span>
+                        </div>
+                        <div className="mt-4 lg:mb-0 lg:ml-auto lg:mr-0 lg:mt-0 lg:mt-auto">
                             <Link to={`/orders/${data?.id}`}>
-                                <button className="rounded  border border-gray-200 p-1 pl-4 pr-4 text-sm text-black hover:bg-red-500 hover:text-white">
+                                <button className="rounded border border-gray-200 bg-red-500 p-1 pl-4 pr-4 text-sm font-normal text-black text-white">
                                     Xem chi tiết
                                 </button>
                             </Link>
-                        </th>
-                    </tr>
-                </>
+                        </div>
+                    </div>
+                </div>
             )}
         </>
     )

@@ -39,43 +39,10 @@ const ListOrderCancel = ({ data }: any) => {
     }
     return (
         <>
-            <table className="w-full border border-gray-300 bg-gray-100 text-sm text-black">
-                <thead className="text-center align-middle">
-                    <tr>
-                        <th className="p-2">ID</th>
-                        <th className="p-2">Tên sản phẩm</th>
-                        <th className="p-2">Ảnh</th>
-                        <th className="p-2">Địa chỉ/Sđt</th>
-                        <th className="p-2">Giá</th>
-                        <th className="p-2">Ngày</th>
-                        <th className="p-2">Hình thức</th>
-                        <th className="p-2">Trạng thái</th>
-                        <th className="p-2">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody className="bg-white">
-                    {loading ? (
-                        <tr>
-                            <td colSpan={9}>
-                                <div className="flex h-24 items-center justify-center">
-                                    <Spin
-                                        indicator={
-                                            <LoadingOutlined
-                                                style={{ fontSize: 48 }}
-                                                spin
-                                            />
-                                        }
-                                    />
-                                </div>
-                            </td>
-                        </tr>
-                    ) : (
-                        currentItems?.map((data: any) => (
-                            <NameListOrderCancel key={data.id} data={data} />
-                        ))
-                    )}
-                </tbody>
-            </table>
+            {currentItems?.map((data: any) => (
+                <NameListOrderCancel key={data.id} data={data} />
+            ))}
+
             <div className="mt-5 flex items-center justify-center">
                 <Pagination
                     current={currentPage}
