@@ -1,4 +1,4 @@
-import { getAllSale } from "@/api/services/Sale"
+import { getAllSale, getAllSaleProduct } from "@/api/services/Sale"
 import formatNumber from "@/utilities/FormatTotal"
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons"
 import { Skeleton } from "antd"
@@ -7,17 +7,16 @@ import { Link } from "react-router-dom"
 
 const ProductNewInHomePage = ({ data }: any) => {
     const [sales, setsale] = useState<any>([])
+
     useEffect(() => {
         const fetchSale = async () => {
-            const allsale: any = await getAllSale()
-            setsale(allsale)
+            const allsale: any = await getAllSaleProduct(data?.sale_id)
+            setsale(allsale?.name)
         }
 
         fetchSale()
     }, [])
-    const sale = sales?.find((data1: any) => data1?.id == data?.sale_id)?.name
-    const totalPrice = (data?.variants[0]?.price * sale) / 100
-    console.log(sale)
+    const totalPrice = (data?.variants[0]?.price * sales) / 100
     return (
         <>
             {data ? (
@@ -26,10 +25,10 @@ const ProductNewInHomePage = ({ data }: any) => {
                         <div className="group relative rounded border border-gray-500 p-2 pb-5 hover:border-2 hover:border-red-300">
                             <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat p-2">
                                 <img src={data?.image} alt="" />
-                                {sale ? (
+                                {sales ? (
                                     <>
                                         <button className="absolute top-5  flex flex-col gap-2 bg-red-500 p-1 pl-3 pr-3 text-sm text-white opacity-0 opacity-100 transition-opacity duration-300">
-                                            -{sale}%
+                                            -{sales}%
                                         </button>{" "}
                                     </>
                                 ) : (
@@ -49,39 +48,41 @@ const ProductNewInHomePage = ({ data }: any) => {
                                         <>{data?.name}</>
                                     )}
                                 </h5>
-                                <span className=" text-sl line-through">
-                                    {sale ? (
+
+                                <div
+                                    className=""
+                                    style={{ fontSize: "16px", fontWeight: "bold" }}
+                                >
+                                    {sales ? (
                                         <>
-                                            {" "}
-                                            {formatNumber(
-                                                data?.variants[0]?.price,
-                                            )}{" "}
+                                            <span className=" text-sl line-through">
+                                                {formatNumber(
+                                                    data?.variants[0]?.price,
+                                                )}
+                                            </span>
                                             đ
                                         </>
                                     ) : (
                                         <></>
                                     )}
-                                </span>
-                                <div
-                                    className=""
-                                    style={{ fontSize: "16px", fontWeight: "bold" }}
-                                >
-                                    {sale ? (
+                                    {sales ? (
                                         <>
-                                            {" "}
-                                            {formatNumber(
-                                                data?.variants[0]?.price -
-                                                    totalPrice,
-                                            )}{" "}
-                                            đ
+                                            <span className=" text-xl text-red-500">
+                                                {formatNumber(
+                                                    data?.variants[0]?.price -
+                                                        totalPrice,
+                                                )}
+                                                đ
+                                            </span>
                                         </>
                                     ) : (
                                         <>
-                                            {" "}
-                                            {formatNumber(
-                                                data?.variants[0]?.price,
-                                            )}{" "}
-                                            đ
+                                            <span className=" text-xl text-red-500">
+                                                {formatNumber(
+                                                    data?.variants[0]?.price,
+                                                )}
+                                                đ
+                                            </span>
                                         </>
                                     )}
                                 </div>
@@ -92,8 +93,7 @@ const ProductNewInHomePage = ({ data }: any) => {
                 </>
             ) : (
                 <>
-                    {" "}
-                    <Skeleton />{" "}
+                    <Skeleton />
                 </>
             )}
         </>

@@ -7,10 +7,16 @@ const getAllSale = async (): Promise<Product[]> => {
         const response: any = await httpRequest.get("/sales")
         return response.data?.data?.sales ?? []
     } catch (error) {
-        console.error("An error occurred while fetching products")
-        toast.error("Failed to fetch products. Please try again later.")
+        return []
+    }
+}
+const getAllSaleProduct = async (id: any): Promise<Product[]> => {
+    try {
+        const response: any = await httpRequest.get(`/sale-product/${id}`)
+        return response.data?.data?.sales ?? []
+    } catch (error) {
         return []
     }
 }
 
-export { getAllSale }
+export { getAllSale, getAllSaleProduct }

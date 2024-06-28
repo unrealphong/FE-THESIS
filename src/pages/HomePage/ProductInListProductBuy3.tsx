@@ -1,5 +1,5 @@
 import { getProductById } from "@/api/services/ProductService"
-import { getAllSale } from "@/api/services/Sale"
+import { getAllSale, getAllSaleProduct } from "@/api/services/Sale"
 import formatNumber from "@/utilities/FormatTotal"
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons"
 import { Skeleton } from "antd"
@@ -8,38 +8,33 @@ import { Link } from "react-router-dom"
 
 const ProductInListProductBuy3 = ({ data }: any) => {
     const [pro, setpro] = useState<any>()
+    const [discount, setdiscount] = useState<any>()
     useEffect(() => {
         const fetchProduct = async () => {
-            const product = await getProductById(data?.id)
+            const product: any = await getProductById(data?.id)
+            const sale: any = await getAllSaleProduct(product?.sale_id)
+            setdiscount(sale?.name)
+            console.log(sale)
+
             setpro(product)
         }
         fetchProduct()
     }, [])
-    const [sales, setsale] = useState<any>([])
-    useEffect(() => {
-        const fetchSale = async () => {
-            const allsale: any = await getAllSale()
-            setsale(allsale)
-        }
-
-        fetchSale()
-    }, [])
-    const sale = sales?.find((data: any) => data?.id == pro?.sale_id)?.name
-    const totalPrice = (pro?.variants[0]?.price * sale) / 100
+    const totalPrice = (pro?.variants[0]?.price * discount) / 100
     console.log(totalPrice)
 
     return (
         <>
-            {pro && sale ? (
+            {pro && discount ? (
                 <>
                     <Link to={`/products/${data?.id}`}>
                         <div className="group relative rounded border border-gray-500 p-2 pb-5 hover:border-2 hover:border-red-300">
                             <div className="h-100 relative overflow-hidden bg-cover bg-no-repeat p-2">
                                 <img src={data?.image} alt="" />
-                                {sale ? (
+                                {discount ? (
                                     <>
                                         <button className="absolute top-5  flex flex-col gap-2 bg-red-500 p-1 pl-3 pr-3 text-sm text-white opacity-0 opacity-100 transition-opacity duration-300">
-                                            -{sale}%
+                                            -{discount}%
                                         </button>{" "}
                                     </>
                                 ) : (
@@ -61,7 +56,7 @@ const ProductInListProductBuy3 = ({ data }: any) => {
                                     )}
                                 </h5>
                                 <span className=" text-sl line-through">
-                                    {sale ? (
+                                    {discount ? (
                                         <>
                                             {" "}
                                             {formatNumber(pro?.variants[0]?.price)} đ
@@ -78,7 +73,7 @@ const ProductInListProductBuy3 = ({ data }: any) => {
                                         color: "red",
                                     }}
                                 >
-                                    {sale ? (
+                                    {discount ? (
                                         <>
                                             {" "}
                                             {formatNumber(
@@ -107,7 +102,6 @@ const ProductInListProductBuy3 = ({ data }: any) => {
                 </>
             ) : (
                 <>
-                    {" "}
                     <Skeleton />
                 </>
             )}

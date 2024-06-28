@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react"
 import formatNumber from "../../utilities/FormatTotal"
-import { getAllSale } from "@/api/services/Sale"
+import { getAllSaleProduct } from "@/api/services/Sale"
 
 const ProductInCartCheckOut = ({ data, index, quantity }: any) => {
     const [sales, setsale] = useState<any>([])
     useEffect(() => {
         const fetchSale = async () => {
-            const allsale: any = await getAllSale()
-            setsale(allsale)
+            const allsale: any = await getAllSaleProduct(quantity?.sale_id)
+            setsale(allsale?.name)
         }
 
         fetchSale()
     }, [])
-    const sale = sales?.find((data1: any) => data1?.id == quantity?.sale_id)?.name
-    const totalPrice = (data?.price * sale) / 100
+    const totalPrice = (data?.price * sales) / 100
     return (
         <>
             <tr className="bg-gray-100">
@@ -36,14 +35,14 @@ const ProductInCartCheckOut = ({ data, index, quantity }: any) => {
                     </p>
                 </td>
                 <td className="mt-5 text-center align-middle font-bold text-red-500">
-                    {sale ? (
+                    {sales ? (
                         <span className="text-sl p-2 font-normal text-black line-through">
                             {formatNumber(data?.price)}đ
                         </span>
                     ) : (
                         ""
                     )}
-                    {sale
+                    {sales
                         ? formatNumber(data?.price - totalPrice)
                         : formatNumber(data?.price)}{" "}
                     đ{/* {formatNumber(data?.price)} đ */}
@@ -52,7 +51,7 @@ const ProductInCartCheckOut = ({ data, index, quantity }: any) => {
                     {quantity?.quantity}
                 </td>
                 <td className="mt-5 text-center align-middle font-bold">
-                    {sale
+                    {sales
                         ? formatNumber(
                               (data?.price - totalPrice) * quantity?.quantity,
                           )

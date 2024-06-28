@@ -2,19 +2,18 @@ import { Link } from "react-router-dom"
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons"
 import formatNumber from "@/utilities/FormatTotal"
 import { useEffect, useState } from "react"
-import { getAllSale } from "@/api/services/Sale"
+import { getAllSale, getAllSaleProduct } from "@/api/services/Sale"
 const ProductInListProduct = ({ data }: any) => {
     const [sales, setsale] = useState<any>([])
     useEffect(() => {
         const fetchSale = async () => {
-            const allsale: any = await getAllSale()
-            setsale(allsale)
+            const allsale: any = await getAllSaleProduct(data?.sale_id)
+            setsale(allsale?.name)
         }
 
         fetchSale()
     }, [])
-    const sale = sales?.find((data1: any) => data1?.id == data?.sale_id)?.name
-    const totalPrice = (data?.variants[0]?.price * sale) / 100
+    const totalPrice = (data?.variants[0]?.price * sales) / 100
     return (
         <>
             <Link to={`/products/${data?.id}`}>
@@ -27,6 +26,15 @@ const ProductInListProduct = ({ data }: any) => {
                     </div>
 
                     <img src={data?.image} />
+                    {sales ? (
+                        <>
+                            <button className="absolute top-5  flex flex-col gap-2 bg-red-500 p-1  text-sm text-white opacity-0 opacity-100 transition-opacity duration-300">
+                                -{sales}%
+                            </button>
+                        </>
+                    ) : (
+                        <></>
+                    )}
 
                     <div className=" ">
                         <a
@@ -43,34 +51,31 @@ const ProductInListProduct = ({ data }: any) => {
                             className=""
                             style={{ fontSize: "16px", fontWeight: "bold" }}
                         >
-                            <span className="text-sl text-sm font-normal line-through">
-                                {sale ? (
-                                    <> {formatNumber(data?.variants[0]?.price)} đ</>
-                                ) : (
-                                    <></>
-                                )}
-                            </span>
                             <p className="text-sl flex text-red-500">
-                                {sale ? (
+                                {sales ? (
                                     <>
                                         {" "}
-                                        {formatNumber(
-                                            data?.variants[0]?.price - totalPrice,
-                                        )}{" "}
-                                        đ
-                                    </>
-                                ) : (
-                                    <> {formatNumber(data?.variants[0]?.price)} đ</>
-                                )}
-                                {sale ? (
-                                    <>
-                                        {" "}
-                                        <span className="ml-auto mr-2 rounded bg-red-500 px-1 py-1 text-sm font-normal text-white">
-                                            -{Math.floor(sale)}%
+                                        <span className="text-sl mr-2 text-sm font-normal text-black line-through">
+                                            {" "}
+                                            {formatNumber(
+                                                data?.variants[0]?.price,
+                                            )}{" "}
+                                            đ{" "}
                                         </span>
                                     </>
                                 ) : (
                                     <></>
+                                )}
+
+                                {sales ? (
+                                    <>
+                                        {formatNumber(
+                                            data?.variants[0]?.price - totalPrice,
+                                        )}
+                                        đ
+                                    </>
+                                ) : (
+                                    <> {formatNumber(data?.variants[0]?.price)} đ</>
                                 )}
                             </p>
                         </div>

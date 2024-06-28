@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom"
 import { addBill, addBillDetail } from "@/api/services/Bill"
 import { toast } from "react-toastify"
 import { getCartOrder } from "@/api/services/Order"
-import { getAllSale } from "@/api/services/Sale"
+import { getAllSale, getAllSaleProduct } from "@/api/services/Sale"
 const CheckOut = () => {
     const [form] = Form.useForm()
     const user = JSON.parse(localStorage.getItem("user") || "null")
@@ -146,6 +146,7 @@ const CheckOut = () => {
                     )?.name
                     const totalPrice = (cartt?.data[index]?.price * sale) / 100
                     const data1 = {
+                        variant_id: element?.variant_id,
                         product_name: element?.name_product,
                         attribute: `${cartt?.data[index]?.atribute[0].value}; ${cartt?.data[index]?.atribute[1].value}`,
                         price: sale
@@ -161,14 +162,15 @@ const CheckOut = () => {
             )
 
             await addBillDetail(data2).then((data) => {
-                if (data?.status == true) {
+                if (data?.data?.status == true) {
                     toast.success("Đặt hàng thành công")
                     localStorage.removeItem("cart")
-                    window.location.href = `/order_done/ ${response?.data?.id} `
+                    setTimeout(() => {
+                        window.location.href = `/order_done/${response?.data?.id} `
+                    }, 500)
                 } else {
                     toast.error("Đặt hàng thất bại")
                 }
-                console.log(data)
             })
         }
     }
@@ -212,11 +214,8 @@ const CheckOut = () => {
             )
             const cartSale_id: any = carts[index]?.sale_id
 
-            const allSale = await getAllSale()
-            const sale: any = allSale?.find(
-                (data1: any) => data1?.id == cartSale_id,
-            )?.name
-            const totalSale: any = (product.price * sale) / 100
+            const allSale: any = await getAllSaleProduct(cartSale_id)
+            const totalSale: any = (product.price * allSale?.name) / 100
             if (cartItem) {
                 const price = cartSale_id ? product.price - totalSale : product.price
                 const quantity = parseInt(cartItem.quantity, 10)
@@ -236,7 +235,6 @@ const CheckOut = () => {
     }, [cartt])
     const [checkvoucher, setcheckvoucher] = useState<any>(false)
     const HandleVoucher = () => {
-        console.log("open")
         if (discountCode.toLowerCase() == "xinchao") {
             if (checkvoucher == false) {
                 if (totalprice >= 499000 && totalprice < 670000) {
