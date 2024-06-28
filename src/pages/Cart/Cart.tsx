@@ -108,7 +108,7 @@ const Cart = () => {
                                         </div>
                                     </>
                                 ) : (
-                                    <table className="font-bold">
+                                    <table className="font-bold ">
                                         <thead>
                                             <th className="font-bold">STT</th>
                                             <th className="font-bold">Ảnh</th>

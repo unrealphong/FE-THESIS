@@ -1,9 +1,10 @@
-import { ClearOutlined } from "@ant-design/icons"
+import { ClearOutlined, LoadingOutlined } from "@ant-design/icons"
 import { useEffect, useState } from "react"
 import formatNumber from "../../utilities/FormatTotal"
 import { toast } from "react-toastify"
 import { getProductById } from "@/api/services/ProductService"
-import { getAllSale } from "@/api/services/Sale"
+import { getAllSale, getAllSaleProduct } from "@/api/services/Sale"
+import { Skeleton, Spin } from "antd"
 
 const ProductInCart = ({ data, index, quantity, onCart }: any) => {
     console.log(quantity)
@@ -14,6 +15,7 @@ const ProductInCart = ({ data, index, quantity, onCart }: any) => {
 
     useEffect(() => {
         const storedCarts = JSON.parse(localStorage.getItem("cart")!) || []
+
         setCarts(storedCarts)
     }, [])
     const handleDecrease = (id: any) => {
@@ -76,89 +78,98 @@ const ProductInCart = ({ data, index, quantity, onCart }: any) => {
         }
     }
     const [sales, setsale] = useState<any>([])
+    const [loading, setLoading] = useState<any>(true)
     useEffect(() => {
         const fetchSale = async () => {
-            const allsale: any = await getAllSale()
-            setsale(allsale)
+            const sale: any = await getAllSaleProduct(quantity?.sale_id)
+            setsale(sale?.name)
+            setLoading(false)
         }
 
         fetchSale()
     }, [])
-    const sale = sales?.find((data1: any) => data1?.id == quantity?.sale_id)?.name
-    const totalPrice = (data?.price * sale) / 100
-    const sumtotal = sale
+    const totalPrice = (data?.price * sales) / 100
+    const sumtotal = sales
         ? (data?.price - totalPrice) * displayQuantity
         : data?.price * displayQuantity
     return (
         <>
-            <tr ng-repeat="item in cart" className="relative pb-20">
-                <td className="pt-5 font-normal">{index + 1}</td>
-                <td className="pt-5 font-normal">
-                    <img src={quantity?.image} width="90px" />
-                </td>
-                <td className="pl-8 pr-8 pt-0 font-normal">
-                    <p
-                        style={{
-                            fontWeight: "400",
-                            paddingBottom: "7px",
-                            fontSize: "16px",
-                        }}
-                    >
-                        {quantity?.name_product}
-                    </p>
-                    <p style={{ fontSize: "14px" }}>
-                        Kích thước: {data?.atribute[1].value}
-                        <br />
-                        Màu sắc: {data?.atribute[0].value}
-                    </p>
-                </td>
-                <td className="pl-5 pr-5 font-normal">
-                    {sale ? (
-                        <span className="text-sl p-2 line-through">
-                            {formatNumber(data?.price)}đ
-                        </span>
-                    ) : (
-                        ""
-                    )}
-                    {sale ? (
-                        <span className="font-500 text-red-500">
-                            {formatNumber(data?.price - totalPrice)}đ
-                        </span>
-                    ) : (
-                        <>{formatNumber(data?.price)}đ</>
-                    )}
-                </td>
-                <td className="pl-4 pr-4 font-normal">
-                    <div className="flex items-center">
-                        <button
-                            className="h-8 w-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none"
-                            onClick={() => handleDecrease(quantity?.variant_id)}
+            {loading ?
+                <tr>
+                    <td colSpan={7} className="flex justify-center items-center">
+                       <Skeleton/>
+                    </td>
+                </tr>
+                :
+                <tr ng-repeat="item in cart" className="relative pb-20">
+                    <td className="pt-5 font-normal">{index + 1}</td>
+                    <td className="pt-5 font-normal">
+                        <img src={quantity?.image} width="90px" />
+                    </td>
+                    <td className="pl-8 pr-8 pt-0 font-normal">
+                        <p
+                            style={{
+                                fontWeight: "400",
+                                paddingBottom: "7px",
+                                fontSize: "16px",
+                            }}
                         >
-                            -
-                        </button>
-                        <input
-                            type="number"
-                            className="w-15 h-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none "
-                            min="1"
-                            max="9"
-                            value={displayQuantity}
+                            {quantity?.name_product}
+                        </p>
+                        <p style={{ fontSize: "14px" }}>
+                            Kích thước: {data?.atribute[1].value}
+                            <br />
+                            Màu sắc: {data?.atribute[0].value}
+                        </p>
+                    </td>
+                    <td className="pl-5 pr-5 font-normal">
+                        {sales ? (
+                            <span className="text-sl p-2 line-through">
+                                {formatNumber(data?.price)}đ
+                            </span>
+                        ) : (
+                            ""
+                        )}
+                        {sales ? (
+                            <span className="font-500 text-red-500">
+                                {formatNumber(data?.price - totalPrice)}đ
+                            </span>
+                        ) : (
+                            <>{formatNumber(data?.price)}đ</>
+                        )}
+                    </td>
+                    <td className="pl-4 pr-4 font-normal">
+                        <div className="flex items-center">
+                            <button
+                                className="h-8 w-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none"
+                                onClick={() => handleDecrease(quantity?.variant_id)}
+                            >
+                                -
+                            </button>
+                            <input
+                                type="number"
+                                className="w-15 h-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none "
+                                min="1"
+                                max="9"
+                                value={displayQuantity}
+                            />
+                            <button
+                                className="h-8 w-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none"
+                                onClick={() => handleIncrease(quantity?.variant_id)}
+                            >
+                                +
+                            </button>
+                        </div>
+                    </td>
+                    <td className="pl-4 pr-4 font-bold">{formatNumber(sumtotal)}đ</td>
+                    <td className="pl-4">
+                        <ClearOutlined
+                            className="bg-white p-2 text-red-500"
+                            onClick={() => HandleRemove(quantity?.variant_id)}
                         />
-                        <button
-                            className="h-8 w-8 cursor-pointer select-none rounded border px-2 py-1 text-center text-gray-700 hover:bg-gray-200 focus:outline-none"
-                            onClick={() => handleIncrease(quantity?.variant_id)}
-                        >
-                            +
-                        </button>
-                    </div>
-                </td>
-                <td className="pl-4 pr-4 font-bold">{formatNumber(sumtotal)}đ</td>
-                <td className="pl-4">
-                    <ClearOutlined
-                        className="bg-white p-2 text-red-500"
-                        onClick={() => HandleRemove(quantity?.variant_id)}
-                    />
-                </td>
-            </tr>
+                    </td>
+                </tr>}
+
         </>
     )
 }
