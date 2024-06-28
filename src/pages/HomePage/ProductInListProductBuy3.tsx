@@ -11,11 +11,11 @@ const ProductInListProductBuy3 = ({ data }: any) => {
     const [discount, setdiscount] = useState<any>()
     useEffect(() => {
         const fetchProduct = async () => {
-            const product:any = await getProductById(data?.id)
-            const sale :any= await getAllSaleProduct(product?.sale_id)
+            const product: any = await getProductById(data?.id)
+            const sale: any = await getAllSaleProduct(product?.sale_id)
             setdiscount(sale?.name)
-            console.log(sale);
-            
+            console.log(sale)
+
             setpro(product)
         }
         fetchProduct()

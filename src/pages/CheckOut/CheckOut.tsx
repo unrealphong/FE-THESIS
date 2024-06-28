@@ -160,15 +160,14 @@ const CheckOut = () => {
                     data2.data.push(data1)
                 }),
             )
-                
+
             await addBillDetail(data2).then((data) => {
                 if (data?.data?.status == true) {
                     toast.success("Đặt hàng thành công")
                     localStorage.removeItem("cart")
                     setTimeout(() => {
                         window.location.href = `/order_done/${response?.data?.id} `
-                    }, 500);
-                   
+                    }, 500)
                 } else {
                     toast.error("Đặt hàng thất bại")
                 }
@@ -215,7 +214,7 @@ const CheckOut = () => {
             )
             const cartSale_id: any = carts[index]?.sale_id
 
-            const allSale:any = await getAllSaleProduct(cartSale_id)
+            const allSale: any = await getAllSaleProduct(cartSale_id)
             const totalSale: any = (product.price * allSale?.name) / 100
             if (cartItem) {
                 const price = cartSale_id ? product.price - totalSale : product.price

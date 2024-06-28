@@ -51,15 +51,22 @@ const ProductInListProduct = ({ data }: any) => {
                             className=""
                             style={{ fontSize: "16px", fontWeight: "bold" }}
                         >
-                           
                             <p className="text-sl flex text-red-500">
-                               
                                 {sales ? (
-                                    <> <span className="text-sl text-sm font-normal line-through text-black mr-2"> {formatNumber(data?.variants[0]?.price)} đ </span></>
-                                    ) : (
-                                        <></>
-                                    )}
-                             
+                                    <>
+                                        {" "}
+                                        <span className="text-sl mr-2 text-sm font-normal text-black line-through">
+                                            {" "}
+                                            {formatNumber(
+                                                data?.variants[0]?.price,
+                                            )}{" "}
+                                            đ{" "}
+                                        </span>
+                                    </>
+                                ) : (
+                                    <></>
+                                )}
+
                                 {sales ? (
                                     <>
                                         {formatNumber(

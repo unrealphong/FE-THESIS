@@ -94,13 +94,13 @@ const ProductInCart = ({ data, index, quantity, onCart }: any) => {
         : data?.price * displayQuantity
     return (
         <>
-            {loading ?
+            {loading ? (
                 <tr>
-                    <td colSpan={7} className="flex justify-center items-center">
-                       <Skeleton/>
+                    <td colSpan={7} className="flex items-center justify-center">
+                        <Skeleton />
                     </td>
                 </tr>
-                :
+            ) : (
                 <tr ng-repeat="item in cart" className="relative pb-20">
                     <td className="pt-5 font-normal">{index + 1}</td>
                     <td className="pt-5 font-normal">
@@ -161,15 +161,17 @@ const ProductInCart = ({ data, index, quantity, onCart }: any) => {
                             </button>
                         </div>
                     </td>
-                    <td className="pl-4 pr-4 font-bold">{formatNumber(sumtotal)}đ</td>
+                    <td className="pl-4 pr-4 font-bold">
+                        {formatNumber(sumtotal)}đ
+                    </td>
                     <td className="pl-4">
                         <ClearOutlined
                             className="bg-white p-2 text-red-500"
                             onClick={() => HandleRemove(quantity?.variant_id)}
                         />
                     </td>
-                </tr>}
-
+                </tr>
+            )}
         </>
     )
 }

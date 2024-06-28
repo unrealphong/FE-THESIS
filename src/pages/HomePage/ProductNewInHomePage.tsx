@@ -60,7 +60,6 @@ const ProductNewInHomePage = ({ data }: any) => {
                                                     data?.variants[0]?.price,
                                                 )}
                                             </span>
-
                                             đ
                                         </>
                                     ) : (
@@ -68,20 +67,19 @@ const ProductNewInHomePage = ({ data }: any) => {
                                     )}
                                     {sales ? (
                                         <>
-                                            <span className=" text-red-500 text-xl">
+                                            <span className=" text-xl text-red-500">
                                                 {formatNumber(
                                                     data?.variants[0]?.price -
-                                                    totalPrice,
+                                                        totalPrice,
                                                 )}
                                                 đ
                                             </span>
-
                                         </>
                                     ) : (
                                         <>
-                                            <span className=" text-red-500 text-xl">
+                                            <span className=" text-xl text-red-500">
                                                 {formatNumber(
-                                                    data?.variants[0]?.price
+                                                    data?.variants[0]?.price,
                                                 )}
                                                 đ
                                             </span>

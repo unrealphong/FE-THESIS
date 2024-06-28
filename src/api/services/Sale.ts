@@ -7,16 +7,14 @@ const getAllSale = async (): Promise<Product[]> => {
         const response: any = await httpRequest.get("/sales")
         return response.data?.data?.sales ?? []
     } catch (error) {
-      
         return []
     }
 }
-const getAllSaleProduct = async (id:any): Promise<Product[]> => {
+const getAllSaleProduct = async (id: any): Promise<Product[]> => {
     try {
         const response: any = await httpRequest.get(`/sale-product/${id}`)
         return response.data?.data?.sales ?? []
     } catch (error) {
-      
         return []
     }
 }

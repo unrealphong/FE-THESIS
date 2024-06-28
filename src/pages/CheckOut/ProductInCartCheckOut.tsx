@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import formatNumber from "../../utilities/FormatTotal"
-import {  getAllSaleProduct } from "@/api/services/Sale"
+import { getAllSaleProduct } from "@/api/services/Sale"
 
 const ProductInCartCheckOut = ({ data, index, quantity }: any) => {
     const [sales, setsale] = useState<any>([])
