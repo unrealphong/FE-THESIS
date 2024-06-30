@@ -3,7 +3,6 @@ import { deleteUser, getAllUser } from "@/api/services/UserService"
 import { Button, Modal, Popconfirm, Table } from "antd"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom" // Import useNavigate
-import { toast } from "react-toastify"
 
 const UserManagement = () => {
     const [users, setUsers] = useState<User[]>([])
@@ -42,7 +41,7 @@ const UserManagement = () => {
 
     const columns = [
         {
-            title: "Name",
+            title: "Họ và tên",
             dataIndex: "name",
             key: "name",
         },
@@ -52,28 +51,28 @@ const UserManagement = () => {
             key: "email",
         },
         {
-            title: "Phone",
+            title: "Số điện thoại",
             dataIndex: "number",
             key: "phone",
         },
         {
-            title: "Address",
+            title: "Địa chỉ",
             dataIndex: "address",
             key: "address",
         },
         {
-            title: "Role",
+            title: "Vai trò",
             dataIndex: "role_id",
             key: "role",
-            render: (role_id: number) => (role_id === 1 ? "Customer" : "Admin"),
+            render: (role_id: number) => (role_id === 1 ? "Khách hàng" : "Admin"),
         },
         {
-            title: "Actions",
+            title: "Thao tác",
             key: "actions",
             render: (_text: string, record: User) => (
                 <div className="space-x-2">
-                    <Button type="primary" onClick={() => showViewModal(record)}>
-                        View
+                    <Button type="" onClick={() => showViewModal(record)}>
+                        Chi tiết
                     </Button>
                     <Button
                         type="primary"
@@ -81,14 +80,14 @@ const UserManagement = () => {
                             navigate(`/quan-ly-nguoi-dung/sua/${record.id}`)
                         }
                     >
-                        Edit
+                        Sửa
                     </Button>
                     <Popconfirm
-                        title="Sure to delete?"
+                        title="Bạn có chắc chắn xóa?"
                         onConfirm={() => handleDelete(record.id)}
                     >
                         <Button type="primary" danger>
-                            Delete
+                            Xóa
                         </Button>
                     </Popconfirm>
                 </div>
@@ -99,12 +98,11 @@ const UserManagement = () => {
     return (
         <div className="p-4">
             <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl">User Management</h2>
                 <Button
                     type="primary"
                     onClick={() => navigate("/quan-ly-nguoi-dung/them")}
                 >
-                    Add User
+                    Thêm tài khoản
                 </Button>
             </div>
             <Table dataSource={users} columns={columns} rowKey="id" />
@@ -134,7 +132,7 @@ const UserManagement = () => {
                         </p>
                         <p>
                             <strong>Role:</strong>{" "}
-                            {viewingUser.role === 1 ? "Customer" : "Admin"}
+                            {viewingUser.role_id === 1 ? "Khách hàng" : "Admin"}
                         </p>
                     </div>
                 )}

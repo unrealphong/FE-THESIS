@@ -34,31 +34,27 @@ const items = [
                 key: "4",
                 label: <Link to="/quan-ly-san-pham/them">Thêm sản phẩm</Link>,
             },
-            {
-                key: "5",
-                label: <Link to="/quan-ly-san-pham/sua">Sửa sản phẩm</Link>,
-            },
         ],
     },
     {
-        key: "6",
+        key: "5",
         icon: <TagsOutlined />,
         label: <Link to="/quan-ly-attr">Quản lý thuộc tính</Link>,
     },
     {
-        key: "7",
+        key: "6",
         icon: <TeamOutlined />,
-        label: <Link to="/quan-ly-nguoi-dung">Users</Link>,
+        label: <Link to="/quan-ly-nguoi-dung">Quản lý người dùng</Link>,
+    },
+    {
+        key: "7",
+        icon: <OrderedListOutlined />,
+        label: <Link to="/quan-ly-orders">Quản lý đơn hàng</Link>,
     },
     {
         key: "8",
-        icon: <OrderedListOutlined />,
-        label: <Link to="/quan-ly-orders">Orders</Link>,
-    },
-    {
-        key: "9",
         icon: <SettingOutlined />,
-        label: "Settings",
+        label: "Cài đặt",
     },
 ]
 

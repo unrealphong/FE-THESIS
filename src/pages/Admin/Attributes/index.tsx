@@ -41,6 +41,7 @@ const AttributeManagement = () => {
             fetchAttributes()
             setIsAddModalVisible(false)
             form.resetFields()
+            setCurrentAttribute(null)
         } catch (error) {
             console.error("Failed to add attribute:", error)
         }
@@ -48,10 +49,13 @@ const AttributeManagement = () => {
 
     const handleEditAttribute = async (values: Attribute) => {
         try {
-            await updateAttribute(currentAttribute?.id, values)
-            fetchAttributes()
-            setIsEditModalVisible(false)
-            form.resetFields()
+            if (currentAttribute) {
+                await updateAttribute(currentAttribute.id, values)
+                fetchAttributes()
+                setIsEditModalVisible(false)
+                form.resetFields()
+                setCurrentAttribute(null)
+            }
         } catch (error) {
             console.error("Failed to edit attribute:", error)
         }
@@ -60,7 +64,7 @@ const AttributeManagement = () => {
     const handleDeleteAttribute = async (attributeId: number) => {
         try {
             await deleteAttribute(attributeId)
-            fetchAttributes()
+            await fetchAttributes()
         } catch (error) {
             console.error("Failed to delete attribute:", error)
         }
@@ -69,10 +73,11 @@ const AttributeManagement = () => {
     const handleAddAttributeValue = async (values: AttributeValue) => {
         try {
             if (currentAttribute) {
-                await createAttributeValue(values)
+                await createAttributeValue(currentAttribute.id, values)
                 fetchAttributes()
                 setIsValueModalVisible(false)
                 form.resetFields()
+                setCurrentAttributeValue(null)
             }
         } catch (error) {
             console.error("Failed to add attribute value:", error)
@@ -81,24 +86,22 @@ const AttributeManagement = () => {
 
     const handleEditAttributeValue = async (values: AttributeValue) => {
         try {
-            if (currentAttribute && currentAttributeValue) {
+            if (currentAttributeValue) {
                 await updateAttributeValue(currentAttributeValue.id, values)
                 fetchAttributes()
                 setIsValueModalVisible(false)
                 form.resetFields()
+                setCurrentAttributeValue(null)
             }
         } catch (error) {
             console.error("Failed to edit attribute value:", error)
         }
     }
 
-    const handleDeleteAttributeValue = async (
-        attributeId: number,
-        attributeValueId: number,
-    ) => {
+    const handleDeleteAttributeValue = async (attributeValueId: number) => {
         try {
-            await deleteAttributeValue(attributeId, attributeValueId)
-            fetchAttributes()
+            await deleteAttributeValue(attributeValueId)
+            await fetchAttributes()
         } catch (error) {
             console.error("Failed to delete attribute value:", error)
         }
@@ -111,12 +114,12 @@ const AttributeManagement = () => {
             okText: "Delete",
             okType: "danger",
             cancelText: "Cancel",
-            onOk: () => handleDeleteAttribute(attribute.id),
+            onOk: async () => await handleDeleteAttribute(attribute.id),
         })
     }
 
     const showDeleteValueConfirm = (
-        attributeId: number,
+        _attributeId: number,
         attributeValue: AttributeValue,
     ) => {
         Modal.confirm({
@@ -125,7 +128,7 @@ const AttributeManagement = () => {
             okText: "Delete",
             okType: "danger",
             cancelText: "Cancel",
-            onOk: () => handleDeleteAttributeValue(attributeId, attributeValue.id),
+            onOk: async () => await handleDeleteAttributeValue(attributeValue.id),
         })
     }
 
@@ -137,12 +140,12 @@ const AttributeManagement = () => {
             render: (_text: string, _record: Attribute, index: number) => index + 1,
         },
         {
-            title: "Attribute Name",
+            title: "Tên thuộc tính",
             dataIndex: "name",
             key: "name",
         },
         {
-            title: "Action",
+            title: "Thao tác",
             key: "action",
             render: (record: Attribute) => (
                 <Space size="middle">
@@ -163,10 +166,12 @@ const AttributeManagement = () => {
                         icon={<PlusOutlined />}
                         onClick={() => {
                             setCurrentAttribute(record)
+                            setCurrentAttributeValue(null)
+                            form.resetFields()
                             setIsValueModalVisible(true)
                         }}
                     >
-                        Add Value
+                        Thêm giá trị thuộc tính
                     </Button>
                 </Space>
             ),
@@ -182,16 +187,12 @@ const AttributeManagement = () => {
                 index + 1,
         },
         {
-            title: "Value",
+            title: "Giá trị",
             dataIndex: "value",
             key: "value",
-            render: (text: string, record: AttributeValue) => {
-                return record.value
-            },
         },
-
         {
-            title: "Action",
+            title: "Thao tác",
             key: "action",
             render: (record: AttributeValue) => (
                 <Space size="middle">
@@ -212,15 +213,20 @@ const AttributeManagement = () => {
             ),
         },
     ]
+
     return (
         <div className="content">
             <Button
                 type="primary"
                 icon={<PlusOutlined />}
-                onClick={() => setIsAddModalVisible(true)}
+                onClick={() => {
+                    setCurrentAttribute(null)
+                    form.resetFields()
+                    setIsAddModalVisible(true)
+                }}
                 style={{ marginBottom: "16px" }}
             >
-                Add New Attribute
+                Thêm thuộc tính mới
             </Button>
 
             <Table
@@ -240,14 +246,17 @@ const AttributeManagement = () => {
             />
 
             <Modal
-                title="Add New Attribute"
+                title="Thêm thuộc tính mới"
                 open={isAddModalVisible}
                 onCancel={() => setIsAddModalVisible(false)}
-                footer={null}
+                onOk={() => form.submit()}
+                afterClose={() => {
+                    form.resetFields()
+                }}
             >
                 <Form form={form} onFinish={handleAddAttribute}>
                     <Form.Item
-                        label="Attribute Name"
+                        label="Tên thuộc tính"
                         name="name"
                         rules={[
                             {
@@ -260,21 +269,24 @@ const AttributeManagement = () => {
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">
-                            Add Attribute
+                            Thêm thuộc tính
                         </Button>
                     </Form.Item>
                 </Form>
             </Modal>
 
             <Modal
-                title="Edit Attribute"
+                title="Sửa thuộc tính"
                 open={isEditModalVisible}
                 onCancel={() => setIsEditModalVisible(false)}
-                footer={null}
+                onOk={() => form.submit()}
+                afterClose={() => {
+                    form.resetFields()
+                }}
             >
                 <Form form={form} onFinish={handleEditAttribute}>
                     <Form.Item
-                        label="Attribute Name"
+                        label="Tên thuộc tính"
                         name="name"
                         rules={[
                             {
@@ -287,7 +299,7 @@ const AttributeManagement = () => {
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">
-                            Save Changes
+                            Lưu
                         </Button>
                     </Form.Item>
                 </Form>
@@ -296,12 +308,15 @@ const AttributeManagement = () => {
             <Modal
                 title={
                     currentAttributeValue
-                        ? "Edit Attribute Value"
-                        : "Add Attribute Value"
+                        ? "Sửa giá trị thuộc tính"
+                        : "Thêm giá trị thuộc tính"
                 }
                 open={isValueModalVisible}
                 onCancel={() => setIsValueModalVisible(false)}
-                footer={null}
+                onOk={() => form.submit()}
+                afterClose={() => {
+                    form.resetFields()
+                }}
             >
                 <Form
                     form={form}
@@ -312,7 +327,7 @@ const AttributeManagement = () => {
                     }
                 >
                     <Form.Item
-                        label="Value"
+                        label="Giá trị"
                         name="value"
                         rules={[
                             {
@@ -325,7 +340,7 @@ const AttributeManagement = () => {
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">
-                            {currentAttributeValue ? "Save Changes" : "Add Value"}
+                            {currentAttributeValue ? "Lưu" : "Thêm thuộc tính"}
                         </Button>
                     </Form.Item>
                 </Form>
